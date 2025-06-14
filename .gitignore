@@ -56,7 +56,7 @@ dmypy.json
 cxd_cache/
 models/
 embeddings_cache/
-tales/
+
 
 # Node.js (for MCP server)
 node_modules/
