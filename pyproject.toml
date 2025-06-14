@@ -1,0 +1,78 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "memmimic"
+version = "1.0.0"
+description = "The Memory System That Learns You Back"
+authors = [
+    {name = "Sprooket", email = "sprooket@example.com"},
+    {name = "Claude", email = "claude@anthropic.com"}
+]
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
+keywords = ["ai", "memory", "context", "llm", "assistant"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "pydantic>=2.0",
+    "sqlalchemy>=2.0", 
+    "sentence-transformers>=2.2",
+    "nltk>=3.8",
+    "click>=8.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+# Performance extras
+faiss = ["faiss-cpu>=1.7"]
+faiss-gpu = ["faiss-gpu>=1.7"]
+
+# Local LLM support
+local = ["ollama>=0.1", "httpx>=0.24"]
+
+# Development tools
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+    "black>=23.0",
+    "ruff>=0.1",
+    "mypy>=1.5",
+]
+
+# All features
+all = ["memmimic[faiss,local]"]
+
+[project.urls]
+Homepage = "https://github.com/sprooket/MemMimic"
+Repository = "https://github.com/sprooket/MemMimic"
+Documentation = "https://github.com/sprooket/MemMimic/docs"
+Issues = "https://github.com/sprooket/MemMimic/issues"
+
+[project.scripts]
+memmimic = "memmimic.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true

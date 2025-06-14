@@ -1,0 +1,214 @@
+version: "2.0"
+description: "CXD Classifier Configuration v2.0"
+
+# =============================================================================
+# PATHS AND DIRECTORIES
+# =============================================================================
+paths:
+  cache_dir: "./cxd_cache"
+  canonical_examples: "./config/canonical_examples.yaml"
+  log_dir: "./logs"
+  models_dir: "./models"
+
+# =============================================================================
+# MODEL CONFIGURATION
+# =============================================================================
+models:
+  embedding:
+    # Primary embedding model (SentenceTransformers)
+    name: "all-MiniLM-L6-v2"
+    device: "cpu"  # cpu, cuda, mps
+    fallback_dimension: 384
+    
+    # Alternative models for different use cases
+    alternatives:
+      large: "all-mpnet-base-v2"  # Better quality, slower
+      multilingual: "paraphrase-multilingual-MiniLM-L12-v2"
+      fast: "all-MiniLM-L6-v2"    # Fastest, good quality
+  
+  # Mock model for development/testing
+  mock:
+    dimension: 384
+    seed: 42
+
+# =============================================================================
+# ALGORITHM PARAMETERS
+# =============================================================================
+algorithms:
+  thresholds:
+    # Meta-classification concordance threshold
+    concordance: 0.7
+    
+    # Semantic similarity minimum threshold
+    semantic: 0.1
+    
+    # Minimum confidence for classification
+    confidence_min: 0.1
+    
+    # High confidence threshold for automatic validation
+    confidence_high: 0.7
+  
+  search:
+    # Number of nearest neighbors to retrieve
+    k: 10
+    
+    # Distance metric (cosine, euclidean, dot_product)
+    metric: "cosine"
+    
+    # Maximum search time in milliseconds
+    timeout_ms: 1000
+  
+  fusion:
+    # Weight for lexical classifier in fusion (0.0-1.0)
+    lexical_weight: 0.6
+    
+    # Weight for semantic classifier in fusion (0.0-1.0)  
+    semantic_weight: 0.4
+    
+    # Enable semantic override in low concordance
+    semantic_override: true
+
+# =============================================================================
+# FEATURE FLAGS
+# =============================================================================
+features:
+  # Core features
+  cache_persistence: true
+  batch_processing: true
+  
+  # Advanced features
+  explainability: true
+  auto_optimization: false
+  fine_tuning: false
+  
+  # Development features
+  debug_mode: false
+  performance_logging: true
+  
+  # External integrations
+  faiss_indexing: true
+  gpu_acceleration: false
+
+# =============================================================================
+# PERFORMANCE SETTINGS
+# =============================================================================
+performance:
+  # Batch processing
+  batch_size: 32
+  max_concurrent_requests: 100
+  
+  # Memory management
+  max_cache_size_mb: 1024
+  cache_cleanup_interval: 3600  # seconds
+  
+  # Timeouts
+  classification_timeout: 30    # seconds
+  index_build_timeout: 300     # seconds
+  model_load_timeout: 120      # seconds
+  
+  # Threading
+  num_threads: 1  # 0 = auto-detect
+  thread_pool_size: 4
+
+# =============================================================================
+# LOGGING CONFIGURATION
+# =============================================================================
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  
+  # Output formats
+  structured: true      # JSON structured logging
+  colored: true        # Colored console output
+  
+  # Log rotation
+  max_size_mb: 100
+  backup_count: 5
+  
+  # What to log
+  log_classifications: true
+  log_performance: true
+  log_errors: true
+  log_cache_operations: false
+  
+  # Sensitive data handling
+  sanitize_inputs: true
+  max_input_length_logged: 200
+
+# =============================================================================
+# VALIDATION AND TESTING
+# =============================================================================
+validation:
+  # Input validation
+  max_text_length: 10000
+  min_text_length: 1
+  allowed_languages: ["en", "es", "fr", "de"]  # empty = all allowed
+  
+  # Quality assurance
+  enable_regression_testing: true
+  golden_dataset_path: "./tests/data/golden_dataset.yaml"
+  confidence_calibration: true
+  
+  # Error handling
+  strict_validation: false
+  graceful_degradation: true
+
+# =============================================================================
+# CLI CONFIGURATION
+# =============================================================================
+cli:
+  # Default output format
+  output_format: "table"  # table, json, yaml, csv
+  
+  # Display options
+  show_confidence: true
+  show_evidence: false
+  show_timing: false
+  
+  # Colors and styling
+  use_colors: true
+  theme: "default"  # default, minimal, rich
+  
+  # Verbosity levels
+  default_verbosity: 1  # 0=quiet, 1=normal, 2=verbose, 3=debug
+
+# =============================================================================
+# API CONFIGURATION (if running as service)
+# =============================================================================
+api:
+  # Server settings
+  host: "localhost"
+  port: 8000
+  workers: 1
+  
+  # Rate limiting
+  rate_limit_rpm: 1000  # requests per minute
+  rate_limit_burst: 100
+  
+  # Security
+  enable_cors: true
+  api_key_required: false
+  
+  # Health and monitoring
+  health_check_endpoint: "/health"
+  metrics_endpoint: "/metrics"
+  docs_endpoint: "/docs"
+
+# =============================================================================
+# EXPERIMENTAL FEATURES
+# =============================================================================
+experimental:
+  # Neural network integration
+  neural_classifier: false
+  transformer_fine_tuning: false
+  
+  # Advanced algorithms
+  active_learning: false
+  uncertainty_quantification: false
+  
+  # Multi-modal support
+  image_text_fusion: false
+  audio_text_fusion: false
+  
+  # Distributed processing
+  cluster_processing: false
+  async_processing: false
