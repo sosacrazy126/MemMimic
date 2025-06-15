@@ -5,7 +5,7 @@ No para impresionar, sino para persistir y profundizar.
 """
 from typing import Dict, List, Optional
 from .memory import Memory, MemoryStore
-from .socratic import SocraticEngine
+from .memory.socratic import SocraticEngine
 
 class ContextualAssistant:
     """Un asistente que preserva contexto y se auto-cuestiona"""

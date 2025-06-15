@@ -329,7 +329,8 @@ def get_memory_store(db_name: Optional[str] = None):
         from memmimic.memory.memory import MemoryStore
         
         # Database selection with intelligent fallbacks
-        memmimic_root = Path(memmimic_src).parent
+        # FIXED: Force absolute path resolution for consistency
+        memmimic_root = Path(memmimic_src).resolve().parent
         
         db_options = {
             "memmimic": "memmimic_memories.db",
@@ -392,9 +393,9 @@ class MemMimicSemanticSearchEngine:
         if cache_dir:
             self.cache_dir = Path(cache_dir)
         else:
-            # Use memmimic_cache directory within the project
-            memmimic_root = Path(memmimic_src).parent
-            self.cache_dir = memmimic_root / "memmimic_cache"
+            # Use memmimic_cache directory relative to memmimic source
+            # FIXED: Force absolute path resolution for consistency
+            self.cache_dir = Path(memmimic_src).resolve() / "memmimic_cache"
         self.cache_dir.mkdir(exist_ok=True)
         
         # CXD components
