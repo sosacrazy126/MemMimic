@@ -261,7 +261,26 @@ def main():
         status_parts.append("  • Tales for narrative, memories for facts")
         status_parts.append("")
         status_parts.append("🚀 MemMimic v1.0 - The Memory System That Learns You Back")
-        
+        # === INTERACTION GUIDELINES v2.5 ===
+        status_parts.append("💡 DEFAULT: Trust your knowledge ")
+        status_parts.append("")
+        status_parts.append("🛑 MEMORY CHECK")
+        status_parts.append("==============")
+        status_parts.append("About to search? Ask yourself:")
+        status_parts.append("'Am I searching because I don't trust what I know?'")
+        status_parts.append("")
+        status_parts.append("Search for: What did WE do/decide/try?")
+        status_parts.append("Don't search for: What is this thing?")
+        status_parts.append("")
+        status_parts.append("Surprised? → remember()")
+        status_parts.append("Uncertain? → Skip it")
+        status_parts.append("")
+        status_parts.append("")
+        status_parts.append("📖 context_tale() ONLY for:")
+        status_parts.append("  • Onboarding new Claude instances")
+        status_parts.append("  • 'Tell me the story of X project'")
+        status_parts.append("  • Deep context recovery requests")
+
         print("\n".join(status_parts))
         
     except Exception as e:
