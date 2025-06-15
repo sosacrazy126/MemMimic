@@ -1,6 +1,17 @@
 # MemMimic
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![MCP](https://img.shields.io/badge/MCP-compatible-green.svg)](https://modelcontextprotocol.io/)
+[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://github.com/xprooket/memmimic)
+
+<!-- TODO: Add logo image here -->
+<!-- ![MemMimic Logo](docs/images/memmimic.png) -->
+
 Persistent contextual memory system for AI assistants via Model Context Protocol (MCP).
+
+<!-- TODO: Add blueprint/architecture diagram here -->
+<!-- ![MemMimic Architecture](docs/images/blueprint.png) -->
 
 ## What It Does
 
@@ -192,12 +203,23 @@ python -c "from memmimic.api import create_memmimic; mm = create_memmimic(':memo
 - **Storage**: SQLite with automatic optimization
 - **Caching**: Persistent embeddings and vector indexes
 
+## ⚠️ Usage Considerations
+
+**Claude API Rate Limits**: MemMimic's conversational and memory operations may approach Anthropic's usage limits during intensive sessions. The system performs multiple API calls for:
+- Memory classification and storage
+- Semantic search operations
+- Socratic dialogue generation
+- Memory pattern analysis
+
+Consider this for production deployments and monitor your usage accordingly.
+
 ## Limitations
 
 - Requires Model Context Protocol support
 - Memory grows over time (no automatic cleanup)
 - Semantic search quality depends on content similarity
 - CXD classification optimized for English text
+- May consume significant API quota during heavy usage
 
 ## License
 

@@ -54,10 +54,10 @@ dev = [
 all = ["memmimic[faiss,local]"]
 
 [project.urls]
-Homepage = "https://github.com/sprooket/MemMimic"
-Repository = "https://github.com/sprooket/MemMimic"
-Documentation = "https://github.com/sprooket/MemMimic/docs"
-Issues = "https://github.com/sprooket/MemMimic/issues"
+Homepage = "https://github.com/xprooket/memmimic"
+Repository = "https://github.com/xprooket/memmimic"
+Documentation = "https://github.com/xprooket/memmimic/docs"
+Issues = "https://github.com/xprooket/memmimic/issues"
 
 [project.scripts]
 memmimic = "memmimic.cli:main"
