@@ -9,8 +9,6 @@
 
 Persistent contextual memory system for AI assistants via Model Context Protocol (MCP).
 
-![MemMimic Architecture](docs/images/bluePrint.png)
-
 ## What It Does
 
 MemMimic provides AI assistants with persistent memory that survives across conversations. It combines semantic search, cognitive classification, and narrative management to maintain context over time.
@@ -20,6 +18,8 @@ MemMimic provides AI assistants with persistent memory that survives across conv
 - Automatic cognitive function classification (Control/Context/Data)
 - Generate coherent narratives from memory fragments
 - Self-reflective analysis and pattern recognition
+
+![MemMimic Architecture](docs/images/bluePrint.png)
 
 ## Installation
 
