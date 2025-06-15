@@ -5,7 +5,11 @@
 [![MCP](https://img.shields.io/badge/MCP-compatible-green.svg)](https://modelcontextprotocol.io/)
 [![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://github.com/xprooket/memmimic)
 
+<div align="center">
+
 ![MemMimic Logo](docs/images/MemMimic.png)
+
+</div>
 
 Persistent contextual memory system for AI assistants via Model Context Protocol (MCP).
 
