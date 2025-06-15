@@ -14,7 +14,7 @@ class MemMimicAPI:
     def __init__(self, db_path="memmimic.db"):
         self.memory = MemoryStore(db_path)
         self.assistant = ContextualAssistant("memmimic", db_path)
-        self.tales = TaleManager()
+        self.tales_manager = TaleManager()
         try:
             self.cxd = create_optimized_classifier()
         except Exception:
@@ -48,7 +48,7 @@ class MemMimicAPI:
     def status(self):
         """System status."""
         all_memories = self.memory.get_all()
-        all_tales = self.tales.list_tales()
+        all_tales = self.tales_manager.list_tales()
         
         return {
             "memories": len(all_memories),
@@ -61,32 +61,32 @@ class MemMimicAPI:
     def tales(self, query=None, stats=False, load=False, category=None, limit=10):
         """Unified list/search/stats/load."""
         if load and query:
-            return self.tales.load_tale(query, category)
+            return self.tales_manager.load_tale(query, category)
         elif stats:
-            return self.tales.get_statistics()
+            return self.tales_manager.get_statistics()
         elif query:
-            return self.tales.search_tales(query, category)[:limit]
+            return self.tales_manager.search_tales(query, category)[:limit]
         else:
-            return self.tales.list_tales(category)[:limit]
+            return self.tales_manager.list_tales(category)[:limit]
     
     def save_tale(self, name: str, content: str, category: str = "claude/core", tags=None):
         """Auto create/update."""
         # Check if tale exists to determine create vs update
-        existing = self.tales.load_tale(name, category)
+        existing = self.tales_manager.load_tale(name, category)
         if existing:
-            return self.tales.update_tale(name, content, category)
+            return self.tales_manager.update_tale(name, content, category)
         else:
-            return self.tales.create_tale(name, content, category, tags)
+            return self.tales_manager.create_tale(name, content, category, tags)
     
     def load_tale(self, name: str, category: str = None):
         """Load specific tale."""
-        return self.tales.load_tale(name, category)
+        return self.tales_manager.load_tale(name, category)
     
     def delete_tale(self, name: str, category: str = None, confirm: bool = False):
         """Delete tale (explicit)."""
         if not confirm:
             return {"error": "Confirmation required for deletion"}
-        return self.tales.delete_tale(name, category)
+        return self.tales_manager.delete_tale(name, category)
     
     def context_tale(self, query: str, style: str = "auto", max_memories: int = 15):
         """Generate narrative from memories."""
