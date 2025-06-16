@@ -62,7 +62,11 @@ Add to your Claude Desktop MCP settings:
   }
 }
 ```
+## Quick Start
 
+After installation, verify MemMimic is working with your first boot:
+
+![MemMimic First Boot](docs/images/first-boot.png)
 ## API Reference
 
 MemMimic provides 11 essential tools organized by function:
