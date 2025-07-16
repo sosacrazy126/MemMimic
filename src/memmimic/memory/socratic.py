@@ -48,24 +48,24 @@ class SocraticEngine:
         
         # Patterns that trigger Socratic dialogues (updated for MemMimic)
         self.trigger_patterns = {
-            "uncertainty_detected": ["no estoy seguro", "podría ser", "tal vez", "posiblemente"],
-            "assumptions_present": ["obviamente", "claramente", "sin duda", "definitivamente"],
-            "complex_topic": ["filosofía", "principio", "arquitectura", "decisión", "estrategia", "memmimic", "cxd"],
-            "conflicting_memories": [],  # Se llena dinámicamente
-            "deep_question": ["por qué", "cómo funciona", "cuál es el propósito", "qué significa"]
+            "uncertainty_detected": ["not sure", "could be", "maybe", "possibly"],
+            "assumptions_present": ["obviously", "clearly", "without doubt", "definitely"],
+            "complex_topic": ["philosophy", "principle", "architecture", "decision", "strategy", "memmimic", "cxd"],
+            "conflicting_memories": [],  # Filled dynamically
+            "deep_question": ["why", "how does it work", "what is the purpose", "what does it mean"]
         }
         
-        # Templates de preguntas socráticas
+        # Socratic question templates
         self.socratic_questions = {
             "assumption_challenge": [
-                "¿Qué estoy asumiendo aquí?",
-                "¿Esta asunción es necesariamente cierta?",
-                "¿Qué pasaría si esta asunción fuera falsa?"
+                "What am I assuming here?",
+                "Is this assumption necessarily true?",
+                "What would happen if this assumption were false?"
             ],
             "evidence_inquiry": [
-                "¿Qué evidencia tengo para esta conclusión?",
-                "¿Hay evidencia que contradiga mi pensamiento?",
-                "¿Las memorias que estoy usando son suficientemente confiables?"
+                "What evidence do I have for this conclusion?",
+                "Is there evidence that contradicts my thinking?",
+                "Are the memories I'm using sufficiently reliable?"
             ],
             "perspective_shift": [
                 "¿Cómo vería esto desde otra perspectiva?",

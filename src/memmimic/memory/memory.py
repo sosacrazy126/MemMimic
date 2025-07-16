@@ -99,14 +99,14 @@ class MemoryStore:
         type_results = self._search_by_query_type(query_lower, limit)
         search_results.extend(type_results)
         
-        # PASO 4: Deduplicar y rankear
+        # STEP 4: Deduplicate and rank
         unique_results = self._deduplicate_memories(search_results)
         ranked_results = self._rank_memories(unique_results, query_lower)
         
         return ranked_results[:limit]
     
     def _search_content(self, query: str, limit: int) -> List[Memory]:
-        """Búsqueda directa en contenido"""
+        """Direct content search"""
         cursor = self.conn.execute(
             """SELECT * FROM memories 
                WHERE LOWER(content) LIKE ? 
