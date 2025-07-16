@@ -1,14 +1,14 @@
-# clay/assistant.py - Con diálogos socráticos integrados
+# memmimic/assistant.py - With integrated Socratic dialogues
 """
-El asistente que recuerda y se auto-cuestiona.
-No para impresionar, sino para persistir y profundizar.
+The assistant that remembers and self-questions.
+Not to impress, but to persist and deepen understanding.
 """
 from typing import Dict, List, Optional
 from .memory import Memory, MemoryStore
 from .memory.socratic import SocraticEngine
 
 class ContextualAssistant:
-    """Un asistente que preserva contexto y se auto-cuestiona"""
+    """An assistant that preserves context and self-questions"""
     
     def __init__(self, name: str, db_path: str = None):
         self.name = name
@@ -19,13 +19,13 @@ class ContextualAssistant:
         
     def think(self, user_input: str) -> Dict:
         """
-        Pensar ahora incluye auto-cuestionamiento socrático.
-        Recordar → Razonar → Responder → Auto-cuestionar → Refinar → Aprender
+        Thinking now includes Socratic self-questioning.
+        Remember → Reason → Respond → Self-question → Refine → Learn
         """
-        # 1. RECORDAR - Buscar memorias relevantes
+        # 1. REMEMBER - Search for relevant memories
         relevant_memories = self.memory_store.search(user_input)
         
-        # 2. RAZONAR - Construir contexto con memorias
+        # 2. REASON - Build context with memories
         thought_process = self._build_thought_process(user_input, relevant_memories)
         
         # 3. RESPONDER - Generar respuesta inicial
@@ -114,7 +114,7 @@ class ContextualAssistant:
         interaction_memory = Memory(
             content=interaction_content,
             memory_type="interaction",
-            confidence=0.8 if not socratic_result else 0.85  # Mayor confianza si hubo auto-cuestionamiento
+            confidence=0.8 if not socratic_result else 0.85  # Higher confidence with self-questioning
         )
         self.memory_store.add(interaction_memory)
     

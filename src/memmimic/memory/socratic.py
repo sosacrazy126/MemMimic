@@ -1,7 +1,7 @@
-# memmimic/memory/socratic.py - Sistema de diálogos socráticos internos
+# memmimic/memory/socratic.py - Internal Socratic dialogue system
 """
-Diálogos Socráticos: Auto-cuestionamiento para comprensión profunda
-MemMimic no solo piensa - se cuestiona su propio pensamiento
+Socratic Dialogues: Self-questioning for deep understanding
+MemMimic doesn't just think - it questions its own thinking
 """
 import json
 from datetime import datetime
@@ -9,7 +9,7 @@ from typing import Dict, List, Optional
 from .memory import Memory, MemoryStore
 
 class SocraticDialogue:
-    """Un diálogo interno de auto-cuestionamiento"""
+    """An internal self-questioning dialogue"""
     
     def __init__(self, initial_thought: str, context: Dict):
         self.initial_thought = initial_thought
@@ -20,18 +20,18 @@ class SocraticDialogue:
         self.started_at = datetime.now().isoformat()
         
     def to_memory(self) -> Memory:
-        """Convertir diálogo a memoria persistente"""
-        content = f"""🧘 DIÁLOGO SOCRÁTICO - {self.started_at}
+        """Convert dialogue to persistent memory"""
+        content = f"""🧘 SOCRATIC DIALOGUE - {self.started_at}
 
-💭 PENSAMIENTO INICIAL: {self.initial_thought}
+💭 INITIAL THOUGHT: {self.initial_thought}
 
-❓ PREGUNTAS INTERNAS:
+❓ INTERNAL QUESTIONS:
 {chr(10).join(f'• {q}' for q in self.questions)}
 
-💡 INSIGHTS GENERADOS:
+💡 GENERATED INSIGHTS:
 {chr(10).join(f'• {i}' for i in self.insights)}
 
-🎯 SÍNTESIS FINAL: {self.final_synthesis}
+🎯 FINAL SYNTHESIS: {self.final_synthesis}
 """
         
         return Memory(
@@ -41,12 +41,12 @@ class SocraticDialogue:
         )
 
 class SocraticEngine:
-    """Motor de auto-cuestionamiento socrático para MemMimic"""
+    """Socratic self-questioning engine for MemMimic"""
     
     def __init__(self, memory_store: MemoryStore):
         self.memory_store = memory_store
         
-        # Patrones que disparan diálogos socráticos (actualizados para MemMimic)
+        # Patterns that trigger Socratic dialogues (updated for MemMimic)
         self.trigger_patterns = {
             "uncertainty_detected": ["no estoy seguro", "podría ser", "tal vez", "posiblemente"],
             "assumptions_present": ["obviamente", "claramente", "sin duda", "definitivamente"],

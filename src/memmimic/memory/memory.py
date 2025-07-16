@@ -1,11 +1,11 @@
-# clay/memory.py - Con motor de búsqueda inteligente
+# memmimic/memory.py - With intelligent search engine
 import json
 import sqlite3
 from datetime import datetime
 from typing import List, Optional, Dict
 
 class Memory:
-    """Una unidad de recuerdo"""
+    """A unit of memory"""
     def __init__(self, content: str, memory_type: str = "interaction", confidence: float = 0.8):
         self.content = content
         self.type = memory_type
@@ -24,7 +24,7 @@ class Memory:
         }
 
 class MemoryStore:
-    """SQLite con búsqueda inteligente"""
+    """SQLite with intelligent search"""
     def __init__(self, db_path: str = "memories.db"):
         self.conn = sqlite3.connect(db_path)
         self.conn.execute("PRAGMA encoding = 'UTF-8'")
@@ -32,31 +32,31 @@ class MemoryStore:
         self.conn.row_factory = sqlite3.Row
         self._init_db()
         
-        # Expansiones semánticas para búsqueda inteligente
+        # Semantic expansions for intelligent search
         self.semantic_expansions = {
-            # Conceptos filosóficos
-            "incertidumbre": ["certeza", "duda", "honestidad", "admitir", "principio"],
-            "filosofía": ["principio", "sabiduría", "enfoque", "creencia"],
-            "transparencia": ["proceso", "razonamiento", "visible", "claro"],
+            # Philosophical concepts
+            "uncertainty": ["certainty", "doubt", "honesty", "admit", "principle"],
+            "philosophy": ["principle", "wisdom", "approach", "belief"],
+            "transparency": ["process", "reasoning", "visible", "clear"],
             
-            # Conceptos técnicos
-            "arquitectura": ["componente", "estructura", "diseño", "sistema"],
-            "búsqueda": ["encontrar", "recall", "memoria", "relevante"],
-            "reflexión": ["análisis", "patrón", "insight", "meta"],
+            # Technical concepts
+            "architecture": ["component", "structure", "design", "system"],
+            "search": ["find", "recall", "memory", "relevant"],
+            "reflection": ["analysis", "pattern", "insight", "meta"],
             
-            # Conceptos de proyecto
-            "clay": ["memoria", "persistente", "asistente", "contexto"],
-            "colaborador": ["equipo", "líder", "proyecto", "humano", "claude"],
-            "hito": ["milestone", "logro", "completado", "fase"],
+            # Project concepts
+            "memmimic": ["memory", "persistent", "assistant", "context"],
+            "collaborator": ["team", "leader", "project", "human", "claude"],
+            "milestone": ["achievement", "completed", "phase"],
             
-            # Conceptos de desarrollo
-            "simplicidad": ["complejo", "simple", "elegante", "mínimo"],
-            "contexto": ["memoria", "preservar", "continuidad", "recordar"],
-            "aprendizaje": ["evolución", "mejora", "patrón", "conocimiento"]
+            # Development concepts
+            "simplicity": ["complex", "simple", "elegant", "minimal"],
+            "context": ["memory", "preserve", "continuity", "remember"],
+            "learning": ["evolution", "improvement", "pattern", "knowledge"]
         }
         
     def _init_db(self):
-        """Crear la tabla si no existe"""
+        """Create table if it doesn't exist"""
         self.conn.execute("""
             CREATE TABLE IF NOT EXISTS memories (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -70,7 +70,7 @@ class MemoryStore:
         self.conn.commit()
         
     def add(self, memory: Memory) -> int:
-        """Guardar una memoria"""
+        """Save a memory"""
         cursor = self.conn.execute(
             """INSERT INTO memories (content, type, confidence, created_at, access_count) 
                VALUES (?, ?, ?, ?, ?)""",
@@ -81,21 +81,21 @@ class MemoryStore:
         
     def search(self, query: str, limit: int = 5) -> List[Memory]:
         """
-        Motor de búsqueda inteligente que encuentra memorias relevantes
-        incluyendo sintéticas usando expansión semántica y ranking
+        Intelligent search engine that finds relevant memories
+        including synthetic ones using semantic expansion and ranking
         """
         query_lower = query.lower()
         search_results = []
         
-        # PASO 1: Búsqueda directa en contenido
+        # STEP 1: Direct content search
         direct_results = self._search_content(query_lower, limit * 2)
         search_results.extend(direct_results)
         
-        # PASO 2: Búsqueda por expansión semántica
+        # STEP 2: Semantic expansion search
         expanded_results = self._search_semantic_expansion(query_lower, limit * 2)
         search_results.extend(expanded_results)
         
-        # PASO 3: Búsqueda por tipo si es consulta específica
+        # STEP 3: Type-based search for specific queries
         type_results = self._search_by_query_type(query_lower, limit)
         search_results.extend(type_results)
         
