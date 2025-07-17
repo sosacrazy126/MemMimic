@@ -15,13 +15,16 @@ Persistent contextual memory system for AI assistants via Model Context Protocol
 
 ## What It Does
 
-MemMimic provides AI assistants with persistent memory that survives across conversations. It combines semantic search, cognitive classification, and narrative management to maintain context over time.
+MemMimic provides AI assistants with persistent memory that survives across conversations. It combines semantic search, cognitive classification, and narrative management with an intelligent **Active Memory Management System (AMMS)** to maintain context over time while optimizing performance.
 
 **Core capabilities:**
 - Store and retrieve memories with semantic + keyword search
+- **Intelligent memory pool management** with dynamic ranking
+- **Automatic lifecycle management** (active → archive → prune)
 - Automatic cognitive function classification (Control/Context/Data)
 - Generate coherent narratives from memory fragments
 - Self-reflective analysis and pattern recognition
+- **Sub-100ms query performance** with importance-based ranking
 
 ![MemMimic Architecture](docs/images/bluePrint.png)
 
@@ -62,6 +65,58 @@ Add to your Claude Desktop MCP settings:
   }
 }
 ```
+
+## Active Memory Management System (AMMS)
+
+MemMimic v1.0+ includes an advanced Active Memory Management System that provides:
+
+- **Intelligent Memory Pool**: Keeps ~1000 most important memories active for fast access
+- **Dynamic Ranking**: Multi-factor importance scoring using CXD classification, recency, and usage patterns  
+- **Automatic Cleanup**: Archives stale memories and prunes low-value ones
+- **Performance Optimization**: Sub-100ms query times even with millions of stored memories
+- **Configurable Policies**: Customizable retention rules per memory type
+
+### AMMS Configuration
+
+Create `config/memmimic_config.yaml` to customize AMMS behavior:
+
+```yaml
+active_memory_pool:
+  target_size: 1000              # Target active memories
+  max_size: 1500                 # Hard limit
+  importance_threshold: 0.3      # Minimum score to stay active
+
+scoring_weights:
+  cxd_classification: 0.40       # CXD cognitive function weight
+  access_frequency: 0.25         # Usage frequency weight  
+  recency_temporal: 0.20         # Recency weight
+  confidence_quality: 0.10       # Confidence weight
+  memory_type: 0.05              # Type priority weight
+
+retention_policies:
+  synthetic_wisdom:
+    min_retention: permanent     # Never archive wisdom
+  milestone:
+    min_retention: permanent     # Never archive milestones
+  interaction:
+    min_retention: 90_days       # Standard retention
+```
+
+### Migration from Legacy
+
+If you have an existing MemMimic database, migrate to AMMS:
+
+```bash
+# Check database status
+python migrate_to_amms.py memmimic.db --check-only
+
+# Migrate to AMMS (creates backup automatically)
+python migrate_to_amms.py memmimic.db
+
+# Migrate with custom configuration
+python migrate_to_amms.py memmimic.db --config config/memmimic_config.yaml
+```
+
 ## Quick Start
 
 After installation, verify MemMimic is working with your first boot:

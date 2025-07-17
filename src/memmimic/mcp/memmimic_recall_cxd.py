@@ -326,7 +326,7 @@ def safe_decode_text(text: Any) -> str:
 def get_memory_store(db_name: Optional[str] = None):
     """Get memory store with robust database selection and error handling."""
     try:
-        from memmimic.memory.memory import MemoryStore
+        from memmimic.memory import UnifiedMemoryStore as MemoryStore
         
         # Database selection with intelligent fallbacks
         # FIXED: Force absolute path resolution for consistency
