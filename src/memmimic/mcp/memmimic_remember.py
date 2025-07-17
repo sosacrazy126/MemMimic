@@ -18,7 +18,7 @@ if sys.platform.startswith('win'):
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
-    from memmimic.memory import Memory, MemoryStore
+    from memmimic.memory import Memory, UnifiedMemoryStore
     from memmimic import ContextualAssistant
 except ImportError as e:
     print(f"❌ Error importing MemMimic: {e}", file=sys.stderr)

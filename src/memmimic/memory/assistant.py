@@ -5,15 +5,23 @@ No para impresionar, sino para persistir y profundizar.
 """
 from typing import Dict, List, Optional
 from .memory import Memory, MemoryStore
+from .unified_store import UnifiedMemoryStore
 from .socratic import SocraticEngine
 
 class ContextualAssistant:
     """Un asistente que preserva contexto y se auto-cuestiona"""
     
-    def __init__(self, name: str, db_path: str = None):
+    def __init__(self, name: str, db_path: str = None, config_path: str = None):
         self.name = name
         self.db_path = db_path or f"{name}_memories.db"
-        self.memory_store = MemoryStore(self.db_path)
+        
+        # Use UnifiedMemoryStore with AMMS by default, fallback to basic MemoryStore
+        try:
+            self.memory_store = UnifiedMemoryStore(self.db_path, config_path)
+        except Exception as e:
+            # Fallback to basic MemoryStore for compatibility
+            self.memory_store = MemoryStore(self.db_path)
+            
         self.socratic_engine = SocraticEngine(self.memory_store)
         self.current_context = {}
         
