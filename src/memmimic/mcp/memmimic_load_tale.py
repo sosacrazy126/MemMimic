@@ -50,16 +50,16 @@ def main():
             print("  tales(category='specific') # Browse by category")
             sys.exit(1)
         
-        # Extract tale information
-        tale_name = tale_data.get('name', args.name)
-        tale_category = tale_data.get('category', 'unknown')
-        tale_size = tale_data.get('size', 0)
-        tale_updated = tale_data.get('updated', 'unknown')
-        tale_created = tale_data.get('created', 'unknown')
-        tale_version = tale_data.get('version', 1)
-        tale_usage_count = tale_data.get('usage_count', 0)
-        tale_tags = tale_data.get('tags', [])
-        tale_content = tale_data.get('content', '')
+        # Extract tale information from Tale object
+        tale_name = tale_data.name
+        tale_category = tale_data.category
+        tale_size = tale_data.metadata.get('size_chars', 0)
+        tale_updated = tale_data.metadata.get('updated', 'unknown')
+        tale_created = tale_data.metadata.get('created', 'unknown')
+        tale_version = tale_data.metadata.get('version', 1)
+        tale_usage_count = tale_data.metadata.get('usage_count', 0)
+        tale_tags = tale_data.tags
+        tale_content = tale_data.content
         
         # Format category emoji
         category_emoji = "🧠" if tale_category.startswith('claude') else "🔧" if tale_category.startswith('projects') else "📦"
@@ -106,11 +106,7 @@ def main():
         # Output
         print("\n".join(result_parts))
         
-        # Update usage count
-        try:
-            tale_manager.increment_usage_count(args.name, args.category)
-        except:
-            pass  # Non-critical operation
+        # Usage count is already incremented by load_tale method
         
     except Exception as e:
         print(f"❌ Critical error loading tale: {str(e)}", file=sys.stderr)
