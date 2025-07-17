@@ -1,0 +1,106 @@
+# MemMimic Active Memory Management System Configuration
+# Version: 1.0
+# This file controls the behavior of MemMimic's intelligent memory management
+
+# Active Memory Pool Configuration
+active_memory_pool:
+  # Pool size management (number of memories kept in active pool)
+  target_size: 1000              # Target number of active memories
+  max_size: 1500                 # Hard limit before forced evictions
+  importance_threshold: 0.3      # Minimum importance score to stay active
+  
+  # Performance settings  
+  batch_size: 100                # Batch size for bulk operations
+  max_query_time_ms: 100         # Target query response time (milliseconds)
+  cache_size: 500                # Number of memories to cache in RAM
+
+# Memory Cleanup Policies
+cleanup_policies:
+  # Time-based thresholds
+  stale_threshold_days: 30       # Days without access before considering stale
+  archive_threshold_days: 90     # Days before archiving low-importance memories
+  prune_threshold_days: 180      # Days before permanently deleting very low-value memories
+  
+  # Importance-based thresholds (0.0 - 1.0 scale)
+  archive_threshold: 0.2         # Importance below this gets archived
+  prune_threshold: 0.1           # Importance below this gets pruned (deleted)
+  
+  # Access-based thresholds
+  min_access_frequency: 0.01     # Minimum accesses per day to avoid staleness
+
+# Importance Scoring Weights
+# These weights determine how memories are ranked - must sum to 1.0
+scoring_weights:
+  cxd_classification: 0.40       # Weight for CXD cognitive function (Control/Context/Data)
+  access_frequency: 0.25         # Weight for how often memory is accessed
+  recency_temporal: 0.20         # Weight for how recent the memory is
+  confidence_quality: 0.10       # Weight for memory confidence/quality
+  memory_type: 0.05              # Weight for memory type (milestone, synthetic, etc.)
+
+# Memory Type Retention Policies
+# Controls how different types of memories are retained
+retention_policies:
+  # Critical memories - never archived/deleted
+  synthetic_wisdom:
+    min_retention: permanent
+    importance_boost: 0.2        # Add 0.2 to importance score
+    archive_after: permanent
+  
+  milestone:
+    min_retention: permanent
+    importance_boost: 0.15       # Add 0.15 to importance score  
+    archive_after: permanent
+  
+  # Project-related memories - longer retention
+  project_info:
+    min_retention: 180_days      # Keep for 6 months minimum
+    importance_boost: 0.1        # Slight boost to importance
+    archive_after: 180_days
+  
+  # Regular interaction memories - standard retention
+  interaction:
+    min_retention: 90_days       # Keep for 3 months minimum
+    importance_boost: 0.0        # No boost
+    archive_after: 90_days
+  
+  # Reflection memories - moderate retention
+  reflection:
+    min_retention: 60_days       # Keep for 2 months minimum
+    importance_boost: 0.0        # No boost
+    archive_after: 60_days
+  
+  # Technical memories - longer retention due to value
+  technical:
+    min_retention: 120_days      # Keep for 4 months minimum
+    importance_boost: 0.05       # Small boost
+    archive_after: 120_days
+  
+  # Error/debugging memories - shorter retention
+  error:
+    min_retention: 30_days       # Keep for 1 month minimum
+    importance_boost: 0.0        # No boost
+    archive_after: 30_days
+
+# Advanced Configuration Options
+advanced:
+  # Enable background cleanup processes
+  enable_background_cleanup: true
+  
+  # Cleanup schedule (how often to run maintenance)
+  cleanup_interval_hours: 24     # Run cleanup daily
+  
+  # Performance monitoring
+  enable_performance_monitoring: true
+  performance_log_interval_minutes: 60
+  
+  # Memory consolidation (grouping related memories)
+  enable_memory_consolidation: true
+  consolidation_similarity_threshold: 0.85
+  
+  # CXD integration settings
+  enable_cxd_classification: true
+  cxd_fallback_weight: 0.5       # Weight to use when CXD classification unavailable
+  
+  # Vector search optimization
+  enable_vector_optimization: true
+  vector_index_rebuild_threshold: 1000  # Rebuild index after this many changes

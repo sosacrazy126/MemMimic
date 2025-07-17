@@ -4,15 +4,15 @@ MemMimic Unified API - 11 Core Tools
 The main interface combining all MemMimic functionality.
 """
 
-from .memory import MemoryStore, ContextualAssistant
+from .memory import UnifiedMemoryStore, ContextualAssistant
 from .tales import TaleManager
 from .cxd import create_optimized_classifier
 
 class MemMimicAPI:
-    """Unified API for MemMimic - 11 core tools."""
+    """Unified API for MemMimic - 11 core tools with AMMS integration."""
     
-    def __init__(self, db_path="memmimic.db"):
-        self.memory = MemoryStore(db_path)
+    def __init__(self, db_path="memmimic.db", config_path=None):
+        self.memory = UnifiedMemoryStore(db_path, config_path)
         self.assistant = ContextualAssistant("memmimic", db_path)
         self.tales_manager = TaleManager()
         try:
@@ -46,16 +46,35 @@ class MemMimicAPI:
         return self.assistant.think(input_text)
     
     def status(self):
-        """System status."""
+        """System status with AMMS information."""
         all_memories = self.memory.get_all()
         all_tales = self.tales_manager.list_tales()
         
-        return {
+        # Get AMMS status if available
+        amms_status = {}
+        if hasattr(self.memory, 'get_active_pool_status'):
+            try:
+                amms_status = self.memory.get_active_pool_status()
+            except Exception as e:
+                amms_status = {"error": str(e)}
+        
+        base_status = {
             "memories": len(all_memories),
             "tales": len(all_tales),
             "cxd_available": self.cxd is not None,
+            "amms_active": getattr(self.memory, 'is_amms_active', False),
             "status": "operational"
         }
+        
+        # Include AMMS details if available
+        if amms_status and 'error' not in amms_status:
+            base_status.update({
+                "amms_pool_status": amms_status.get('status_stats', {}),
+                "amms_performance": amms_status.get('performance', {}),
+                "memory_types": amms_status.get('memory_type_distribution', {})
+            })
+        
+        return base_status
     
     # === TALES SYSTEM (5 tools) ===
     def tales(self, query=None, stats=False, load=False, category=None, limit=10):
