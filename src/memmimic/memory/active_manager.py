@@ -485,10 +485,24 @@ class ActiveMemoryPool:
         return cursor.rowcount
     
     def _update_consolidation_groups(self, conn) -> int:
-        """Update memory consolidation groups"""
-        # This would implement the consolidation logic
-        # For now, return 0 as placeholder
-        return 0
+        """Update memory consolidation groups using MemoryConsolidator"""
+        try:
+            from .memory_consolidator import MemoryConsolidator
+            
+            # Create consolidator instance
+            consolidator = MemoryConsolidator(self.db_path)
+            
+            # Run consolidation
+            result = consolidator.consolidate_memories()
+            
+            return result.get('groups_created', 0) + result.get('groups_updated', 0)
+            
+        except ImportError:
+            self.logger.warning("MemoryConsolidator not available, skipping consolidation")
+            return 0
+        except Exception as e:
+            self.logger.error(f"Consolidation failed: {e}")
+            return 0
     
     def _update_performance_metrics(self, start_time: datetime):
         """Update performance tracking metrics"""

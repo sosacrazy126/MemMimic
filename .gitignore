@@ -57,6 +57,33 @@ cxd_cache/
 models/
 embeddings_cache/
 
+# Generated content and caches
+src/memmimic_cache/
+src/memmimic/memmimic_cache/
+memmimic_memories.db*
+*.db.backup*
+phases_output/
+.archive/
+.taskmaster/
+
+# Consciousness system caches
+src/memmimic/consciousness/cache/
+consciousness_cache/
+sigil_cache/
+living_prompts_cache/
+rup_cache/
+
+# Debug and temporary files
+debug_*.py
+test_*.py
+!tests/
+!test_living_prompts_integration.py
+
+# Memory tales and generated content
+tales/
+prompts/
+Memory/Phase_*/
+
 
 # Node.js (for MCP server)
 node_modules/
@@ -67,3 +94,23 @@ yarn-error.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Logs
+logs
+*.log
+dev-debug.log
+# Dependency directories
+# Environment variables
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/ 

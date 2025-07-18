@@ -283,6 +283,19 @@ class ActiveMemorySchema:
         }
         return weights.get(memory_type, 0.5)
     
+    def check_enhanced_schema_exists(self) -> bool:
+        """Check if enhanced schema exists in the database"""
+        try:
+            with self._get_connection() as conn:
+                # Check if memories_enhanced table exists
+                cursor = conn.execute("""
+                    SELECT name FROM sqlite_master 
+                    WHERE type='table' AND name='memories_enhanced'
+                """)
+                return cursor.fetchone() is not None
+        except Exception:
+            return False
+
     def get_schema_info(self) -> Dict[str, Any]:
         """Get information about the current schema"""
         with self._get_connection() as conn:

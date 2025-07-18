@@ -378,6 +378,24 @@ def get_memory_store(db_name: Optional[str] = None):
         logger.error(f"Failed to access memory store: {e}")
         return None
 
+def get_enhanced_memory_store(db_name: Optional[str] = None):
+    """Get enhanced memory store with AMMS and performance monitoring."""
+    try:
+        from memmimic.mcp.enhanced_mcp_wrapper import enhance_mcp_tool
+        
+        # Create enhanced wrapper
+        wrapper = enhance_mcp_tool("recall_cxd", None)
+        
+        if wrapper.memory_store:
+            return wrapper.memory_store
+        else:
+            # Fallback to regular memory store
+            return get_memory_store(db_name)
+            
+    except Exception as e:
+        logger.warning(f"Enhanced memory store failed, using fallback: {e}")
+        return get_memory_store(db_name)
+
 # =============================================================================
 # CXD v2.0 INTEGRATION - SEMANTIC SEARCH ENGINE
 # =============================================================================
@@ -1098,8 +1116,8 @@ def search_memories_hybrid(query: str,
     # === PHASE 0: GOLDEN MEMORIES AUTO-BRIEFING (EGOISTIC FIRST-TIME) ===
     global _first_search_in_session, _golden_briefing_shown
     
-    # Get memory store
-    memory_store = get_memory_store(db_name)
+    # Get enhanced memory store with AMMS integration
+    memory_store = get_enhanced_memory_store(db_name)
     if not memory_store:
         logger.error("Cannot access memory store")
         return []

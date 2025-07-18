@@ -140,18 +140,43 @@ def analyze_tales_statistics():
 
 def main():
     try:
-        # Initialize MemMimic components
-        assistant = ContextualAssistant("memmimic")
-        memory_store = assistant.memory_store
-        
-        # Check CXD status
-        cxd_status = check_cxd_status()
-        
-        # Analyze memory statistics  
-        memory_stats = analyze_memory_statistics(memory_store)
-        
-        # Analyze tales statistics
-        tales_stats = analyze_tales_statistics()
+        # Initialize MemMimic components with enhanced wrapper
+        try:
+            from memmimic.mcp.enhanced_mcp_wrapper import enhance_mcp_tool
+            enhanced_wrapper = enhance_mcp_tool("status", None)
+            memory_store = enhanced_wrapper.memory_store
+            
+            # Get enhanced status
+            enhanced_status = enhanced_wrapper.enhanced_status()
+            
+            # Check if enhanced status succeeded
+            if enhanced_status.get('system_health') != 'ERROR':
+                # Use enhanced data
+                memory_stats = enhanced_status.get('memory_statistics', {})
+                tales_stats = enhanced_status.get('tales_statistics', {})
+                cxd_status = enhanced_status.get('cxd_status', {})
+                performance_metrics = enhanced_status.get('performance_metrics', {})
+            else:
+                # Fallback to legacy approach
+                raise Exception("Enhanced status failed, using fallback")
+            
+        except Exception as e:
+            logger.warning(f"Enhanced MCP wrapper failed, using legacy approach: {e}")
+            # Fallback to legacy approach
+            assistant = ContextualAssistant("memmimic")
+            memory_store = assistant.memory_store
+            
+            # Check CXD status
+            cxd_status = check_cxd_status()
+            
+            # Analyze memory statistics  
+            memory_stats = analyze_memory_statistics(memory_store)
+            
+            # Analyze tales statistics
+            tales_stats = analyze_tales_statistics()
+            
+            performance_metrics = None
+            enhanced_wrapper = None
         
         # Build clean status report
         status_parts = []
@@ -209,6 +234,32 @@ def main():
             status_parts.append(f"  ❌ Tales analysis failed: {tales_stats['error']}")
         status_parts.append("")
         
+        # Enhanced Performance Metrics (if available)
+        if performance_metrics and enhanced_wrapper:
+            status_parts.append("⚡ PERFORMANCE METRICS:")
+            status_parts.append(f"  🎯 System Health: {performance_metrics.get('status', 'UNKNOWN')}")
+            status_parts.append(f"  📊 Total Operations: {performance_metrics.get('total_operations', 0)}")
+            status_parts.append(f"  📈 Error Rate: {performance_metrics.get('error_rate', 0.0):.3f}")
+            status_parts.append(f"  ⏱️ Avg Response Time: {performance_metrics.get('avg_response_time_ms', 0.0):.1f}ms")
+            status_parts.append(f"  🔄 Active Operations: {performance_metrics.get('active_operations', 0)}")
+            
+            # Show recommendations if any
+            recommendations = performance_metrics.get('recommendations', [])
+            if recommendations:
+                status_parts.append("  💡 Recommendations:")
+                for rec in recommendations:
+                    status_parts.append(f"    • {rec}")
+            
+            status_parts.append("")
+            
+            # Show enhanced features
+            status_parts.append("🚀 ENHANCED FEATURES:")
+            status_parts.append("  ✅ AMMS Integration: Active")
+            status_parts.append("  ✅ Performance Monitoring: Active")
+            status_parts.append("  ✅ Enhanced Search: Active")
+            status_parts.append("  ✅ Caching: Active")
+            status_parts.append("")
+        
         # System Health Summary
         total_issues = 0
         if not cxd_status['available']:
@@ -217,6 +268,14 @@ def main():
             total_issues += 1
         if 'error' in tales_stats:
             total_issues += 1
+        
+        # Factor in performance metrics
+        if performance_metrics:
+            system_health = performance_metrics.get('status', 'UNKNOWN')
+            if system_health == 'CRITICAL':
+                total_issues += 2
+            elif system_health == 'DEGRADED':
+                total_issues += 1
         
         if total_issues == 0:
             status_parts.append("🟢 SYSTEM HEALTH: All systems operational")

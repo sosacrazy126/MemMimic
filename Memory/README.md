@@ -1,9 +1,24 @@
-# MemMimic - Active Memory System Status & Plan
+# APM Project Memory Bank Directory
 
-**Version:** 2.0
-**Date:** 2025-07-17
-**Implementation Agent:** Claude Code (Sonnet 4)
-**Project Principal:** User
+This directory houses the detailed log files for the MemMimic Active Memory Management System project.
+
+## Structure:
+
+Logs are organized into subdirectories corresponding to each Phase in the `Implementation_Plan.md`.
+Within each phase directory, individual `.md` files capture logs for specific tasks.
+
+- `Phase_1_Integration_Testing/` - Integration & Testing phase logs
+- `Phase_2_Performance_Validation/` - Performance & Validation phase logs  
+- `Phase_3_Advanced_Features/` - Advanced Features phase logs
+
+All log entries within these files adhere to the format defined in `prompts/02_Utility_Prompts_And_Format_Definitions/Memory_Bank_Log_Format.md`.
+
+## Current Status:
+
+**Project Goal:** Implement comprehensive Active Memory Management System with intelligent ranking and lifecycle management
+**Date Initiated:** 2025-07-17
+**Manager Agent Session ID:** Claude Code (Sonnet 4)
+**Implementation Plan Reference:** `Implementation_Plan.md`
 
 ## 1. Project Status & Achievements
 

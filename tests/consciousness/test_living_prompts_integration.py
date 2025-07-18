@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from unittest.mock import Mock
 
 # Add MemMimic to path
-sys.path.insert(0, str(Path(__file__).parent / "src"))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 def test_shadow_detector():
     """Test shadow-aware consciousness detector"""
