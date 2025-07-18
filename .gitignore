@@ -84,6 +84,16 @@ tales/
 prompts/
 Memory/Phase_*/
 
+# Development and cursor files
+.cursor/
+.cursorignore
+.cursorrules
+Phase_*.md
+CLEANUP_SUMMARY.md
+IMPLEMENTATION_*.md
+CODE_REVIEW_*.md
+*_Implementation_Context.md
+commit_summary.md
 
 # Node.js (for MCP server)
 node_modules/
