@@ -25,17 +25,17 @@ sys.path.insert(0, memmimic_src)
 def get_memory_store():
     """Get the MemMimic memory store instance"""
     try:
-        from memmimic.memory.memory import MemoryStore
+        from memmimic.memory.storage import AMMSStorage
 
-        # Use MemMimic memory database
-        db_path = os.path.join(memmimic_src, "..", "memmimic_memories.db")
+        # Use MemMimic memory database - standardized path
+        db_path = os.path.join(memmimic_src, "..", "memmimic.db")
         if not os.path.exists(db_path):
             # Fallback to legacy path
             db_path = os.path.join(
                 memmimic_src, "..", "..", "clay", "claude_mcp_enhanced_memories.db"
             )
 
-        return MemoryStore(db_path)
+        return AMMSStorage(db_path)
     except Exception as e:
         print(f"❌ Error accessing memory store: {e}", file=sys.stderr)
         return None

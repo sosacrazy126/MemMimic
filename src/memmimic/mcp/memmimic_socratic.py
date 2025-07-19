@@ -35,7 +35,7 @@ class SocraticDialogue:
 
     def to_memory(self):
         """Convert dialogue to persistent memory format"""
-        from memmimic.memory.memory import Memory
+        from memmimic.memory.storage import Memory
 
         content = f"""🧘 SOCRATIC DIALOGUE - {self.started_at}
 
@@ -57,7 +57,11 @@ class SocraticDialogue:
   • Depth reached: {len(self.questions)} questions, {len(self.insights)} insights
 """
 
-        return Memory(content=content.strip(), memory_type="socratic", confidence=0.85)
+        return Memory(
+            content=content.strip(), 
+            metadata={"type": "socratic", "confidence": 0.85, "depth": len(self.questions)},
+            importance_score=0.8
+        )
 
 
 class MemMimicSocraticEngine:
@@ -625,17 +629,17 @@ class MemMimicSocraticEngine:
 def get_memory_store():
     """Get the MemMimic memory store instance"""
     try:
-        from memmimic.memory.memory import MemoryStore
+        from memmimic.memory.storage import AMMSStorage
 
-        # Use MemMimic memory database
-        db_path = os.path.join(memmimic_src, "..", "memmimic_memories.db")
+        # Use MemMimic memory database - standardized path
+        db_path = os.path.join(memmimic_src, "..", "memmimic.db")
         if not os.path.exists(db_path):
             # Fallback to legacy path
             db_path = os.path.join(
                 memmimic_src, "..", "..", "clay", "claude_mcp_enhanced_memories.db"
             )
 
-        return MemoryStore(db_path)
+        return AMMSStorage(db_path)
     except Exception as e:
         print(f"❌ Error accessing memory store: {e}", file=sys.stderr)
         return None

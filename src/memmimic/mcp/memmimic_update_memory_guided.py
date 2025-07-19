@@ -45,8 +45,9 @@ def analyze_memory_context(memory, assistant):
     """Analyze memory for Socratic questioning"""
     try:
         content = getattr(memory, "content", "")
-        mem_type = getattr(memory, "memory_type", "unknown")
-        confidence = getattr(memory, "confidence", 0.0)
+        metadata = getattr(memory, "metadata", {})
+        mem_type = metadata.get("type", "unknown")
+        confidence = metadata.get("confidence", 0.0)
         created_at = getattr(memory, "created_at", "unknown")
 
         # Generate Socratic questions based on memory type and content
@@ -137,8 +138,9 @@ def main():
 
         # Extract memory details
         content = getattr(memory, "content", "")
-        mem_type = getattr(memory, "memory_type", "unknown")
-        confidence = getattr(memory, "confidence", 0.0)
+        metadata = getattr(memory, "metadata", {})
+        mem_type = metadata.get("type", "unknown")
+        confidence = metadata.get("confidence", 0.0)
         created_at = getattr(memory, "created_at", "unknown")
 
         # Analyze memory for guidance
