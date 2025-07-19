@@ -9,36 +9,34 @@ __author__ = "Sprooket & Claude"
 
 # Main API
 from .api import MemMimicAPI, create_memmimic
-
-# Core components (for advanced users)
-from .memory import UnifiedMemoryStore, MemoryStore, Memory, ContextualAssistant
-from .tales import TaleManager
 from .cxd import (
     CXDFunction,
-    ExecutionState,
-    CXDTag, 
     CXDSequence,
+    CXDTag,
+    ExecutionState,
     OptimizedMetaCXDClassifier,
     create_optimized_classifier,
 )
+
+# Core components (for advanced users)
+from .memory import ContextualAssistant, Memory, MemoryStore, UnifiedMemoryStore
+from .tales import TaleManager
 
 __all__ = [
     # Main API (most users)
     "MemMimicAPI",
     "create_memmimic",
-    
     # Core components (advanced users)
     "UnifiedMemoryStore",
-    "MemoryStore", 
+    "MemoryStore",
     "Memory",
     "ContextualAssistant",
     "TaleManager",
-    
     # CXD Framework
     "CXDFunction",
     "ExecutionState",
     "CXDTag",
-    "CXDSequence", 
+    "CXDSequence",
     "OptimizedMetaCXDClassifier",
     "create_optimized_classifier",
 ]

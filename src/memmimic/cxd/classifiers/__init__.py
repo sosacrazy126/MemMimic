@@ -6,18 +6,19 @@ and meta-classifiers with their optimized variants.
 """
 
 from .lexical import LexicalCXDClassifier
-from .semantic import SemanticCXDClassifier  
-from .optimized_semantic import OptimizedSemanticCXDClassifier
 from .meta import MetaCXDClassifier
 from .optimized_meta import (
     OptimizedMetaCXDClassifier,
+    create_fast_classifier,
     create_optimized_classifier,
-    create_fast_classifier
 )
+from .optimized_semantic import OptimizedSemanticCXDClassifier
+from .semantic import SemanticCXDClassifier
 
 # Try to import factory if it exists
 try:
     from .factory import CXDClassifierFactory
+
     _has_factory = True
 except ImportError:
     CXDClassifierFactory = None
@@ -28,11 +29,9 @@ __all__ = [
     "LexicalCXDClassifier",
     "SemanticCXDClassifier",
     "MetaCXDClassifier",
-    
     # Optimized classifiers
     "OptimizedSemanticCXDClassifier",
     "OptimizedMetaCXDClassifier",
-    
     # Factory functions
     "create_optimized_classifier",
     "create_fast_classifier",

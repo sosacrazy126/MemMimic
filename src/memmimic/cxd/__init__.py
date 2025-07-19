@@ -4,16 +4,20 @@ CXD Framework Integration
 Cognitive function classification (Control/Context/Data).
 """
 
-from .core.types import CXDFunction, ExecutionState, CXDTag, CXDSequence
-from .classifiers.optimized_meta import OptimizedMetaCXDClassifier, create_optimized_classifier, create_fast_classifier
-from .classifiers.meta import MetaCXDClassifier
 from .classifiers.factory import CXDClassifierFactory
+from .classifiers.meta import MetaCXDClassifier
+from .classifiers.optimized_meta import (
+    OptimizedMetaCXDClassifier,
+    create_fast_classifier,
+    create_optimized_classifier,
+)
 from .core.config import CXDConfig
+from .core.types import CXDFunction, CXDSequence, CXDTag, ExecutionState
 
 __all__ = [
     # Core types
     "CXDFunction",
-    "ExecutionState", 
+    "ExecutionState",
     "CXDTag",
     "CXDSequence",
     # Main classifiers

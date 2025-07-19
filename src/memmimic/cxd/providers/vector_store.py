@@ -1,22 +1,22 @@
 # --- Archivo: src/cxd_classifier/providers/vector_store.py ---
-import hashlib
+import logging
 import pickle
 import time
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Any, Union
-import logging
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
-from ..core.interfaces import VectorStore # Asegúrate que esta importación sea correcta
+from ..core.interfaces import VectorStore  # Asegúrate que esta importación sea correcta
 
 # Optional FAISS import
 try:
     import faiss
+
     FAISS_AVAILABLE = True
 except ImportError:
     FAISS_AVAILABLE = False
-    faiss = None # faiss será None si la importación falla
+    faiss = None  # faiss será None si la importación falla
 
 logger = logging.getLogger(__name__)
 
@@ -28,38 +28,44 @@ class FAISSVectorStore(VectorStore):
     distance metrics and index types.
     """
 
-    def __init__(self,
-                 dimension: int, # Este es el parámetro de entrada
-                 metric: str = "cosine",
-                 index_type: str = "flat",
-                 normalize_vectors: bool = True):
+    def __init__(
+        self,
+        dimension: int,  # Este es el parámetro de entrada
+        metric: str = "cosine",
+        index_type: str = "flat",
+        normalize_vectors: bool = True,
+    ):
         if not FAISS_AVAILABLE:
-            raise ImportError("FAISS is not available. Install with: pip install faiss-cpu or faiss-gpu")
+            raise ImportError(
+                "FAISS is not available. Install with: pip install faiss-cpu or faiss-gpu"
+            )
 
         self._dimension_val: int = dimension  # ASIGNACIÓN AL ATRIBUTO INTERNO
         self.metric: str = metric.lower()
         self.index_type: str = index_type.lower()
         self.normalize_vectors: bool = normalize_vectors
 
-        self.index: 'faiss.Index' = self._create_faiss_index()
+        self.index: "faiss.Index" = self._create_faiss_index()
         self.metadata_store: List[Dict[str, Any]] = []
         self.stats: Dict[str, Any] = {
             "vectors_added": 0,
             "searches_performed": 0,
             "total_search_time_ms": 0.0,
-            "last_search_time_ms": 0.0
+            "last_search_time_ms": 0.0,
         }
-        logger.info(f"Initialized FAISS vector store: {self.dimension}D, {self.metric}, {self.index_type}")
+        logger.info(
+            f"Initialized FAISS vector store: {self.dimension}D, {self.metric}, {self.index_type}"
+        )
 
     @property
     def dimension(self) -> int:
         """Get vector dimension."""
         return self._dimension_val
 
-    def _create_faiss_index(self) -> 'faiss.Index':
+    def _create_faiss_index(self) -> "faiss.Index":
         """Create appropriate FAISS index based on configuration."""
         dim_to_use = self._dimension_val
-        index: 'faiss.Index'
+        index: "faiss.Index"
 
         if self.metric == "cosine":
             if self.index_type == "flat":
@@ -67,14 +73,18 @@ class FAISSVectorStore(VectorStore):
             elif self.index_type == "ivf":
                 quantizer = faiss.IndexFlatIP(dim_to_use)
                 nlist = min(100, max(1, dim_to_use // 10 if dim_to_use >= 40 else 4))
-                index = faiss.IndexIVFFlat(quantizer, dim_to_use, nlist, faiss.METRIC_INNER_PRODUCT)
+                index = faiss.IndexIVFFlat(
+                    quantizer, dim_to_use, nlist, faiss.METRIC_INNER_PRODUCT
+                )
             elif self.index_type == "hnsw":
                 M = 32
                 index = faiss.IndexHNSWFlat(dim_to_use, M, faiss.METRIC_INNER_PRODUCT)
                 index.hnsw.efConstruction = 40
                 index.hnsw.efSearch = 32
             else:
-                raise ValueError(f"Unsupported index type for cosine: {self.index_type}")
+                raise ValueError(
+                    f"Unsupported index type for cosine: {self.index_type}"
+                )
 
         elif self.metric == "euclidean":
             if self.index_type == "flat":
@@ -82,21 +92,27 @@ class FAISSVectorStore(VectorStore):
             elif self.index_type == "ivf":
                 quantizer = faiss.IndexFlatL2(dim_to_use)
                 nlist = min(100, max(1, dim_to_use // 10 if dim_to_use >= 40 else 4))
-                index = faiss.IndexIVFFlat(quantizer, dim_to_use, nlist, faiss.METRIC_L2)
+                index = faiss.IndexIVFFlat(
+                    quantizer, dim_to_use, nlist, faiss.METRIC_L2
+                )
             elif self.index_type == "hnsw":
                 M = 32
                 index = faiss.IndexHNSWFlat(dim_to_use, M, faiss.METRIC_L2)
                 index.hnsw.efConstruction = 40
                 index.hnsw.efSearch = 32
             else:
-                raise ValueError(f"Unsupported index type for euclidean: {self.index_type}")
+                raise ValueError(
+                    f"Unsupported index type for euclidean: {self.index_type}"
+                )
 
         elif self.metric == "dot_product":
             if self.index_type == "flat":
                 index = faiss.IndexFlatIP(dim_to_use)
             else:
-                raise ValueError(f"Dot product currently only supports flat index type for simplicity. "
-                                 f"Consider IndexIVFFlat or HNSWFlat with METRIC_INNER_PRODUCT if needed.")
+                raise ValueError(
+                    f"Dot product currently only supports flat index type for simplicity. "
+                    f"Consider IndexIVFFlat or HNSWFlat with METRIC_INNER_PRODUCT if needed."
+                )
         else:
             raise ValueError(f"Unsupported metric: {self.metric}")
         return index
@@ -104,8 +120,10 @@ class FAISSVectorStore(VectorStore):
     def add(self, vectors: np.ndarray, metadata: List[Dict[str, Any]]) -> None:
         if vectors.ndim != 2:
             raise ValueError("Vectors must be a 2D array")
-        if vectors.shape[1] != self.dimension: # Usa la propiedad (getter)
-            raise ValueError(f"Vector dimension {vectors.shape[1]} doesn't match index dimension {self.dimension}")
+        if vectors.shape[1] != self.dimension:  # Usa la propiedad (getter)
+            raise ValueError(
+                f"Vector dimension {vectors.shape[1]} doesn't match index dimension {self.dimension}"
+            )
         if len(metadata) != vectors.shape[0]:
             raise ValueError("Number of metadata entries must match number of vectors")
 
@@ -114,21 +132,29 @@ class FAISSVectorStore(VectorStore):
         if self.normalize_vectors and self.metric == "cosine":
             faiss.normalize_L2(vectors_to_add)
 
-        if hasattr(self.index, 'is_trained') and not self.index.is_trained:
-            n_train_min = getattr(self.index, 'nlist', 1) if hasattr(self.index, 'nlist') else 1
+        if hasattr(self.index, "is_trained") and not self.index.is_trained:
+            n_train_min = (
+                getattr(self.index, "nlist", 1) if hasattr(self.index, "nlist") else 1
+            )
             n_train_min = max(n_train_min, 1)
             if vectors_to_add.shape[0] >= n_train_min:
                 self.index.train(vectors_to_add)
             else:
-                logger.warning(f"Index type {self.index_type} may require training, but not enough vectors ({vectors_to_add.shape[0]}) provided. "
-                               f"Min required: {n_train_min}. This might lead to errors if index is not already trained.")
+                logger.warning(
+                    f"Index type {self.index_type} may require training, but not enough vectors ({vectors_to_add.shape[0]}) provided. "
+                    f"Min required: {n_train_min}. This might lead to errors if index is not already trained."
+                )
 
         self.index.add(vectors_to_add)
         self.metadata_store.extend(metadata)
         self.stats["vectors_added"] += vectors_to_add.shape[0]
-        logger.debug(f"Added {vectors_to_add.shape[0]} vectors to FAISS index. Total size: {self.index.ntotal}")
+        logger.debug(
+            f"Added {vectors_to_add.shape[0]} vectors to FAISS index. Total size: {self.index.ntotal}"
+        )
 
-    def search(self, query_vector: np.ndarray, k: int = 10) -> Tuple[np.ndarray, np.ndarray]:
+    def search(
+        self, query_vector: np.ndarray, k: int = 10
+    ) -> Tuple[np.ndarray, np.ndarray]:
         start_time = time.time()
 
         if self.index.ntotal == 0:
@@ -136,8 +162,10 @@ class FAISSVectorStore(VectorStore):
             return np.array([]), np.array([])
         if query_vector.ndim != 1:
             raise ValueError("Query vector must be 1D")
-        if len(query_vector) != self.dimension: # Usa la propiedad (getter)
-            raise ValueError(f"Query vector dimension {len(query_vector)} doesn't match index dimension {self.dimension}")
+        if len(query_vector) != self.dimension:  # Usa la propiedad (getter)
+            raise ValueError(
+                f"Query vector dimension {len(query_vector)} doesn't match index dimension {self.dimension}"
+            )
 
         query = query_vector.astype(np.float32).reshape(1, -1)
         if self.normalize_vectors and self.metric == "cosine":
@@ -164,7 +192,9 @@ class FAISSVectorStore(VectorStore):
     def get_metadata(self, index: int) -> Dict[str, Any]:
         if 0 <= index < len(self.metadata_store):
             return self.metadata_store[index]
-        raise IndexError(f"Index {index} out of range for metadata store (size: {len(self.metadata_store)})")
+        raise IndexError(
+            f"Index {index} out of range for metadata store (size: {len(self.metadata_store)})"
+        )
 
     def save(self, path: Union[str, Path]) -> bool:
         try:
@@ -173,17 +203,17 @@ class FAISSVectorStore(VectorStore):
             index_path = save_path / "faiss_index.bin"
             faiss.write_index(self.index, str(index_path))
             metadata_path = save_path / "metadata.pkl"
-            with open(metadata_path, 'wb') as f:
+            with open(metadata_path, "wb") as f:
                 pickle.dump(self.metadata_store, f)
             config_data = {
-                "dimension": self.dimension, # Usa la propiedad (getter)
+                "dimension": self.dimension,  # Usa la propiedad (getter)
                 "metric": self.metric,
                 "index_type": self.index_type,
                 "normalize_vectors": self.normalize_vectors,
-                "stats": self.stats
+                "stats": self.stats,
             }
             config_path_file = save_path / "config.pkl"
-            with open(config_path_file, 'wb') as f:
+            with open(config_path_file, "wb") as f:
                 pickle.dump(config_data, f)
             logger.info(f"Saved FAISS vector store to {save_path}")
             return True
@@ -198,13 +228,15 @@ class FAISSVectorStore(VectorStore):
             if not config_path_file.exists():
                 logger.error(f"Config file not found at {config_path_file}")
                 return False
-            with open(config_path_file, 'rb') as f:
+            with open(config_path_file, "rb") as f:
                 config_data = pickle.load(f)
 
             # Verificamos que la dimensión del __init__ coincida con la guardada.
             # Si se quisiera que el archivo dictara la dimensión, habría que cambiar self._dimension_val aquí.
-            if config_data["dimension"] != self.dimension: # Usa la propiedad (getter)
-                raise ValueError(f"Dimension mismatch: expected {self.dimension} (from init), got {config_data['dimension']} from saved config.")
+            if config_data["dimension"] != self.dimension:  # Usa la propiedad (getter)
+                raise ValueError(
+                    f"Dimension mismatch: expected {self.dimension} (from init), got {config_data['dimension']} from saved config."
+                )
 
             index_path = load_path / "faiss_index.bin"
             if not index_path.exists():
@@ -214,17 +246,21 @@ class FAISSVectorStore(VectorStore):
 
             metadata_path = load_path / "metadata.pkl"
             if not metadata_path.exists():
-                logger.warning(f"Metadata file not found at {metadata_path}. Initializing empty metadata.")
+                logger.warning(
+                    f"Metadata file not found at {metadata_path}. Initializing empty metadata."
+                )
                 self.metadata_store = []
             else:
-                with open(metadata_path, 'rb') as f:
+                with open(metadata_path, "rb") as f:
                     self.metadata_store = pickle.load(f)
 
             self.metric = config_data["metric"]
             self.index_type = config_data["index_type"]
             self.normalize_vectors = config_data["normalize_vectors"]
             self.stats = config_data.get("stats", self.stats)
-            logger.info(f"Loaded FAISS vector store from {load_path}. Index size: {self.index.ntotal}")
+            logger.info(
+                f"Loaded FAISS vector store from {load_path}. Index size: {self.index.ntotal}"
+            )
             return True
         except Exception as e:
             logger.error(f"Failed to load FAISS vector store: {e}", exc_info=True)
@@ -235,7 +271,7 @@ class FAISSVectorStore(VectorStore):
         return self.index.ntotal if self.index else 0
 
     def clear(self) -> None:
-        if self.index: # Solo llamar a reset si el índice existe
+        if self.index:  # Solo llamar a reset si el índice existe
             self.index.reset()
         self.metadata_store.clear()
         self.stats["vectors_added"] = 0
@@ -245,13 +281,15 @@ class FAISSVectorStore(VectorStore):
 
     def get_stats(self) -> Dict[str, Any]:
         stats = self.stats.copy()
-        stats.update({
-            "size": self.size,
-            "dimension": self.dimension, # Usa la propiedad (getter)
-            "metric": self.metric,
-            "index_type": self.index_type,
-            "faiss_available": True
-        })
+        stats.update(
+            {
+                "size": self.size,
+                "dimension": self.dimension,  # Usa la propiedad (getter)
+                "metric": self.metric,
+                "index_type": self.index_type,
+                "faiss_available": True,
+            }
+        )
         if self.stats.get("searches_performed", 0) > 0:
             stats["avg_search_time_ms"] = (
                 self.stats["total_search_time_ms"] / self.stats["searches_performed"]
@@ -265,6 +303,7 @@ class NumpyVectorStore(VectorStore):
     Provides O(n) search when FAISS is not available. Suitable for
     small to medium datasets (< 10k vectors).
     """
+
     def __init__(self, dimension: int, metric: str = "cosine"):
         self._dimension_val: int = dimension  # ASIGNACIÓN AL ATRIBUTO INTERNO
         self.metric: str = metric.lower()
@@ -278,9 +317,11 @@ class NumpyVectorStore(VectorStore):
             "vectors_added": 0,
             "searches_performed": 0,
             "total_search_time_ms": 0.0,
-            "last_search_time_ms": 0.0
+            "last_search_time_ms": 0.0,
         }
-        logger.info(f"Initialized NumPy vector store: {self.dimension}D, {self.metric}") # Usa la propiedad (getter)
+        logger.info(
+            f"Initialized NumPy vector store: {self.dimension}D, {self.metric}"
+        )  # Usa la propiedad (getter)
 
     @property
     def dimension(self) -> int:
@@ -290,8 +331,10 @@ class NumpyVectorStore(VectorStore):
     def add(self, vectors: np.ndarray, metadata: List[Dict[str, Any]]) -> None:
         if vectors.ndim != 2:
             raise ValueError("Vectors must be a 2D array")
-        if vectors.shape[1] != self.dimension: # Usa la propiedad (getter)
-            raise ValueError(f"Vector dimension {vectors.shape[1]} doesn't match store dimension {self.dimension}")
+        if vectors.shape[1] != self.dimension:  # Usa la propiedad (getter)
+            raise ValueError(
+                f"Vector dimension {vectors.shape[1]} doesn't match store dimension {self.dimension}"
+            )
         if len(metadata) != vectors.shape[0]:
             raise ValueError("Number of metadata entries must match number of vectors")
 
@@ -303,17 +346,23 @@ class NumpyVectorStore(VectorStore):
 
         self.metadata_store.extend(metadata)
         self.stats["vectors_added"] += vectors_to_add.shape[0]
-        logger.debug(f"Added {vectors_to_add.shape[0]} vectors to NumPy store. Total size: {self.size}")
+        logger.debug(
+            f"Added {vectors_to_add.shape[0]} vectors to NumPy store. Total size: {self.size}"
+        )
 
-    def search(self, query_vector: np.ndarray, k: int = 10) -> Tuple[np.ndarray, np.ndarray]:
+    def search(
+        self, query_vector: np.ndarray, k: int = 10
+    ) -> Tuple[np.ndarray, np.ndarray]:
         start_time = time.time()
         if self.vectors is None or self.size == 0:
             logger.warning("Search called on an empty NumPy store.")
             return np.array([]), np.array([])
         if query_vector.ndim != 1:
             raise ValueError("Query vector must be 1D")
-        if len(query_vector) != self.dimension: # Usa la propiedad (getter)
-            raise ValueError(f"Query vector dimension {len(query_vector)} doesn't match store dimension {self.dimension}")
+        if len(query_vector) != self.dimension:  # Usa la propiedad (getter)
+            raise ValueError(
+                f"Query vector dimension {len(query_vector)} doesn't match store dimension {self.dimension}"
+            )
 
         query = query_vector.astype(np.float32)
         similarities: np.ndarray
@@ -322,7 +371,9 @@ class NumpyVectorStore(VectorStore):
             similarities = self._cosine_similarity(query, self.vectors)
         elif self.metric == "euclidean":
             distances = np.linalg.norm(self.vectors - query, axis=1)
-            similarities = 1.0 / (1.0 + distances + 1e-8) # Añadido epsilon para evitar división por cero si distancia es -1
+            similarities = 1.0 / (
+                1.0 + distances + 1e-8
+            )  # Añadido epsilon para evitar división por cero si distancia es -1
         elif self.metric == "dot_product":
             similarities = np.dot(self.vectors, query)
         else:
@@ -333,7 +384,9 @@ class NumpyVectorStore(VectorStore):
         if effective_k == 0:
             return np.array([]), np.array([])
 
-        top_indices = np.argsort(similarities)[::-1][:effective_k] # Orden descendente para similitud
+        top_indices = np.argsort(similarities)[::-1][
+            :effective_k
+        ]  # Orden descendente para similitud
         top_similarities = similarities[top_indices]
 
         search_time = (time.time() - start_time) * 1000
@@ -342,32 +395,35 @@ class NumpyVectorStore(VectorStore):
         self.stats["last_search_time_ms"] = search_time
         return top_similarities, top_indices
 
-    def _cosine_similarity(self, query: np.ndarray, data_vectors: np.ndarray) -> np.ndarray:
+    def _cosine_similarity(
+        self, query: np.ndarray, data_vectors: np.ndarray
+    ) -> np.ndarray:
         query_norm = np.linalg.norm(query)
-        if query_norm < 1e-8: # query es un vector nulo
-            return np.zeros(data_vectors.shape[0]) # Similitud cero con todos
+        if query_norm < 1e-8:  # query es un vector nulo
+            return np.zeros(data_vectors.shape[0])  # Similitud cero con todos
 
         data_norms = np.linalg.norm(data_vectors, axis=1)
-        
+
         # Crear una máscara para las normas de data_vectors que son casi cero
         zero_norm_mask = data_norms < 1e-8
         # Para las normas casi cero, establecerlas a un valor pequeño para evitar la división por cero,
         # pero la similitud con estos vectores será esencialmente cero de todos modos si el producto punto no es también cero.
-        data_norms[zero_norm_mask] = 1e-8 
+        data_norms[zero_norm_mask] = 1e-8
 
         dot_products = np.dot(data_vectors, query)
         similarities = dot_products / (query_norm * data_norms)
-        
+
         # Si un vector de datos era nulo, su similitud debería ser 0 (a menos que query también fuera nulo, caso ya manejado)
         similarities[zero_norm_mask] = 0.0
-        
-        return similarities
 
+        return similarities
 
     def get_metadata(self, index: int) -> Dict[str, Any]:
         if 0 <= index < len(self.metadata_store):
             return self.metadata_store[index]
-        raise IndexError(f"Index {index} out of range for metadata store (size: {len(self.metadata_store)})")
+        raise IndexError(
+            f"Index {index} out of range for metadata store (size: {len(self.metadata_store)})"
+        )
 
     def save(self, path: Union[str, Path]) -> bool:
         try:
@@ -377,15 +433,15 @@ class NumpyVectorStore(VectorStore):
                 vectors_path = save_path / "vectors.npy"
                 np.save(vectors_path, self.vectors)
             metadata_path = save_path / "metadata.pkl"
-            with open(metadata_path, 'wb') as f:
+            with open(metadata_path, "wb") as f:
                 pickle.dump(self.metadata_store, f)
             config_data = {
-                "dimension": self.dimension, # Usa la propiedad (getter)
+                "dimension": self.dimension,  # Usa la propiedad (getter)
                 "metric": self.metric,
-                "stats": self.stats
+                "stats": self.stats,
             }
             config_path_file = save_path / "config.pkl"
-            with open(config_path_file, 'wb') as f:
+            with open(config_path_file, "wb") as f:
                 pickle.dump(config_data, f)
             logger.info(f"Saved NumPy vector store to {save_path}")
             return True
@@ -400,29 +456,35 @@ class NumpyVectorStore(VectorStore):
             if not config_path_file.exists():
                 logger.error(f"Config file not found at {config_path_file}")
                 return False
-            with open(config_path_file, 'rb') as f:
+            with open(config_path_file, "rb") as f:
                 config_data = pickle.load(f)
 
-            if config_data["dimension"] != self.dimension: # Usa la propiedad (getter)
-                raise ValueError(f"Dimension mismatch: expected {self.dimension}, got {config_data['dimension']} from saved config.")
+            if config_data["dimension"] != self.dimension:  # Usa la propiedad (getter)
+                raise ValueError(
+                    f"Dimension mismatch: expected {self.dimension}, got {config_data['dimension']} from saved config."
+                )
 
             vectors_path = load_path / "vectors.npy"
             if vectors_path.exists():
                 self.vectors = np.load(vectors_path)
             else:
-                self.vectors = None # Importante si el archivo de vectores no existe
+                self.vectors = None  # Importante si el archivo de vectores no existe
 
             metadata_path = load_path / "metadata.pkl"
             if not metadata_path.exists():
-                logger.warning(f"Metadata file not found at {metadata_path}. Initializing empty metadata.")
+                logger.warning(
+                    f"Metadata file not found at {metadata_path}. Initializing empty metadata."
+                )
                 self.metadata_store = []
             else:
-                with open(metadata_path, 'rb') as f:
+                with open(metadata_path, "rb") as f:
                     self.metadata_store = pickle.load(f)
-            
+
             self.metric = config_data["metric"]
             self.stats = config_data.get("stats", self.stats)
-            logger.info(f"Loaded NumPy vector store from {load_path}. Size: {self.size}")
+            logger.info(
+                f"Loaded NumPy vector store from {load_path}. Size: {self.size}"
+            )
             return True
         except Exception as e:
             logger.error(f"Failed to load NumPy vector store: {e}", exc_info=True)
@@ -440,41 +502,56 @@ class NumpyVectorStore(VectorStore):
 
     def get_stats(self) -> Dict[str, Any]:
         stats = self.stats.copy()
-        stats.update({
-            "size": self.size,
-            "dimension": self.dimension, # Usa la propiedad (getter)
-            "metric": self.metric,
-            "faiss_available": False
-        })
+        stats.update(
+            {
+                "size": self.size,
+                "dimension": self.dimension,  # Usa la propiedad (getter)
+                "metric": self.metric,
+                "faiss_available": False,
+            }
+        )
         if self.stats.get("searches_performed", 0) > 0:
             stats["avg_search_time_ms"] = (
                 self.stats["total_search_time_ms"] / self.stats["searches_performed"]
             )
         return stats
 
+
 # =============================================================================
 # FACTORY FUNCTIONS
 # =============================================================================
 
-def create_vector_store(dimension: int,
-                       metric: str = "cosine",
-                       prefer_faiss: bool = True,
-                       index_type: str = "flat",
-                       **kwargs) -> VectorStore:
+
+def create_vector_store(
+    dimension: int,
+    metric: str = "cosine",
+    prefer_faiss: bool = True,
+    index_type: str = "flat",
+    **kwargs,
+) -> VectorStore:
     """
     Create the best available vector store for the environment.
     """
     # normalize_vectors es un kwarg común para FAISSVectorStore cuando metric es 'cosine'
-    normalize_vectors = kwargs.get('normalize_vectors', True)
+    normalize_vectors = kwargs.get("normalize_vectors", True)
 
     if prefer_faiss and FAISS_AVAILABLE:
         try:
-            logger.info(f"Attempting to create FAISSVectorStore (dim={dimension}, metric={metric}, type={index_type}, normalize={normalize_vectors})")
-            return FAISSVectorStore(dimension, metric, index_type, normalize_vectors=normalize_vectors)
+            logger.info(
+                f"Attempting to create FAISSVectorStore (dim={dimension}, metric={metric}, type={index_type}, normalize={normalize_vectors})"
+            )
+            return FAISSVectorStore(
+                dimension, metric, index_type, normalize_vectors=normalize_vectors
+            )
         except Exception as e:
-            logger.warning(f"Failed to create FAISS store, falling back to NumPy: {e}", exc_info=True)
+            logger.warning(
+                f"Failed to create FAISS store, falling back to NumPy: {e}",
+                exc_info=True,
+            )
 
-    logger.info(f"Using NumPyVectorStore as FAISS is not preferred, not available, or failed to initialize (dim={dimension}, metric={metric}).")
+    logger.info(
+        f"Using NumPyVectorStore as FAISS is not preferred, not available, or failed to initialize (dim={dimension}, metric={metric})."
+    )
     return NumpyVectorStore(dimension, metric)
 
 

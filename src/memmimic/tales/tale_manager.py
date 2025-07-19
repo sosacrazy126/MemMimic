@@ -13,14 +13,11 @@ NEW STRUCTURE:
 - misc/       → Everything else (flexible subdirs)
 """
 
-import os
-import re
-import json
-import hashlib
 import datetime
-from pathlib import Path
-from typing import Dict, List, Optional, Any, Tuple, Union
 import logging
+import re
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
