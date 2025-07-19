@@ -6,7 +6,7 @@ MemMimic doesn't just think - it questions its own thinking
 from datetime import datetime
 from typing import Dict, List
 
-from .memory import Memory, MemoryStore
+from .storage import Memory
 
 
 class SocraticDialogue:
@@ -41,7 +41,7 @@ class SocraticDialogue:
 class SocraticEngine:
     """Socratic self-questioning engine for MemMimic"""
 
-    def __init__(self, memory_store: MemoryStore):
+    def __init__(self, memory_store):
         self.memory_store = memory_store
 
         # Patterns that trigger Socratic dialogues (updated for MemMimic)

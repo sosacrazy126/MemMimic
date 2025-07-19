@@ -3,30 +3,32 @@ MemMimic Memory System
 Enhanced with Active Memory Management System (AMMS)
 """
 
-# AMMS Components (available for advanced usage)
+# AMMS Components
 from .active_manager import ActiveMemoryConfig, ActiveMemoryPool
 from .active_schema import ActiveMemorySchema
 from .assistant import ContextualAssistant
 from .importance_scorer import ImportanceScorer, ScoringWeights
-from .memory import Memory, MemoryStore
 from .socratic import SocraticDialogue, SocraticEngine
 from .stale_detector import StaleDetectionConfig, StaleMemoryDetector
-from .unified_store import UnifiedMemoryStore
+
+# AMMS-Only Storage (Post-Migration Architecture)
+from .storage import AMMSStorage, create_amms_storage, Memory
 
 __all__ = [
-    # Core interfaces (backward compatible)
-    "MemoryStore",
+    # Core interfaces
     "Memory",
     "ContextualAssistant",
-    "UnifiedMemoryStore",
-    "SocraticEngine",
+    "SocraticEngine", 
     "SocraticDialogue",
-    # AMMS Components (for advanced usage)
+    # AMMS Components
     "ActiveMemoryPool",
-    "ActiveMemoryConfig",
+    "ActiveMemoryConfig", 
     "ImportanceScorer",
     "ScoringWeights",
     "StaleMemoryDetector",
     "StaleDetectionConfig",
     "ActiveMemorySchema",
+    # AMMS-Only Storage (Post-Migration)
+    "AMMSStorage",
+    "create_amms_storage",
 ]

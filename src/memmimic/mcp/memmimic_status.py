@@ -5,6 +5,7 @@ MemMimic Status Tool - Clean System Health Check
 Professional system status without auto-briefings or noise
 """
 
+import asyncio
 import os
 import sys
 from datetime import datetime, timedelta
@@ -15,10 +16,10 @@ if sys.platform.startswith("win"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 # Add MemMimic to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
 try:
-    from memmimic import ContextualAssistant
+    from memmimic import create_memmimic
     from memmimic.tales.tale_manager import TaleManager
 except ImportError as e:
     print(f"❌ Error importing MemMimic: {e}", file=sys.stderr)
@@ -50,46 +51,45 @@ def check_cxd_status():
         return {"available": False, "error": str(e)}
 
 
-def analyze_memory_statistics(memory_store):
-    """Analyze memory database statistics"""
+async def analyze_memory_statistics(api):
+    """Analyze memory database statistics using async API"""
     try:
-        memories = memory_store.get_all()
+        import asyncio
+        
+        # Get count and list recent memories 
+        memory_count = await api.memory.count_memories()
+        memories = await api.memory.list_memories(limit=1000)  # Recent memories
 
         if not memories:
-            return {"total": 0, "by_type": {}, "recent_24h": 0, "avg_confidence": 0.0}
+            return {"total": memory_count, "by_type": {}, "recent_24h": 0, "avg_importance": 0.0}
 
         # Memory type distribution
         type_counts = {}
-        total_confidence = 0
+        total_importance = 0
         recent_count = 0
         now = datetime.now()
 
         for memory in memories:
             # Type distribution
-            mem_type = getattr(memory, "memory_type", "unknown")
+            mem_type = memory.metadata.get("type", "unknown") 
             type_counts[mem_type] = type_counts.get(mem_type, 0) + 1
 
-            # Confidence tracking
-            confidence = getattr(memory, "confidence", 0.0)
-            total_confidence += confidence
+            # Importance tracking
+            importance = memory.importance_score
+            total_importance += importance
 
             # Recent memories (24h)
             try:
-                created_at = getattr(memory, "created_at", "")
-                if created_at:
-                    mem_time = datetime.fromisoformat(
-                        created_at.replace("Z", "+00:00").replace("+00:00", "")
-                    )
-                    if (now - mem_time) < timedelta(hours=24):
-                        recent_count += 1
+                if (now - memory.created_at) < timedelta(hours=24):
+                    recent_count += 1
             except:
                 pass
 
         return {
-            "total": len(memories),
+            "total": memory_count,
             "by_type": type_counts,
             "recent_24h": recent_count,
-            "avg_confidence": total_confidence / len(memories) if memories else 0.0,
+            "avg_importance": total_importance / len(memories) if memories else 0.0,
         }
 
     except Exception as e:
@@ -136,60 +136,40 @@ def analyze_tales_statistics():
         return {"error": str(e)}
 
 
-def main():
+async def main_async():
     try:
-        # Initialize MemMimic components with enhanced wrapper
-        try:
-            from memmimic.mcp.enhanced_mcp_wrapper import enhance_mcp_tool
+        # Initialize MemMimic with AMMS-only architecture
+        api = create_memmimic("memmimic.db")
 
-            enhanced_wrapper = enhance_mcp_tool("status", None)
-            memory_store = enhanced_wrapper.memory_store
+        # Check CXD status
+        cxd_status = check_cxd_status()
 
-            # Get enhanced status
-            enhanced_status = enhanced_wrapper.enhanced_status()
+        # Analyze memory statistics (async)
+        memory_stats = await analyze_memory_statistics(api)
 
-            # Check if enhanced status succeeded
-            if enhanced_status.get("system_health") != "ERROR":
-                # Use enhanced data
-                memory_stats = enhanced_status.get("memory_statistics", {})
-                tales_stats = enhanced_status.get("tales_statistics", {})
-                cxd_status = enhanced_status.get("cxd_status", {})
-                performance_metrics = enhanced_status.get("performance_metrics", {})
-            else:
-                # Fallback to legacy approach
-                raise Exception("Enhanced status failed, using fallback")
+        # Analyze tales statistics
+        tales_stats = analyze_tales_statistics()
 
-        except Exception as e:
-            logger.warning(f"Enhanced MCP wrapper failed, using legacy approach: {e}")
-            # Fallback to legacy approach
-            assistant = ContextualAssistant("memmimic")
-            memory_store = assistant.memory_store
+        # Get storage stats
+        storage_stats = api.memory.get_stats()
 
-            # Check CXD status
-            cxd_status = check_cxd_status()
-
-            # Analyze memory statistics
-            memory_stats = analyze_memory_statistics(memory_store)
-
-            # Analyze tales statistics
-            tales_stats = analyze_tales_statistics()
-
-            performance_metrics = None
-            enhanced_wrapper = None
+        # Get API status
+        api_status = await api.status()
 
         # Build clean status report
         status_parts = []
 
         # Header
-        status_parts.append("🎯 MEMMIMIC SYSTEM STATUS")
+        status_parts.append("🎯 MEMMIMIC SYSTEM STATUS (POST-MIGRATION)")
         status_parts.append("=" * 50)
         status_parts.append("")
 
         # Core System Health
         status_parts.append("🔧 CORE SYSTEM:")
-        status_parts.append("  ✅ Memory Store: Active")
-        status_parts.append("  ✅ Assistant: Active")
-        status_parts.append("  ✅ Tales Manager: Active")
+        status_parts.append(f"  ✅ Storage Type: {storage_stats.get('storage_type', 'amms_only')}")
+        status_parts.append(f"  ✅ Total Memories: {api_status.get('memories', 0)}")
+        status_parts.append(f"  ✅ Total Tales: {api_status.get('tales', 0)}")
+        status_parts.append(f"  ✅ Status: {api_status.get('status', 'operational')}")
         status_parts.append("")
 
         # CXD Classification Status
@@ -208,13 +188,13 @@ def main():
             )
         status_parts.append("")
 
-        # Memory Statistics
+        # Memory Statistics 
         status_parts.append("🧮 MEMORY STATISTICS:")
         if "error" not in memory_stats:
             status_parts.append(f"  📊 Total memories: {memory_stats['total']}")
             status_parts.append(f"  🕐 Recent (24h): {memory_stats['recent_24h']}")
             status_parts.append(
-                f"  📈 Avg confidence: {memory_stats['avg_confidence']:.3f}"
+                f"  📈 Avg importance: {memory_stats['avg_importance']:.3f}"
             )
 
             if memory_stats["by_type"]:
@@ -241,41 +221,22 @@ def main():
             status_parts.append(f"  ❌ Tales analysis failed: {tales_stats['error']}")
         status_parts.append("")
 
-        # Enhanced Performance Metrics (if available)
-        if performance_metrics and enhanced_wrapper:
-            status_parts.append("⚡ PERFORMANCE METRICS:")
-            status_parts.append(
-                f"  🎯 System Health: {performance_metrics.get('status', 'UNKNOWN')}"
-            )
-            status_parts.append(
-                f"  📊 Total Operations: {performance_metrics.get('total_operations', 0)}"
-            )
-            status_parts.append(
-                f"  📈 Error Rate: {performance_metrics.get('error_rate', 0.0):.3f}"
-            )
-            status_parts.append(
-                f"  ⏱️ Avg Response Time: {performance_metrics.get('avg_response_time_ms', 0.0):.1f}ms"
-            )
-            status_parts.append(
-                f"  🔄 Active Operations: {performance_metrics.get('active_operations', 0)}"
-            )
+        # AMMS Performance Metrics
+        performance_metrics = storage_stats.get('metrics', {})
+        status_parts.append("⚡ AMMS PERFORMANCE:")
+        status_parts.append(f"  📊 Total Operations: {performance_metrics.get('total_operations', 0)}")
+        status_parts.append(f"  ✅ Successful Operations: {performance_metrics.get('successful_operations', 0)}")
+        status_parts.append(f"  ❌ Failed Operations: {performance_metrics.get('failed_operations', 0)}")
+        status_parts.append(f"  ⏱️ Avg Response Time: {performance_metrics.get('avg_response_time_ms', 0.0):.1f}ms")
+        status_parts.append("")
 
-            # Show recommendations if any
-            recommendations = performance_metrics.get("recommendations", [])
-            if recommendations:
-                status_parts.append("  💡 Recommendations:")
-                for rec in recommendations:
-                    status_parts.append(f"    • {rec}")
-
-            status_parts.append("")
-
-            # Show enhanced features
-            status_parts.append("🚀 ENHANCED FEATURES:")
-            status_parts.append("  ✅ AMMS Integration: Active")
-            status_parts.append("  ✅ Performance Monitoring: Active")
-            status_parts.append("  ✅ Enhanced Search: Active")
-            status_parts.append("  ✅ Caching: Active")
-            status_parts.append("")
+        # Post-Migration Features
+        status_parts.append("🚀 POST-MIGRATION FEATURES:")
+        status_parts.append("  ✅ AMMS-Only Architecture: Active")
+        status_parts.append("  ✅ Async API: Active")
+        status_parts.append("  ✅ High-Performance Storage: Active")
+        status_parts.append("  ✅ Clean Architecture: Active")
+        status_parts.append("")
 
         # System Health Summary
         total_issues = 0
@@ -285,14 +246,6 @@ def main():
             total_issues += 1
         if "error" in tales_stats:
             total_issues += 1
-
-        # Factor in performance metrics
-        if performance_metrics:
-            system_health = performance_metrics.get("status", "UNKNOWN")
-            if system_health == "CRITICAL":
-                total_issues += 2
-            elif system_health == "DEGRADED":
-                total_issues += 1
 
         if total_issues == 0:
             status_parts.append("🟢 SYSTEM HEALTH: All systems operational")
@@ -365,6 +318,11 @@ def main():
         print(f"❌ Critical error in status check: {str(e)}", file=sys.stderr)
         print(f"❌ Status check failed: {str(e)}")
         sys.exit(1)
+
+
+def main():
+    """Sync wrapper for MCP compatibility"""
+    asyncio.run(main_async())
 
 
 if __name__ == "__main__":

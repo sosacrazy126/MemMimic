@@ -13,7 +13,11 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 from .active_schema import ActiveMemorySchema
-from .memory import Memory
+from .storage import Memory
+from ..errors import (
+    MemMimicError, DatabaseError, ValidationError,
+    handle_errors, log_errors, with_error_context, get_error_logger
+)
 
 
 @dataclass
@@ -464,7 +468,17 @@ class ActiveMemoryPool:
             )
             hours_since_access = (datetime.now() - last_access).total_seconds() / 3600
             recency_boost = max(0, 1.0 - (hours_since_access / 168))  # 1 week decay
-        except:
+        except (ValueError, TypeError, AttributeError) as e:
+            # Handle invalid datetime strings or None values
+            logger = get_error_logger("active_manager")
+            logger.debug(
+                "Failed to parse last_access_time, using default recency boost",
+                extra={
+                    "last_access_time": memory_data.get("last_access_time", ""),
+                    "memory_id": memory_data.get("id"),
+                    "error": str(e)
+                }
+            )
             recency_boost = 0.0
 
         return (word_score * 0.7) + (recency_boost * 0.2) + ((1 - length_penalty) * 0.1)

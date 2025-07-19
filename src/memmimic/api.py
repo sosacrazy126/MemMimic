@@ -5,80 +5,96 @@ The main interface combining all MemMimic functionality.
 """
 
 from .cxd import create_optimized_classifier
-from .memory import ContextualAssistant, UnifiedMemoryStore
+from .memory import ContextualAssistant, create_amms_storage
 from .tales import TaleManager
+from .errors import (
+    MemMimicError, InitializationError, ExternalServiceError, 
+    handle_errors, log_errors, with_error_context, get_error_logger
+)
 
 
 class MemMimicAPI:
     """Unified API for MemMimic - 11 core tools with AMMS integration."""
 
-    def __init__(self, db_path="memmimic.db", config_path=None):
-        self.memory = UnifiedMemoryStore(db_path, config_path)
-        self.assistant = ContextualAssistant("memmimic", db_path)
-        self.tales_manager = TaleManager()
-        try:
-            self.cxd = create_optimized_classifier()
-        except Exception:
-            self.cxd = None  # Graceful fallback
+    def __init__(self, db_path="memmimic.db"):
+        self.logger = get_error_logger("api")
+        
+        with with_error_context(
+            operation="memmimic_initialization",
+            component="api",
+            metadata={"db_path": db_path}
+        ):
+            # Use AMMS storage (post-migration, clean architecture)
+            self.memory = create_amms_storage(db_path)
+            self.logger.info("Using AMMS storage (post-migration architecture)")
+                
+            self.assistant = ContextualAssistant("memmimic", db_path)
+            self.tales_manager = TaleManager()
+            
+            # Initialize CXD classifier with proper error handling
+            try:
+                self.cxd = create_optimized_classifier()
+                self.logger.info("CXD classifier initialized successfully")
+            except Exception as e:
+                # Convert to structured error with context
+                error = ExternalServiceError(
+                    "Failed to initialize CXD classifier",
+                    service_name="cxd_classifier",
+                    operation="initialization",
+                    context={"db_path": db_path, "config_path": config_path}
+                )
+                
+                # Log the error but continue with graceful fallback
+                self.logger.warning(
+                    "CXD classifier initialization failed, continuing without classification",
+                    extra={"error_id": error.error_id, "original_error": str(e)}
+                )
+                self.cxd = None
 
     # === MEMORY CORE (4 tools) ===
-    def remember(self, content: str, memory_type: str = "interaction"):
+    async def remember(self, content: str, memory_type: str = "interaction"):
         """Store + auto-classify in one step."""
         from .memory import Memory
 
-        memory = Memory(content, memory_type)
+        memory = Memory(content)
 
         # Auto-classify with CXD if available
         if self.cxd:
             try:
                 classification = self.cxd.classify(content)
-                memory.metadata = {"cxd": getattr(classification, "pattern", "unknown")}
-            except Exception:
-                pass  # Continue without classification
+                memory.metadata = {"cxd": getattr(classification, "pattern", "unknown"), "type": memory_type}
+            except Exception as e:
+                # Log classification failure but continue
+                memory.metadata = {"type": memory_type}
+                self.logger.debug(
+                    "CXD classification failed, storing memory without classification",
+                    extra={"content_length": len(content), "error": str(e)}
+                )
 
-        return self.memory.add(memory)
+        return await self.memory.store_memory(memory)
 
-    def recall_cxd(self, query: str, limit: int = 10):
-        """Hybrid semantic search."""
-        # For now, use basic search - can be enhanced later
-        return self.memory.search(query, limit=limit)
+    async def recall_cxd(self, query: str, limit: int = 10):
+        """Hybrid semantic search.""" 
+        return await self.memory.search_memories(query, limit)
 
     def think_with_memory(self, input_text: str):
         """Contextual processing."""
         return self.assistant.think(input_text)
 
-    def status(self):
+    async def status(self):
         """System status with AMMS information."""
-        all_memories = self.memory.get_all()
+        memory_count = await self.memory.count_memories()
         all_tales = self.tales_manager.list_tales()
+        stats = self.memory.get_stats()
 
-        # Get AMMS status if available
-        amms_status = {}
-        if hasattr(self.memory, "get_active_pool_status"):
-            try:
-                amms_status = self.memory.get_active_pool_status()
-            except Exception as e:
-                amms_status = {"error": str(e)}
-
-        base_status = {
-            "memories": len(all_memories),
+        return {
+            "memories": memory_count,
             "tales": len(all_tales),
             "cxd_available": self.cxd is not None,
-            "amms_active": getattr(self.memory, "is_amms_active", False),
+            "storage_type": stats.get("storage_type", "amms_only"),
+            "performance": stats.get("metrics", {}),
             "status": "operational",
         }
-
-        # Include AMMS details if available
-        if amms_status and "error" not in amms_status:
-            base_status.update(
-                {
-                    "amms_pool_status": amms_status.get("status_stats", {}),
-                    "amms_performance": amms_status.get("performance", {}),
-                    "memory_types": amms_status.get("memory_type_distribution", {}),
-                }
-            )
-
-        return base_status
 
     # === TALES SYSTEM (5 tools) ===
     def tales(self, query=None, stats=False, load=False, category=None, limit=10):
@@ -113,10 +129,10 @@ class MemMimicAPI:
             return {"error": "Confirmation required for deletion"}
         return self.tales_manager.delete_tale(name, category)
 
-    def context_tale(self, query: str, style: str = "auto", max_memories: int = 15):
+    async def context_tale(self, query: str, style: str = "auto", max_memories: int = 15):
         """Generate narrative from memories."""
         # Get relevant memories
-        relevant_memories = self.memory.search(query, limit=max_memories)
+        relevant_memories = await self.memory.search_memories(query, limit=max_memories)
 
         if not relevant_memories:
             return f"No memories found for: {query}"
@@ -125,9 +141,7 @@ class MemMimicAPI:
         narrative_parts = [f"📖 Context Tale: {query}\n"]
 
         for i, memory in enumerate(relevant_memories, 1):
-            memory_type = getattr(
-                memory, "memory_type", getattr(memory, "type", "unknown")
-            )
+            memory_type = memory.metadata.get("type", "unknown")
             content = (
                 memory.content[:200] + "..."
                 if len(memory.content) > 200
@@ -168,9 +182,9 @@ class MemMimicAPI:
 
         return {"result": f"Memory {memory_id} deletion would be processed here"}
 
-    def analyze_memory_patterns(self):
+    async def analyze_memory_patterns(self):
         """Pattern analysis."""
-        all_memories = self.memory.get_all()
+        all_memories = await self.memory.list_memories(limit=1000)  # Get recent memories
 
         if not all_memories:
             return {"error": "No memories to analyze"}
@@ -180,9 +194,7 @@ class MemMimicAPI:
         total_chars = 0
 
         for memory in all_memories:
-            memory_type = getattr(
-                memory, "memory_type", getattr(memory, "type", "unknown")
-            )
+            memory_type = memory.metadata.get("type", "unknown")
             type_counts[memory_type] = type_counts.get(memory_type, 0) + 1
             total_chars += len(memory.content)
 
@@ -194,13 +206,13 @@ class MemMimicAPI:
         }
 
     # === COGNITIVE (1 tool) ===
-    def socratic_dialogue(self, topic: str, depth: int = 3):
+    async def socratic_dialogue(self, topic: str, depth: int = 3):
         """Self-questioning."""
         # Basic implementation using the SocraticEngine
         if hasattr(self.assistant, "socratic_engine"):
             try:
                 # Create a mock dialogue
-                relevant_memories = self.memory.search(topic, limit=5)
+                relevant_memories = await self.memory.search_memories(topic, limit=5)
                 dialogue = self.assistant.socratic_engine.conduct_dialogue(
                     topic, f"Initial analysis of: {topic}", relevant_memories
                 )
@@ -220,5 +232,10 @@ class MemMimicAPI:
 
 # Factory function
 def create_memmimic(db_path="memmimic.db"):
-    """Create MemMimic instance."""
+    """
+    Create MemMimic instance with AMMS storage.
+    
+    Args:
+        db_path: Database file path
+    """
     return MemMimicAPI(db_path)

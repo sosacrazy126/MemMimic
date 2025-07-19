@@ -5,9 +5,8 @@ No para impresionar, sino para persistir y profundizar.
 """
 from typing import Dict, List, Optional
 
-from .memory import Memory, MemoryStore
+from .storage import Memory, create_amms_storage
 from .socratic import SocraticEngine
-from .unified_store import UnifiedMemoryStore
 
 
 class ContextualAssistant:
@@ -17,12 +16,8 @@ class ContextualAssistant:
         self.name = name
         self.db_path = db_path or f"{name}_memories.db"
 
-        # Use UnifiedMemoryStore with AMMS by default, fallback to basic MemoryStore
-        try:
-            self.memory_store = UnifiedMemoryStore(self.db_path, config_path)
-        except Exception as e:
-            # Fallback to basic MemoryStore for compatibility
-            self.memory_store = MemoryStore(self.db_path)
+        # Use AMMS storage (post-migration)
+        self.memory_store = create_amms_storage(self.db_path)
 
         self.socratic_engine = SocraticEngine(self.memory_store)
         self.current_context = {}
@@ -32,8 +27,17 @@ class ContextualAssistant:
         Pensar ahora incluye auto-cuestionamiento socrático.
         Recordar → Razonar → Responder → Auto-cuestionar → Refinar → Aprender
         """
-        # 1. RECORDAR - Buscar memorias relevantes
-        relevant_memories = self.memory_store.search(user_input)
+        # 1. RECORDAR - Buscar memorias relevantes (async wrapper for compatibility)
+        import asyncio
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+        
+        relevant_memories = loop.run_until_complete(
+            self.memory_store.search_memories(user_input, limit=5)
+        )
 
         # 2. RAZONAR - Construir contexto con memorias
         thought_process = self._build_thought_process(user_input, relevant_memories)

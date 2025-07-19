@@ -33,6 +33,12 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 memmimic_src = os.path.join(current_dir, "..", "..")
 sys.path.insert(0, memmimic_src)
 
+# Import MemMimic error handling framework
+from memmimic.errors import (
+    MemMimicError, DatabaseError, ExternalServiceError, NetworkError,
+    handle_errors, retry, log_errors, with_error_context, get_error_logger
+)
+
 # Configure logging
 logging.basicConfig(
     level=logging.DEBUG, format="%(levelname)s - %(message)s", stream=sys.stderr
@@ -160,9 +166,9 @@ def ensure_wordnet():
             _wordnet_available = True
             logger.debug("✅ NLTK WordNet already available")
 
-        except Exception:
-            # Need to download
-            logger.info("📥 Downloading NLTK WordNet data...")
+        except Exception as e:
+            # Need to download WordNet data
+            logger.info(f"📥 Downloading NLTK WordNet data (reason: {str(e)})")
             try:
                 nltk.download("wordnet", quiet=True)
                 nltk.download("omw-1.4", quiet=True)  # For multilingual support
@@ -328,7 +334,8 @@ def safe_decode_text(text: Any) -> str:
     if isinstance(text, bytes):
         try:
             return text.decode("utf-8", errors="replace")
-        except Exception:
+        except (UnicodeDecodeError, LookupError) as e:
+            logger.warning(f"UTF-8 decode failed, falling back to ASCII: {e}")
             return text.decode("ascii", errors="replace")
 
     return str(text)
@@ -340,55 +347,41 @@ def safe_decode_text(text: Any) -> str:
 
 
 def get_memory_store(db_name: Optional[str] = None):
-    """Get memory store with robust database selection and error handling."""
+    """Get memory store with sync wrapper for MCP compatibility."""
     try:
-        from memmimic.memory import UnifiedMemoryStore as MemoryStore
+        from memmimic.api import MemMimicAPI
+        import asyncio
 
-        # Database selection with intelligent fallbacks
-        # FIXED: Force absolute path resolution for consistency
-        memmimic_root = Path(memmimic_src).resolve().parent
-
-        db_options = {
-            "memmimic": "memmimic_memories.db",
-            "enhanced": "claude_mcp_enhanced_memories.db",
-            "legacy": "claude_mcp_memories.db",
-            "backup": "claude_mcp_enhanced.db",
-            "archive": "claude_mcp_archive.db",
-        }
-
-        if db_name and db_name in db_options:
-            db_file = db_options[db_name]
-        elif db_name and db_name.endswith(".db"):
+        # Use current memmimic.db (post-migration)
+        if db_name and db_name.endswith(".db"):
             db_file = db_name
         else:
-            # Smart default selection for MemMimic
-            db_file = "memmimic_memories.db"
-
-        db_path = memmimic_root / db_file
-
-        # Check existence with fallbacks
-        if not db_path.exists():
-            logger.warning(f"Database {db_file} not found, trying fallbacks...")
-
-            # Try other databases in order of preference
-            for fallback_name, fallback_file in db_options.items():
-                fallback_path = memmimic_root / fallback_file
-                if fallback_path.exists():
-                    logger.info(f"Using fallback database: {fallback_file}")
-                    db_path = fallback_path
-                    break
-            else:
-                # Try Clay legacy path as final fallback
-                clay_path = memmimic_root / "clay" / "claude_mcp_enhanced_memories.db"
-                if clay_path.exists():
-                    logger.info(f"Using Clay legacy database: {clay_path}")
-                    db_path = clay_path
-                else:
-                    logger.error(f"No valid database found in {memmimic_root}")
-                    return None
-
-        logger.debug(f"Using database: {db_path}")
-        return MemoryStore(str(db_path))
+            db_file = "memmimic.db"
+        
+        api = MemMimicAPI(db_file)
+        
+        # Create sync wrapper for MCP compatibility
+        class SyncMemoryWrapper:
+            def __init__(self, async_memory):
+                self.async_memory = async_memory
+                
+            def get_all(self):
+                """Sync wrapper for get_all"""
+                try:
+                    return asyncio.run(self.async_memory.get_all_memories())
+                except Exception as e:
+                    logger.error(f"Failed to get all memories: {e}")
+                    return []
+                    
+            def search(self, query, limit=10):
+                """Sync wrapper for search"""
+                try:
+                    return asyncio.run(self.async_memory.search_memories(query, limit))
+                except Exception as e:
+                    logger.error(f"Failed to search memories: {e}")
+                    return []
+        
+        return SyncMemoryWrapper(api.memory)
 
     except Exception as e:
         logger.error(f"Failed to access memory store: {e}")
@@ -1290,8 +1283,8 @@ def search_memories_hybrid(
                 flag_file = memmimic_root / ".golden_briefing_shown"
                 if flag_file.exists():
                     flag_file.unlink()
-            except:
-                pass
+            except (OSError, PermissionError) as e:
+                logger.debug(f"Could not remove flag file: {e}")
 
     # Initialize semantic engine
     semantic_engine = MemMimicSemanticSearchEngine()

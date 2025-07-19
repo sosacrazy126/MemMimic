@@ -14,11 +14,12 @@ if sys.platform.startswith("win"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 # Add MemMimic to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
 try:
-    from memmimic import ContextualAssistant
-    from memmimic.memory import Memory
+    import asyncio
+    from memmimic import create_memmimic
+    from memmimic.memory.storage.amms_storage import Memory
 except ImportError as e:
     print(f"❌ Error importing MemMimic: {e}", file=sys.stderr)
     print("❌ Error: Cannot import MemMimic core")
@@ -67,7 +68,7 @@ def classify_content_with_cxd(classifier, content):
         return {"cxd_error": str(e)}
 
 
-def main():
+async def main_async():
     if len(sys.argv) < 2:
         print("❌ Error: Missing content argument")
         sys.exit(1)
@@ -80,23 +81,24 @@ def main():
         cxd_classifier = init_cxd_classifier()
         cxd_status = "CXD v2.0 active" if cxd_classifier else "CXD unavailable"
 
-        # Initialize MemMimic assistant
-        assistant = ContextualAssistant("memmimic")
+        # Initialize MemMimic with AMMS-only architecture
+        api = create_memmimic("memmimic.db")
 
         # Classify content with CXD
         cxd_metadata = classify_content_with_cxd(cxd_classifier, content)
 
         # Create memory with CXD metadata
-        memory = Memory(content, memory_type)
+        memory = Memory(
+            content=content,
+            metadata={"type": memory_type}
+        )
 
         # Add CXD metadata if classification succeeded
         if cxd_metadata and "cxd_function" in cxd_metadata:
-            if not hasattr(memory, "metadata") or memory.metadata is None:
-                memory.metadata = {}
             memory.metadata.update(cxd_metadata)
 
-        # Store memory
-        memory_id = assistant.memory_store.add(memory)
+        # Store memory using async API
+        memory_id = await api.remember(content, memory_type)
 
         # Create professional success message
         result_parts = [f"✅ Memory stored (ID: {memory_id}, Type: {memory_type})"]
@@ -123,6 +125,11 @@ def main():
         print(f"❌ Error storing memory: {str(e)}", file=sys.stderr)
         print(f"❌ Failed to store memory: {str(e)}")
         sys.exit(1)
+
+
+def main():
+    """Sync wrapper for MCP compatibility"""
+    asyncio.run(main_async())
 
 
 if __name__ == "__main__":

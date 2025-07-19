@@ -19,7 +19,10 @@ from .cxd import (
 )
 
 # Core components (for advanced users)
-from .memory import ContextualAssistant, Memory, MemoryStore, UnifiedMemoryStore
+from .memory import (
+    ContextualAssistant, Memory,
+    AMMSStorage, create_amms_storage
+)
 from .tales import TaleManager
 
 __all__ = [
@@ -27,11 +30,12 @@ __all__ = [
     "MemMimicAPI",
     "create_memmimic",
     # Core components (advanced users)
-    "UnifiedMemoryStore",
-    "MemoryStore",
     "Memory",
-    "ContextualAssistant",
+    "ContextualAssistant", 
     "TaleManager",
+    # AMMS Storage (Post-Migration)
+    "AMMSStorage",
+    "create_amms_storage",
     # CXD Framework
     "CXDFunction",
     "ExecutionState",
