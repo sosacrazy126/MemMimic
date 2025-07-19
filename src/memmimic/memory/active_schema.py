@@ -177,6 +177,17 @@ class ActiveMemorySchema:
                 ),
             )
             conn.commit()
+            
+            # Integrate consciousness schema if available
+            try:
+                from ..consciousness.consciousness_db_schema import ConsciousnessSchema
+                consciousness_schema = ConsciousnessSchema(self.db_path)
+                consciousness_schema.create_consciousness_schema()
+                self.logger.info("Consciousness schema integrated successfully")
+            except ImportError:
+                self.logger.warning("Consciousness schema not available")
+            except Exception as e:
+                self.logger.error(f"Failed to integrate consciousness schema: {e}")
 
     def _create_indices(self, conn) -> None:
         """Create performance indices for active memory queries"""
