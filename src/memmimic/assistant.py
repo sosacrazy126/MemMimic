@@ -6,7 +6,7 @@ Not to impress, but to persist and deepen understanding.
 import logging
 from typing import Any, Dict, List, Optional
 
-from .memory import Memory, MemoryStore
+from .memory import Memory, AMMSStorage
 from .memory.socratic import SocraticEngine
 
 
@@ -22,7 +22,7 @@ class ContextualAssistant:
         self.logger = logging.getLogger(__name__)
 
         try:
-            self.memory_store = MemoryStore(self.db_path)
+            self.memory_store = AMMSStorage(self.db_path)
             self.socratic_engine = SocraticEngine(self.memory_store)
             self.current_context: Dict[str, Any] = {}
             self.logger.info(f"ContextualAssistant '{self.name}' initialized")

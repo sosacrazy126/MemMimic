@@ -285,6 +285,61 @@ class AMMSStorage:
                 (current_avg * (count - 1) + operation_time) / count
             )
     
+    def search(self, query: str, limit: int = 10) -> List[Memory]:
+        """Sync wrapper for search_memories for compatibility"""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            return loop.run_until_complete(self.search_memories(query, limit))
+        finally:
+            loop.close()
+    
+    def get_all(self, limit: int = 1000) -> List[Memory]:
+        """Sync wrapper for list_memories for compatibility"""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            return loop.run_until_complete(self.list_memories(0, limit))
+        finally:
+            loop.close()
+    
+    def list_all(self, limit: int = 1000) -> List[Memory]:
+        """Sync wrapper for list_memories for compatibility (alias)"""
+        return self.get_all(limit)
+    
+    def add(self, memory: Memory) -> str:
+        """Sync wrapper for store_memory for compatibility"""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            return loop.run_until_complete(self.store_memory(memory))
+        finally:
+            loop.close()
+    
+    def delete(self, memory_id: str) -> bool:
+        """Sync wrapper for delete_memory for compatibility"""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            return loop.run_until_complete(self.delete_memory(memory_id))
+        finally:
+            loop.close()
+    
+    def update_memory(self, memory_id: str, memory: Memory) -> bool:
+        """Sync wrapper for updating memory - stores new version"""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            # Delete old and store new (update pattern)
+            deleted = loop.run_until_complete(self.delete_memory(memory_id))
+            if deleted:
+                memory.id = memory_id
+                loop.run_until_complete(self.store_memory(memory))
+                return True
+            return False
+        finally:
+            loop.close()
+    
     async def close(self):
         """Close storage (cleanup if needed)"""
         self.logger.info("AMMSStorage closed")
