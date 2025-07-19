@@ -9,6 +9,14 @@ from typing import Any, Dict, List, Optional
 from .memory import Memory, MemoryStore
 from .memory.socratic import SocraticEngine
 
+# Consciousness integration - optional import
+try:
+    from .consciousness.consciousness_integration import ConsciousnessIntegration
+    from .consciousness.shadow_detector import ShadowDetector
+    CONSCIOUSNESS_AVAILABLE = True
+except ImportError:
+    CONSCIOUSNESS_AVAILABLE = False
+
 
 class ContextualAssistant:
     """An assistant that preserves context and self-questions with improved error handling"""
@@ -25,6 +33,18 @@ class ContextualAssistant:
             self.memory_store = MemoryStore(self.db_path)
             self.socratic_engine = SocraticEngine(self.memory_store)
             self.current_context: Dict[str, Any] = {}
+            
+            # Initialize consciousness features if available
+            self.consciousness_integration = None
+            self.shadow_detector = None
+            if CONSCIOUSNESS_AVAILABLE:
+                try:
+                    self.consciousness_integration = ConsciousnessIntegration(self.db_path)
+                    self.shadow_detector = ShadowDetector()
+                    self.logger.info("Consciousness features initialized")
+                except Exception as e:
+                    self.logger.warning(f"Failed to initialize consciousness features: {e}")
+            
             self.logger.info(f"ContextualAssistant '{self.name}' initialized")
         except Exception as e:
             self.logger.error(f"Failed to initialize assistant: {e}")

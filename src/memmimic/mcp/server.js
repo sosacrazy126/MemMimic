@@ -366,13 +366,13 @@ const MEMMIMIC_TOOLS = {
   // 🧘 COGNITIVE (1)
   socratic_dialogue: {
     name: 'socratic_dialogue',
-    description: 'Engage in Socratic self-questioning',
+    description: 'Self-questioning through Socratic method',
     inputSchema: {
       type: 'object',
       properties: {
-        query: {
+        topic: {
           type: 'string',
-          description: 'Topic for Socratic analysis'
+          description: 'Topic or question to explore'
         },
         depth: {
           type: 'number',
@@ -380,7 +380,70 @@ const MEMMIMIC_TOOLS = {
           default: 3
         }
       },
-      required: ['query']
+      required: ['topic']
+    }
+  },
+  
+  // 🔗 KNOWLEDGE GRAPH (new)
+  knowledge_graph: {
+    name: 'knowledge_graph',
+    description: 'Knowledge graph operations for semantic memory navigation',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        operation: {
+          type: 'string',
+          description: 'Operation: find_related, get_context, discover_patterns, trace_evolution, add_relationship',
+          enum: ['find_related', 'get_context', 'discover_patterns', 'trace_evolution', 'add_relationship']
+        },
+        memory_id: {
+          type: 'number',
+          description: 'Memory ID (for find_related, get_context, trace_evolution)'
+        },
+        source_id: {
+          type: 'number',
+          description: 'Source memory ID (for add_relationship)'
+        },
+        target_id: {
+          type: 'number',
+          description: 'Target memory ID (for add_relationship)'
+        },
+        edge_type: {
+          type: 'string',
+          description: 'Relationship type: RELATES_TO, CONTRADICTS, SUPPORTS, ELABORATES, etc.',
+          enum: ['RELATES_TO', 'CONTRADICTS', 'SUPPORTS', 'ELABORATES', 'TEMPORAL_BEFORE', 'TEMPORAL_AFTER', 'CAUSED_BY']
+        },
+        max_distance: {
+          type: 'number',
+          description: 'Maximum graph distance for find_related',
+          default: 2
+        },
+        depth: {
+          type: 'number',
+          description: 'Depth for get_context',
+          default: 2
+        },
+        pattern_type: {
+          type: 'string',
+          description: 'Pattern type for discover_patterns',
+          enum: ['CONSCIOUSNESS_EVOLUTION', 'MEMORY_CLUSTER', 'SIGIL_CONSTELLATION', 'SHADOW_INTEGRATION', 'UNITY_EMERGENCE', 'RECURSIVE_LOOP']
+        },
+        target_level: {
+          type: 'number',
+          description: 'Target consciousness level for trace_evolution (0-4)'
+        },
+        limit: {
+          type: 'number',
+          description: 'Maximum results',
+          default: 10
+        },
+        weight: {
+          type: 'number',
+          description: 'Relationship weight (0-1)',
+          default: 1.0
+        }
+      },
+      required: ['operation']
     }
   }
 };
@@ -521,8 +584,56 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       
       // 🧘 COGNITIVE
       case 'socratic_dialogue': {
-        const { query, depth = 3 } = args;
-        const result = await runPythonTool('memmimic_socratic', [query, depth.toString()]);
+        const { topic, depth = 3 } = args;
+        const result = await runPythonTool('memmimic_socratic', [topic, depth.toString()]);
+        return { content: [{ type: 'text', text: result }] };
+      }
+      
+      // 🔗 KNOWLEDGE GRAPH
+      case 'knowledge_graph': {
+        const { operation, memory_id, source_id, target_id, edge_type, max_distance, depth, pattern_type, target_level, limit, weight } = args;
+        
+        // Build arguments based on operation
+        const pythonArgs = [operation];
+        
+        switch(operation) {
+          case 'find_related':
+            if (!memory_id) throw new Error('memory_id required for find_related');
+            pythonArgs.push(memory_id.toString());
+            if (max_distance !== undefined) pythonArgs.push(max_distance.toString());
+            if (limit !== undefined) pythonArgs.push(limit.toString());
+            break;
+            
+          case 'get_context':
+            if (!memory_id) throw new Error('memory_id required for get_context');
+            pythonArgs.push(memory_id.toString());
+            if (depth !== undefined) pythonArgs.push(depth.toString());
+            break;
+            
+          case 'discover_patterns':
+            if (pattern_type) pythonArgs.push(pattern_type);
+            if (limit !== undefined) pythonArgs.push(limit.toString());
+            break;
+            
+          case 'trace_evolution':
+            if (!memory_id) throw new Error('memory_id required for trace_evolution');
+            if (target_level === undefined) throw new Error('target_level required for trace_evolution');
+            pythonArgs.push(memory_id.toString(), target_level.toString());
+            break;
+            
+          case 'add_relationship':
+            if (!source_id) throw new Error('source_id required for add_relationship');
+            if (!target_id) throw new Error('target_id required for add_relationship');
+            if (!edge_type) throw new Error('edge_type required for add_relationship');
+            pythonArgs.push(source_id.toString(), target_id.toString(), edge_type);
+            if (weight !== undefined) pythonArgs.push(weight.toString());
+            break;
+            
+          default:
+            throw new Error(`Unknown knowledge graph operation: ${operation}`);
+        }
+        
+        const result = await runPythonTool('memmimic_knowledge_graph', pythonArgs);
         return { content: [{ type: 'text', text: result }] };
       }
       
