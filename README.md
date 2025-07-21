@@ -38,6 +38,7 @@ This enhanced version transforms the original MemMimic into a **consciousness-in
 - **Intelligent memory pool management** with dynamic ranking
 - **Automatic lifecycle management** (active → archive → prune)
 - **Sub-100ms query performance** with importance-based ranking
+- **Quality Gate System**: Intelligent memory approval with semantic duplicate detection
 
 ## What It Does
 
@@ -173,7 +174,12 @@ After installation, verify MemMimic is working with your first boot:
 
 ## API Reference
 
-MemMimic Enhanced provides **13 consciousness-integrated tools** organized by function:
+MemMimic Enhanced provides **17 consciousness-integrated tools** organized by function:
+
+> 📚 **Comprehensive Documentation Available:**
+> - [Quality Gate System Guide](docs/quality_gate_system.md) - Complete quality control documentation
+> - [Quick Start Guide](docs/quality_gate_quickstart.md) - Get started with quality gate in 5 minutes  
+> - [API Reference](docs/quality_gate_api.md) - Detailed API documentation and examples
 
 ### 🔍 Search
 **`recall_cxd(query, function_filter?, limit?, db_name?)`**
@@ -192,6 +198,23 @@ Store information with automatic cognitive classification.
 remember("User prefers technical documentation over tutorials", "interaction")
 remember("Project completed successfully", "milestone")
 ```
+
+**`remember_with_quality(content, memory_type?, force?)`**
+Store memory with intelligent quality control and duplicate detection.
+
+```
+remember_with_quality("Implemented OAuth2 with PKCE for mobile security", "milestone")
+remember_with_quality("debug test", "interaction", force=true)
+```
+
+**`review_pending_memories()`**
+Show memories awaiting quality approval.
+
+**`approve_memory(queue_id, note?)`**
+Approve pending memory for storage.
+
+**`reject_memory(queue_id, reason?)`**
+Reject pending memory.
 
 **`think_with_memory(input_text)`**
 Process input with full memory context.
@@ -334,6 +357,7 @@ python -c "from memmimic.api import create_memmimic; mm = create_memmimic(':memo
 - ✅ **Performance optimization** with sub-5ms processing
 - ✅ **Cross-session continuity** via "Threw Memory" technique
 - ✅ **Real-time monitoring** of cognitive functions
+- ✅ **Quality Gate System** with semantic similarity and intelligent approval workflow
 
 ## ⚠️ Usage Considerations
 
