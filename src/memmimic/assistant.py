@@ -18,7 +18,8 @@ class ContextualAssistant:
             raise ValueError("Assistant name cannot be empty")
 
         self.name = name.strip()
-        self.db_path = db_path or f"{self.name}_memories.db"
+        # Use standardized database path (memmimic.db) for consistency with AMMS-only architecture
+        self.db_path = db_path or "memmimic.db"
         self.logger = logging.getLogger(__name__)
 
         try:

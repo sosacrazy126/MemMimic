@@ -143,7 +143,7 @@ const MEMMIMIC_TOOLS = {
     }
   },
   
-  // 🧠 MEMORY CORE (3)
+  // 🧠 MEMORY CORE (5)
   remember: {
     name: 'remember',
     description: 'Store information with automatic CXD classification',
@@ -161,6 +161,80 @@ const MEMMIMIC_TOOLS = {
         }
       },
       required: ['content']
+    }
+  },
+  
+  remember_with_quality: {
+    name: 'remember_with_quality',
+    description: 'Store information with intelligent quality control and duplicate detection',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        content: {
+          type: 'string',
+          description: 'Content to remember'
+        },
+        memory_type: {
+          type: 'string',
+          description: 'Type of memory (interaction, reflection, milestone)',
+          default: 'interaction'
+        },
+        force: {
+          type: 'boolean',
+          description: 'Force save without quality check',
+          default: false
+        }
+      },
+      required: ['content']
+    }
+  },
+  
+  review_pending_memories: {
+    name: 'review_pending_memories',
+    description: 'Show memories awaiting quality approval',
+    inputSchema: {
+      type: 'object',
+      properties: {}
+    }
+  },
+  
+  approve_memory: {
+    name: 'approve_memory',
+    description: 'Approve a pending memory for storage',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        queue_id: {
+          type: 'string',
+          description: 'Queue ID of memory to approve'
+        },
+        note: {
+          type: 'string',
+          description: 'Optional reviewer note',
+          default: ''
+        }
+      },
+      required: ['queue_id']
+    }
+  },
+  
+  reject_memory: {
+    name: 'reject_memory',
+    description: 'Reject a pending memory',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        queue_id: {
+          type: 'string',
+          description: 'Queue ID of memory to reject'
+        },
+        reason: {
+          type: 'string',
+          description: 'Reason for rejection',
+          default: 'Rejected by reviewer'
+        }
+      },
+      required: ['queue_id']
     }
   },
   
@@ -431,6 +505,42 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return { content: [{ type: 'text', text: result }] };
       }
       
+      case 'remember_with_quality': {
+        const { content, memory_type = 'interaction', force = false } = args;
+        
+        const pythonArgs = [content, memory_type];
+        if (force) pythonArgs.push('--force');
+        
+        const result = await runPythonTool('memmimic_remember_with_quality', pythonArgs);
+        return { content: [{ type: 'text', text: result }] };
+      }
+      
+      case 'review_pending_memories': {
+        const result = await runPythonTool('memmimic_remember_with_quality', ['--review']);
+        return { content: [{ type: 'text', text: result }] };
+      }
+      
+      case 'approve_memory': {
+        const { queue_id, note = '' } = args;
+        
+        const pythonArgs = ['--approve', queue_id];
+        if (note) {
+          pythonArgs.push('--note', note);
+        }
+        
+        const result = await runPythonTool('memmimic_remember_with_quality', pythonArgs);
+        return { content: [{ type: 'text', text: result }] };
+      }
+      
+      case 'reject_memory': {
+        const { queue_id, reason = 'Rejected by reviewer' } = args;
+        
+        const pythonArgs = ['--reject', queue_id, '--reason', reason];
+        
+        const result = await runPythonTool('memmimic_remember_with_quality', pythonArgs);
+        return { content: [{ type: 'text', text: result }] };
+      }
+      
       case 'think_with_memory': {
         const { input_text } = args;
         const result = await runPythonTool('memmimic_think', [input_text]);
@@ -500,12 +610,21 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       // 🔧 MEMORY MANAGEMENT
       case 'update_memory_guided': {
         const { memory_id } = args;
+        
+        if (!memory_id && memory_id !== 0) {
+          return { content: [{ type: 'text', text: '❌ Error: memory_id is required' }] };
+        }
+        
         const result = await runPythonTool('memmimic_update_memory_guided', [memory_id.toString()]);
         return { content: [{ type: 'text', text: result }] };
       }
       
       case 'delete_memory_guided': {
         const { memory_id, confirm = false } = args;
+        
+        if (!memory_id && memory_id !== 0) {
+          return { content: [{ type: 'text', text: '❌ Error: memory_id is required' }] };
+        }
         
         const pythonArgs = [memory_id.toString()];
         if (confirm) pythonArgs.push('--confirm');

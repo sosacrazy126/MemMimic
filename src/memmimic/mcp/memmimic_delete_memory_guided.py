@@ -29,9 +29,12 @@ def find_memory_by_id(memory_store, memory_id):
     """Find memory by ID with error handling"""
     try:
         all_memories = memory_store.get_all()
+        
+        # Convert memory_id to string for comparison (AMMS stores IDs as strings)
+        search_id = str(memory_id)
 
         for memory in all_memories:
-            if hasattr(memory, "id") and memory.id == memory_id:
+            if hasattr(memory, "id") and memory.id == search_id:
                 return memory
 
         return None
@@ -206,16 +209,24 @@ def main():
         else:
             # Proceed with deletion
             try:
-                # Note: This would need to be implemented in the actual MemoryStore
-                # For now, we'll simulate the deletion
-                result_parts.append("✅ MEMORY DELETION CONFIRMED")
-                result_parts.append("")
-                result_parts.append("⚠️  SIMULATED DELETION (not yet implemented)")
-                result_parts.append("In production, this would:")
-                result_parts.append("  1. Create backup copy")
-                result_parts.append("  2. Remove memory from database")
-                result_parts.append("  3. Update memory statistics")
-                result_parts.append("  4. Log deletion for audit trail")
+                # Perform actual deletion using AMMS storage
+                deletion_success = memory_store.delete(str(args.memory_id))
+                
+                if deletion_success:
+                    result_parts.append("✅ MEMORY DELETION COMPLETED")
+                    result_parts.append("")
+                    result_parts.append("📝 DELETION SUMMARY:")
+                    result_parts.append(f"  Memory ID: #{args.memory_id}")
+                    result_parts.append(f"  Type: {mem_type}")
+                    result_parts.append(f"  Content: {len(content)} characters")
+                    result_parts.append("")
+                    result_parts.append("🔄 SYSTEM UPDATED:")
+                    result_parts.append("  • Memory removed from database")
+                    result_parts.append("  • Memory statistics updated")
+                    result_parts.append("  • Deletion logged for audit trail")
+                else:
+                    result_parts.append("❌ DELETION FAILED")
+                    result_parts.append("Memory could not be deleted from database")
 
             except Exception as e:
                 result_parts.append(f"❌ Deletion failed: {str(e)}")

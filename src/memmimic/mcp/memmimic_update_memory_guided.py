@@ -29,9 +29,12 @@ def find_memory_by_id(memory_store, memory_id):
     """Find memory by ID with error handling"""
     try:
         all_memories = memory_store.get_all()
+        
+        # Convert memory_id to string for comparison (AMMS stores IDs as strings)
+        search_id = str(memory_id)
 
         for memory in all_memories:
-            if hasattr(memory, "id") and memory.id == memory_id:
+            if hasattr(memory, "id") and memory.id == search_id:
                 return memory
 
         return None
