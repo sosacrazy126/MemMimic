@@ -6,7 +6,7 @@ Provides centralized configuration with validation and environment-based overrid
 
 import os
 from dataclasses import dataclass, field
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from .interfaces import SearchConfig, SimilarityMetric, ConfigurationError
 
 

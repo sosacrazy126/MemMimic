@@ -1,0 +1,72 @@
+# MemMimic Performance Configuration
+# Configuration for cache sizes, thresholds, and performance optimization
+
+# Database Configuration
+database:
+  connection_pool_size: 5
+  connection_timeout: 5.0
+  wal_mode: true
+  cache_size: 10000
+  temp_store: "MEMORY"
+
+# Memory Management Configuration
+memory:
+  # Active Memory Management System (AMMS) settings
+  active_pool_size: 1000
+  max_pool_size: 1500
+  importance_threshold: 0.3
+  
+  # Quality Gate settings
+  auto_approve_threshold: 0.8
+  auto_reject_threshold: 0.3
+  duplicate_threshold: 0.85
+  min_content_length: 10
+  
+  # Search optimization
+  default_search_limit: 10
+  max_search_limit: 100
+
+# CXD Classification Configuration
+cxd:
+  # Semantic classifier settings
+  enable_cache_persistence: true
+  rebuild_cache_on_start: false
+  embedding_cache_size: 1000
+  vector_index_type: "flat"
+  
+  # Classification thresholds
+  confidence_threshold: 0.5
+  similarity_threshold: 0.7
+
+# Tales System Configuration
+tales:
+  # Cache settings
+  cache_size: 100
+  cache_ttl_hours: 24
+  
+  # File system settings
+  backup_on_delete: true
+  max_file_size_mb: 10
+
+# Performance Monitoring
+monitoring:
+  # Metrics collection
+  enable_performance_metrics: true
+  metrics_retention_hours: 168  # 1 week
+  
+  # Response time targets (milliseconds)
+  target_response_time_ms: 5.0
+  warning_threshold_ms: 10.0
+  error_threshold_ms: 50.0
+
+# Async/Sync Bridge Configuration
+async_bridge:
+  shared_loop_enabled: true
+  thread_pool_size: 4
+  operation_timeout: 30.0
+
+# Logging Configuration
+logging:
+  performance_logging: true
+  slow_query_threshold_ms: 100.0
+  log_level: "INFO"

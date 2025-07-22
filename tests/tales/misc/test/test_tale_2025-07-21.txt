@@ -1,0 +1,9 @@
+<!-- Tale: test_tale -->
+<!-- Category: misc/test -->
+<!-- Created: 2025-07-21T20:43:09.637627 -->
+<!-- Updated: 2025-07-21T20:43:09.637630 -->
+<!-- Usage: 0 -->
+<!-- Size: 27 chars -->
+<!-- Version: 1 -->
+
+This is a test tale content

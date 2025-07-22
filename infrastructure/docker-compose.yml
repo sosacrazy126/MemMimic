@@ -1,0 +1,276 @@
+version: '3.8'
+
+services:
+  # Database Services
+  postgres-primary:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: memmimic
+      POSTGRES_USER: memmimic
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_REPLICATION_MODE: master
+      POSTGRES_REPLICATION_USER: replicator
+      POSTGRES_REPLICATION_PASSWORD: ${REPLICATION_PASSWORD}
+    volumes:
+      - postgres-primary-data:/var/lib/postgresql/data
+      - ./infrastructure/database/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    command: >
+      postgres
+      -c wal_level=replica
+      -c max_wal_senders=3
+      -c max_replication_slots=3
+      -c hot_standby=on
+    networks:
+      - memmimic-network
+    restart: unless-stopped
+
+  postgres-replica:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: memmimic
+      POSTGRES_USER: memmimic
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_REPLICATION_MODE: slave
+      POSTGRES_REPLICATION_USER: replicator
+      POSTGRES_REPLICATION_PASSWORD: ${REPLICATION_PASSWORD}
+      POSTGRES_MASTER_SERVICE: postgres-primary
+    volumes:
+      - postgres-replica-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    depends_on:
+      - postgres-primary
+    networks:
+      - memmimic-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    networks:
+      - memmimic-network
+    restart: unless-stopped
+
+  # MemMimic Services
+  memory-service:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.memory-service
+    environment:
+      DATABASE_URL: postgresql://memmimic:${DB_PASSWORD}@postgres-primary:5432/memmimic
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_PORT: 8001
+    volumes:
+      - ./infrastructure/config:/app/config
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres-primary
+      - redis
+    networks:
+      - memmimic-network
+    restart: unless-stopped
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+
+  classification-service:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.classification-service
+    environment:
+      REDIS_URL: redis://redis:6379/1
+      SERVICE_PORT: 8002
+    volumes:
+      - ./infrastructure/config:/app/config
+      - classification-models:/app/models
+    ports:
+      - "8002:8002"
+    depends_on:
+      - redis
+    networks:
+      - memmimic-network
+    restart: unless-stopped
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+
+  search-service:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.search-service
+    environment:
+      DATABASE_URL: postgresql://memmimic:${DB_PASSWORD}@postgres-primary:5432/memmimic
+      REDIS_URL: redis://redis:6379/2
+      SERVICE_PORT: 8003
+    volumes:
+      - ./infrastructure/config:/app/config
+      - search-indexes:/app/indexes
+    ports:
+      - "8003:8003"
+    depends_on:
+      - postgres-primary
+      - redis
+      - classification-service
+    networks:
+      - memmimic-network
+    restart: unless-stopped
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          memory: 768M
+          cpus: '0.75'
+
+  tale-service:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.tale-service
+    environment:
+      DATABASE_URL: postgresql://memmimic:${DB_PASSWORD}@postgres-primary:5432/memmimic
+      SERVICE_PORT: 8004
+    volumes:
+      - ./infrastructure/config:/app/config
+      - tale-storage:/app/tales
+    ports:
+      - "8004:8004"
+    depends_on:
+      - postgres-primary
+    networks:
+      - memmimic-network
+    restart: unless-stopped
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+
+  consciousness-service:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.consciousness-service
+    environment:
+      DATABASE_URL: postgresql://memmimic:${DB_PASSWORD}@postgres-primary:5432/memmimic
+      REDIS_URL: redis://redis:6379/3
+      SERVICE_PORT: 8005
+    volumes:
+      - ./infrastructure/config:/app/config
+      - consciousness-cache:/app/consciousness_cache
+    ports:
+      - "8005:8005"
+    depends_on:
+      - postgres-primary
+      - redis
+    networks:
+      - memmimic-network
+    restart: unless-stopped
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 384M
+          cpus: '0.5'
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.api-gateway
+    environment:
+      MEMORY_SERVICE_URL: http://memory-service:8001
+      CLASSIFICATION_SERVICE_URL: http://classification-service:8002
+      SEARCH_SERVICE_URL: http://search-service:8003
+      TALE_SERVICE_URL: http://tale-service:8004
+      CONSCIOUSNESS_SERVICE_URL: http://consciousness-service:8005
+      REDIS_URL: redis://redis:6379/4
+      SERVICE_PORT: 8000
+      MCP_SERVER_PORT: 3001
+    volumes:
+      - ./infrastructure/config:/app/config
+    ports:
+      - "8000:8000"
+      - "3001:3001"
+    depends_on:
+      - memory-service
+      - classification-service
+      - search-service
+      - tale-service
+      - consciousness-service
+    networks:
+      - memmimic-network
+    restart: unless-stopped
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+
+  # Load Balancer
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./infrastructure/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - api-gateway
+    networks:
+      - memmimic-network
+    restart: unless-stopped
+
+  # Monitoring Stack
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - memmimic-network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./infrastructure/monitoring/grafana:/etc/grafana/provisioning
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - memmimic-network
+    restart: unless-stopped
+
+volumes:
+  postgres-primary-data:
+  postgres-replica-data:
+  redis-data:
+  classification-models:
+  search-indexes:
+  tale-storage:
+  consciousness-cache:
+  prometheus-data:
+  grafana-data:
+
+networks:
+  memmimic-network:
+    driver: bridge

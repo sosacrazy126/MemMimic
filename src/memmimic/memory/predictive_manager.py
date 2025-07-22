@@ -934,3 +934,4 @@ if __name__ == "__main__":
     summary = manager.get_predictive_summary()
     print(f"\nPredictive Summary:")
     print(json.dumps(summary, indent=2))
+

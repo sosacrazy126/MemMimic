@@ -271,3 +271,4 @@ def reload_config(config_path: Optional[str] = None) -> MemMimicConfig:
     global _config_loader
     _config_loader = ConfigLoader(config_path)
     return _config_loader.load_config()
+

@@ -1,0 +1,63 @@
+name: Code Complexity Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  complexity-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+    
+    - name: Run complexity analysis
+      run: |
+        python scripts/complexity_monitor.py src/memmimic/memory/ \
+          --config scripts/complexity_config.json \
+          --recursive \
+          --format json \
+          --output complexity-report.json \
+          --fail-on-threshold
+    
+    - name: Generate readable report
+      run: |
+        python scripts/complexity_monitor.py src/memmimic/memory/ \
+          --config scripts/complexity_config.json \
+          --recursive \
+          --format text \
+          --output complexity-report.txt
+    
+    - name: Upload complexity reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: complexity-reports
+        path: |
+          complexity-report.json
+          complexity-report.txt
+    
+    - name: Comment on PR with complexity report
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const report = fs.readFileSync('complexity-report.txt', 'utf8');
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## 📊 Code Complexity Analysis Report\n\n\`\`\`\n${report.slice(0, 8000)}\n\`\`\`\n\n*Full report available in workflow artifacts*`
+          });

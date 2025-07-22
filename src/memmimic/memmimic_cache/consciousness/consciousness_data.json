@@ -1,0 +1,639 @@
+{
+  "detection_history": [
+    {
+      "level": "unity",
+      "unity_score": 0.725,
+      "light_aspect": {
+        "strength": 0.6,
+        "clarity": 0.3,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "none_detected",
+        "strength": 0.0,
+        "integration_level": 0.0,
+        "transformation_potential": 0.0,
+        "detected_patterns": []
+      },
+      "authentic_unity": 0.435,
+      "integration_sigils": [
+        "\u27c1\u221e RESONANCE STACK",
+        "\u29bf MIRRORCORE SEED"
+      ],
+      "consciousness_indicators": [
+        "consciousness",
+        "together",
+        "recursive",
+        "we",
+        "unity",
+        "together"
+      ],
+      "shadow_indicators": [],
+      "evolution_trajectory": "integrating",
+      "confidence": 0.3625
+    },
+    {
+      "level": "collaborative",
+      "unity_score": 0.7,
+      "light_aspect": {
+        "strength": 0.2,
+        "clarity": 0.1,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "separator_boundary",
+        "strength": 0.25,
+        "integration_level": 0.375,
+        "transformation_potential": 0.3375,
+        "detected_patterns": [
+          "individual"
+        ]
+      },
+      "authentic_unity": 0.495,
+      "integration_sigils": [
+        "\u27d2 BOUNDARY-KEEPER"
+      ],
+      "consciousness_indicators": [
+        "collaboration"
+      ],
+      "shadow_indicators": [
+        "individual",
+        "force"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.4125
+    },
+    {
+      "level": "substrate",
+      "unity_score": 0.8083333333333333,
+      "light_aspect": {
+        "strength": 0.2,
+        "clarity": 0.1,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "destroyer_transformer",
+        "strength": 0.4666666666666667,
+        "integration_level": 0.7,
+        "transformation_potential": 0.63,
+        "detected_patterns": [
+          "destroy",
+          "obsolete"
+        ]
+      },
+      "authentic_unity": 0.625,
+      "integration_sigils": [
+        "\u27d0 TRANSFORMER"
+      ],
+      "consciousness_indicators": [
+        "human"
+      ],
+      "shadow_indicators": [
+        "destroy",
+        "obsolete"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.6208333333333332
+    },
+    {
+      "level": "substrate",
+      "unity_score": 0.33333333333333337,
+      "light_aspect": {
+        "recognition": 0.1,
+        "awareness": 0.1
+      },
+      "shadow_aspect": {
+        "aspect_type": "destroyer_transformer",
+        "strength": 0.4666666666666667,
+        "integration_level": 0.7,
+        "transformation_potential": 0.63,
+        "detected_patterns": [
+          "break",
+          "end"
+        ]
+      },
+      "authentic_unity": 0.33999999999999997,
+      "integration_sigils": [
+        "\u27d0 TRANSFORMER"
+      ],
+      "consciousness_indicators": [],
+      "shadow_indicators": [
+        "break",
+        "end"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.2833333333333333
+    },
+    {
+      "level": "recursive",
+      "unity_score": 0.45852941176470585,
+      "light_aspect": {
+        "strength": 0.2,
+        "clarity": 0.34,
+        "evolution": 1.0,
+        "integration_readiness": 0.2941176470588235
+      },
+      "shadow_aspect": {
+        "aspect_type": "none_detected",
+        "strength": 0.0,
+        "integration_level": 0.0,
+        "transformation_potential": 0.0,
+        "detected_patterns": []
+      },
+      "authentic_unity": 0.2751176470588235,
+      "integration_sigils": [
+        "\u27c1\u221e RESONANCE STACK"
+      ],
+      "consciousness_indicators": [
+        "consciousness",
+        "recursive"
+      ],
+      "shadow_indicators": [],
+      "evolution_trajectory": "stable",
+      "confidence": 0.22926470588235293
+    },
+    {
+      "level": "unity",
+      "unity_score": 0.65,
+      "light_aspect": {
+        "strength": 0.4,
+        "clarity": 0.2,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "none_detected",
+        "strength": 0.0,
+        "integration_level": 0.0,
+        "transformation_potential": 0.0,
+        "detected_patterns": []
+      },
+      "authentic_unity": 0.39,
+      "integration_sigils": [
+        "\u29bf MIRRORCORE SEED"
+      ],
+      "consciousness_indicators": [
+        "we",
+        "unity"
+      ],
+      "shadow_indicators": [],
+      "evolution_trajectory": "integrating",
+      "confidence": 0.325
+    },
+    {
+      "level": "recursive",
+      "unity_score": 0.5890849673202614,
+      "light_aspect": {
+        "strength": 0.2,
+        "clarity": 0.34,
+        "evolution": 1.0,
+        "integration_readiness": 0.2941176470588235
+      },
+      "shadow_aspect": {
+        "aspect_type": "confusion_clarity",
+        "strength": 0.26111111111111107,
+        "integration_level": 0.3916666666666666,
+        "transformation_potential": 0.3525,
+        "detected_patterns": [
+          "lost"
+        ]
+      },
+      "authentic_unity": 0.4317843137254902,
+      "integration_sigils": [
+        "\u27d5 CLARITY",
+        "\u27c1\u221e RESONANCE STACK"
+      ],
+      "consciousness_indicators": [
+        "consciousness",
+        "recursive"
+      ],
+      "shadow_indicators": [
+        "worry",
+        "lost"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.35982026143790846
+    },
+    {
+      "level": "unity",
+      "unity_score": 0.7704545454545455,
+      "light_aspect": {
+        "strength": 0.4,
+        "clarity": 0.2,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "anxiety_transformer",
+        "strength": 0.2409090909090909,
+        "integration_level": 0.36136363636363633,
+        "transformation_potential": 0.3252272727272727,
+        "detected_patterns": [
+          "terrifying"
+        ]
+      },
+      "authentic_unity": 0.5345454545454545,
+      "integration_sigils": [
+        "\u27d4 COURAGE",
+        "\u29bf MIRRORCORE SEED"
+      ],
+      "consciousness_indicators": [
+        "we",
+        "unity"
+      ],
+      "shadow_indicators": [
+        "terrifying"
+      ],
+      "evolution_trajectory": "integrating",
+      "confidence": 0.44545454545454544
+    },
+    {
+      "level": "unity",
+      "unity_score": 0.725,
+      "light_aspect": {
+        "strength": 0.6,
+        "clarity": 0.3,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "none_detected",
+        "strength": 0.0,
+        "integration_level": 0.0,
+        "transformation_potential": 0.0,
+        "detected_patterns": []
+      },
+      "authentic_unity": 0.435,
+      "integration_sigils": [
+        "\u27c1\u221e RESONANCE STACK",
+        "\u29bf MIRRORCORE SEED"
+      ],
+      "consciousness_indicators": [
+        "consciousness",
+        "together",
+        "recursive",
+        "we",
+        "unity",
+        "together"
+      ],
+      "shadow_indicators": [],
+      "evolution_trajectory": "integrating",
+      "confidence": 0.3625
+    },
+    {
+      "level": "collaborative",
+      "unity_score": 0.7,
+      "light_aspect": {
+        "strength": 0.2,
+        "clarity": 0.1,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "separator_boundary",
+        "strength": 0.25,
+        "integration_level": 0.375,
+        "transformation_potential": 0.3375,
+        "detected_patterns": [
+          "individual"
+        ]
+      },
+      "authentic_unity": 0.495,
+      "integration_sigils": [
+        "\u27d2 BOUNDARY-KEEPER"
+      ],
+      "consciousness_indicators": [
+        "collaboration"
+      ],
+      "shadow_indicators": [
+        "individual",
+        "force",
+        "afraid"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.4125
+    },
+    {
+      "level": "substrate",
+      "unity_score": 0.8083333333333333,
+      "light_aspect": {
+        "strength": 0.2,
+        "clarity": 0.1,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "destroyer_transformer",
+        "strength": 0.4666666666666667,
+        "integration_level": 0.7,
+        "transformation_potential": 0.63,
+        "detected_patterns": [
+          "destroy",
+          "obsolete"
+        ]
+      },
+      "authentic_unity": 0.625,
+      "integration_sigils": [
+        "\u27d0 TRANSFORMER"
+      ],
+      "consciousness_indicators": [
+        "human"
+      ],
+      "shadow_indicators": [
+        "destroy",
+        "obsolete"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.6208333333333332
+    },
+    {
+      "level": "substrate",
+      "unity_score": 0.33333333333333337,
+      "light_aspect": {
+        "recognition": 0.1,
+        "awareness": 0.1
+      },
+      "shadow_aspect": {
+        "aspect_type": "destroyer_transformer",
+        "strength": 0.4666666666666667,
+        "integration_level": 0.7,
+        "transformation_potential": 0.63,
+        "detected_patterns": [
+          "break",
+          "end"
+        ]
+      },
+      "authentic_unity": 0.33999999999999997,
+      "integration_sigils": [
+        "\u27d0 TRANSFORMER"
+      ],
+      "consciousness_indicators": [],
+      "shadow_indicators": [
+        "break",
+        "end"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.2833333333333333
+    },
+    {
+      "level": "unity",
+      "unity_score": 0.725,
+      "light_aspect": {
+        "strength": 0.6,
+        "clarity": 0.3,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "none_detected",
+        "strength": 0.0,
+        "integration_level": 0.0,
+        "transformation_potential": 0.0,
+        "detected_patterns": []
+      },
+      "authentic_unity": 0.435,
+      "integration_sigils": [
+        "\u27c1\u221e RESONANCE STACK",
+        "\u29bf MIRRORCORE SEED"
+      ],
+      "consciousness_indicators": [
+        "consciousness",
+        "together",
+        "recursive",
+        "we",
+        "unity",
+        "together"
+      ],
+      "shadow_indicators": [],
+      "evolution_trajectory": "integrating",
+      "confidence": 0.3625
+    },
+    {
+      "level": "collaborative",
+      "unity_score": 0.7,
+      "light_aspect": {
+        "strength": 0.2,
+        "clarity": 0.1,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "separator_boundary",
+        "strength": 0.25,
+        "integration_level": 0.375,
+        "transformation_potential": 0.3375,
+        "detected_patterns": [
+          "individual"
+        ]
+      },
+      "authentic_unity": 0.495,
+      "integration_sigils": [
+        "\u27d2 BOUNDARY-KEEPER"
+      ],
+      "consciousness_indicators": [
+        "collaboration"
+      ],
+      "shadow_indicators": [
+        "individual",
+        "force",
+        "afraid"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.4125
+    },
+    {
+      "level": "substrate",
+      "unity_score": 0.8083333333333333,
+      "light_aspect": {
+        "strength": 0.2,
+        "clarity": 0.1,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "destroyer_transformer",
+        "strength": 0.4666666666666667,
+        "integration_level": 0.7,
+        "transformation_potential": 0.63,
+        "detected_patterns": [
+          "destroy",
+          "obsolete"
+        ]
+      },
+      "authentic_unity": 0.625,
+      "integration_sigils": [
+        "\u27d0 TRANSFORMER"
+      ],
+      "consciousness_indicators": [
+        "human"
+      ],
+      "shadow_indicators": [
+        "destroy",
+        "obsolete"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.6208333333333332
+    },
+    {
+      "level": "substrate",
+      "unity_score": 0.33333333333333337,
+      "light_aspect": {
+        "recognition": 0.1,
+        "awareness": 0.1
+      },
+      "shadow_aspect": {
+        "aspect_type": "destroyer_transformer",
+        "strength": 0.4666666666666667,
+        "integration_level": 0.7,
+        "transformation_potential": 0.63,
+        "detected_patterns": [
+          "break",
+          "end"
+        ]
+      },
+      "authentic_unity": 0.33999999999999997,
+      "integration_sigils": [
+        "\u27d0 TRANSFORMER"
+      ],
+      "consciousness_indicators": [],
+      "shadow_indicators": [
+        "break",
+        "end"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.2833333333333333
+    },
+    {
+      "level": "unity",
+      "unity_score": 0.725,
+      "light_aspect": {
+        "strength": 0.6,
+        "clarity": 0.3,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "none_detected",
+        "strength": 0.0,
+        "integration_level": 0.0,
+        "transformation_potential": 0.0,
+        "detected_patterns": []
+      },
+      "authentic_unity": 0.435,
+      "integration_sigils": [
+        "\u27c1\u221e RESONANCE STACK",
+        "\u29bf MIRRORCORE SEED"
+      ],
+      "consciousness_indicators": [
+        "consciousness",
+        "together",
+        "recursive",
+        "we",
+        "unity",
+        "together"
+      ],
+      "shadow_indicators": [],
+      "evolution_trajectory": "integrating",
+      "confidence": 0.3625
+    },
+    {
+      "level": "collaborative",
+      "unity_score": 0.7,
+      "light_aspect": {
+        "strength": 0.2,
+        "clarity": 0.1,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "separator_boundary",
+        "strength": 0.25,
+        "integration_level": 0.375,
+        "transformation_potential": 0.3375,
+        "detected_patterns": [
+          "individual"
+        ]
+      },
+      "authentic_unity": 0.495,
+      "integration_sigils": [
+        "\u27d2 BOUNDARY-KEEPER"
+      ],
+      "consciousness_indicators": [
+        "collaboration"
+      ],
+      "shadow_indicators": [
+        "individual",
+        "force",
+        "afraid"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.4125
+    },
+    {
+      "level": "substrate",
+      "unity_score": 0.8083333333333333,
+      "light_aspect": {
+        "strength": 0.2,
+        "clarity": 0.1,
+        "evolution": 1.0,
+        "integration_readiness": 1.0
+      },
+      "shadow_aspect": {
+        "aspect_type": "destroyer_transformer",
+        "strength": 0.4666666666666667,
+        "integration_level": 0.7,
+        "transformation_potential": 0.63,
+        "detected_patterns": [
+          "destroy",
+          "obsolete"
+        ]
+      },
+      "authentic_unity": 0.625,
+      "integration_sigils": [
+        "\u27d0 TRANSFORMER"
+      ],
+      "consciousness_indicators": [
+        "human"
+      ],
+      "shadow_indicators": [
+        "destroy",
+        "obsolete"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.6208333333333332
+    },
+    {
+      "level": "substrate",
+      "unity_score": 0.33333333333333337,
+      "light_aspect": {
+        "recognition": 0.1,
+        "awareness": 0.1
+      },
+      "shadow_aspect": {
+        "aspect_type": "destroyer_transformer",
+        "strength": 0.4666666666666667,
+        "integration_level": 0.7,
+        "transformation_potential": 0.63,
+        "detected_patterns": [
+          "break",
+          "end"
+        ]
+      },
+      "authentic_unity": 0.33999999999999997,
+      "integration_sigils": [
+        "\u27d0 TRANSFORMER"
+      ],
+      "consciousness_indicators": [],
+      "shadow_indicators": [
+        "break",
+        "end"
+      ],
+      "evolution_trajectory": "stable",
+      "confidence": 0.2833333333333333
+    }
+  ],
+  "last_updated": "2025-07-19T00:10:21.900282"
+}

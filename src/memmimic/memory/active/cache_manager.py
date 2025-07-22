@@ -11,7 +11,7 @@ import threading
 import sys
 from collections import OrderedDict
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Optional
 import weakref
 
 from .interfaces import (

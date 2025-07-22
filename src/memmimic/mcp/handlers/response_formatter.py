@@ -7,7 +7,7 @@ and metadata in MCP protocol responses.
 
 import logging
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 from datetime import datetime
 
 from ..memory.search.interfaces import SearchResults, SearchResult, CXDClassification

@@ -1,3 +1,10 @@
+"""
+Vector Store
+
+MemMimic module for vector store functionality.
+"""
+
+
 # --- Archivo: src/cxd_classifier/providers/vector_store.py ---
 import logging
 import pickle
@@ -578,3 +585,4 @@ __all__ = [
     "create_numpy_store",
     "FAISS_AVAILABLE",
 ]
+

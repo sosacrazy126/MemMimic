@@ -700,3 +700,4 @@ if __name__ == "__main__":
     # Test historical trends
     trends = dashboard.get_historical_trends(7)
     print(f"\nHistorical Trends Available: {list(trends.keys())}")
+

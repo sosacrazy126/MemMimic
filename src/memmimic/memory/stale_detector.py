@@ -206,57 +206,69 @@ class StaleMemoryDetector:
         stats = {"archived": 0, "marked_for_pruning": 0, "protected": 0, "no_change": 0}
 
         if dry_run:
-            # Just calculate what would happen
-            for result in results:
-                if result.should_change_status():
-                    if result.recommended_status == MemoryStatus.ARCHIVE_CANDIDATE:
-                        stats["archived"] += 1
-                    elif result.recommended_status == MemoryStatus.PRUNE_CANDIDATE:
-                        stats["marked_for_pruning"] += 1
-                else:
-                    if result.protection_reasons:
-                        stats["protected"] += 1
-                    else:
-                        stats["no_change"] += 1
-            return stats
+            return self._simulate_stale_detection_changes(results, stats)
 
-        # Apply actual changes
+        return self._apply_stale_detection_changes(results, stats)
+
+    def _simulate_stale_detection_changes(
+        self, results: List[StaleDetectionResult], stats: Dict[str, int]
+    ) -> Dict[str, int]:
+        """Simulate changes without applying them"""
+        for result in results:
+            self._update_stats_for_result(result, stats)
+        return stats
+
+    def _apply_stale_detection_changes(
+        self, results: List[StaleDetectionResult], stats: Dict[str, int]
+    ) -> Dict[str, int]:
+        """Apply actual changes to the database"""
         with self._get_connection() as conn:
             for result in results:
                 if result.should_change_status():
-                    # Map status to archive_status values
-                    archive_status = self._map_status_to_db(result.recommended_status)
-
-                    conn.execute(
-                        """
-                        UPDATE memories_enhanced 
-                        SET archive_status = ?, 
-                            metadata = json_set(COALESCE(metadata, '{}'), 
-                                              '$.stale_detection', json(?))
-                        WHERE id = ?
-                    """,
-                        (
-                            archive_status,
-                            self._create_stale_metadata(result),
-                            result.memory_id,
-                        ),
-                    )
-
-                    # Update statistics
-                    if result.recommended_status == MemoryStatus.ARCHIVE_CANDIDATE:
-                        stats["archived"] += 1
-                    elif result.recommended_status == MemoryStatus.PRUNE_CANDIDATE:
-                        stats["marked_for_pruning"] += 1
-                else:
-                    if result.protection_reasons:
-                        stats["protected"] += 1
-                    else:
-                        stats["no_change"] += 1
+                    self._update_memory_status(conn, result)
+                
+                self._update_stats_for_result(result, stats)
 
             conn.commit()
 
         self.logger.info(f"Stale detection applied: {stats}")
         return stats
+
+    def _update_stats_for_result(
+        self, result: StaleDetectionResult, stats: Dict[str, int]
+    ) -> None:
+        """Update statistics for a single result"""
+        if result.should_change_status():
+            if result.recommended_status == MemoryStatus.ARCHIVE_CANDIDATE:
+                stats["archived"] += 1
+            elif result.recommended_status == MemoryStatus.PRUNE_CANDIDATE:
+                stats["marked_for_pruning"] += 1
+        else:
+            if result.protection_reasons:
+                stats["protected"] += 1
+            else:
+                stats["no_change"] += 1
+
+    def _update_memory_status(
+        self, conn, result: StaleDetectionResult
+    ) -> None:
+        """Update memory status in database"""
+        archive_status = self._map_status_to_db(result.recommended_status)
+
+        conn.execute(
+            """
+            UPDATE memories_enhanced 
+            SET archive_status = ?, 
+                metadata = json_set(COALESCE(metadata, '{}'), 
+                                  '$.stale_detection', json(?))
+            WHERE id = ?
+        """,
+            (
+                archive_status,
+                self._create_stale_metadata(result),
+                result.memory_id,
+            ),
+        )
 
     def get_stale_detection_summary(self) -> Dict[str, Any]:
         """Get summary of stale detection statistics"""
@@ -443,70 +455,81 @@ class StaleMemoryDetector:
         if protection_reasons:
             return MemoryStatus.ACTIVE, stale_reasons
 
-        # Check for pruning conditions (most severe)
-        if (
-            staleness_factors["days_since_access"] > self.config.prune_threshold_days
-            or staleness_factors["importance_score"]
-            < self.config.prune_importance_threshold
-        ):
+        # Check each status level in order of severity
+        prune_status = self._check_prune_conditions(staleness_factors, stale_reasons)
+        if prune_status:
+            return prune_status
 
-            if (
-                staleness_factors["days_since_access"]
-                > self.config.prune_threshold_days
-            ):
-                stale_reasons.append(StaleReason.LONG_UNUSED)
-            if (
-                staleness_factors["importance_score"]
-                < self.config.prune_importance_threshold
-            ):
-                stale_reasons.append(StaleReason.LOW_IMPORTANCE)
+        archive_status = self._check_archive_conditions(staleness_factors, stale_reasons)
+        if archive_status:
+            return archive_status
 
-            return MemoryStatus.PRUNE_CANDIDATE, stale_reasons
-
-        # Check for archival conditions
-        if (
-            staleness_factors["days_since_access"] > self.config.archive_threshold_days
-            or staleness_factors["importance_score"]
-            < self.config.archive_importance_threshold
-            or staleness_factors["access_frequency"] < self.config.min_access_frequency
-        ):
-
-            if (
-                staleness_factors["days_since_access"]
-                > self.config.archive_threshold_days
-            ):
-                stale_reasons.append(StaleReason.LONG_UNUSED)
-            if (
-                staleness_factors["importance_score"]
-                < self.config.archive_importance_threshold
-            ):
-                stale_reasons.append(StaleReason.LOW_IMPORTANCE)
-            if staleness_factors["access_frequency"] < self.config.min_access_frequency:
-                stale_reasons.append(StaleReason.LOW_QUALITY)
-
-            return MemoryStatus.ARCHIVE_CANDIDATE, stale_reasons
-
-        # Check for stale conditions (warning)
-        if (
-            staleness_factors["days_since_access"] > self.config.stale_threshold_days
-            or staleness_factors["importance_score"] < self.config.min_active_importance
-        ):
-
-            if (
-                staleness_factors["days_since_access"]
-                > self.config.stale_threshold_days
-            ):
-                stale_reasons.append(StaleReason.LONG_UNUSED)
-            if (
-                staleness_factors["importance_score"]
-                < self.config.min_active_importance
-            ):
-                stale_reasons.append(StaleReason.LOW_IMPORTANCE)
-
-            return MemoryStatus.STALE_CANDIDATE, stale_reasons
+        stale_status = self._check_stale_conditions(staleness_factors, stale_reasons)
+        if stale_status:
+            return stale_status
 
         # Memory is fine, keep active
         return MemoryStatus.ACTIVE, stale_reasons
+
+    def _check_prune_conditions(
+        self, staleness_factors: Dict[str, float], stale_reasons: List[StaleReason]
+    ) -> Optional[Tuple[MemoryStatus, List[StaleReason]]]:
+        """Check if memory meets pruning conditions"""
+        should_prune = (
+            staleness_factors["days_since_access"] > self.config.prune_threshold_days
+            or staleness_factors["importance_score"] < self.config.prune_importance_threshold
+        )
+
+        if not should_prune:
+            return None
+
+        if staleness_factors["days_since_access"] > self.config.prune_threshold_days:
+            stale_reasons.append(StaleReason.LONG_UNUSED)
+        if staleness_factors["importance_score"] < self.config.prune_importance_threshold:
+            stale_reasons.append(StaleReason.LOW_IMPORTANCE)
+
+        return MemoryStatus.PRUNE_CANDIDATE, stale_reasons
+
+    def _check_archive_conditions(
+        self, staleness_factors: Dict[str, float], stale_reasons: List[StaleReason]
+    ) -> Optional[Tuple[MemoryStatus, List[StaleReason]]]:
+        """Check if memory meets archival conditions"""
+        should_archive = (
+            staleness_factors["days_since_access"] > self.config.archive_threshold_days
+            or staleness_factors["importance_score"] < self.config.archive_importance_threshold
+            or staleness_factors["access_frequency"] < self.config.min_access_frequency
+        )
+
+        if not should_archive:
+            return None
+
+        if staleness_factors["days_since_access"] > self.config.archive_threshold_days:
+            stale_reasons.append(StaleReason.LONG_UNUSED)
+        if staleness_factors["importance_score"] < self.config.archive_importance_threshold:
+            stale_reasons.append(StaleReason.LOW_IMPORTANCE)
+        if staleness_factors["access_frequency"] < self.config.min_access_frequency:
+            stale_reasons.append(StaleReason.LOW_QUALITY)
+
+        return MemoryStatus.ARCHIVE_CANDIDATE, stale_reasons
+
+    def _check_stale_conditions(
+        self, staleness_factors: Dict[str, float], stale_reasons: List[StaleReason]
+    ) -> Optional[Tuple[MemoryStatus, List[StaleReason]]]:
+        """Check if memory meets stale warning conditions"""
+        should_flag_stale = (
+            staleness_factors["days_since_access"] > self.config.stale_threshold_days
+            or staleness_factors["importance_score"] < self.config.min_active_importance
+        )
+
+        if not should_flag_stale:
+            return None
+
+        if staleness_factors["days_since_access"] > self.config.stale_threshold_days:
+            stale_reasons.append(StaleReason.LONG_UNUSED)
+        if staleness_factors["importance_score"] < self.config.min_active_importance:
+            stale_reasons.append(StaleReason.LOW_IMPORTANCE)
+
+        return MemoryStatus.STALE_CANDIDATE, stale_reasons
 
     def _calculate_staleness_score(self, staleness_factors: Dict[str, float]) -> float:
         """Calculate overall staleness score (0 = fresh, 1 = very stale)"""
@@ -650,3 +673,4 @@ if __name__ == "__main__":
     else:
         print("Usage: python stale_detector.py <database_path> [--apply]")
         print("  --apply: Actually apply changes (default is dry run)")
+

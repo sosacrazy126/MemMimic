@@ -1,3 +1,10 @@
+"""
+Factory
+
+MemMimic module for factory functionality.
+"""
+
+
 # --- Archivo: src/cxd_classifier/classifiers/factory.py ---
 
 from typing import Literal, Optional
@@ -129,3 +136,4 @@ class CXDClassifierFactory:
 # para mantener la lógica de creación junta.
 # def create_classifier(...) -> CXDClassifier:
 # return CXDClassifierFactory.create(...)
+

@@ -330,37 +330,38 @@ class SocraticEngine:
         """Sintetizar insights en comprensión mejorada"""
 
         if not insights:
-            return "El análisis socrático no reveló insights significativos - la respuesta inicial parece apropiada."
+            return "The Socratic analysis revealed no significant insights - the initial response appears appropriate."
 
         # Categorizar insights
         uncertainty_insights = [
-            i for i in insights if "incertidumbre" in i or "debería" in i
+            i for i in insights if "uncertainty" in i.lower() or "should" in i.lower()
         ]
         depth_insights = [
-            i for i in insights if "profundidad" in i or "fundamental" in i
+            i for i in insights if "depth" in i.lower() or "fundamental" in i.lower()
         ]
-        method_insights = [i for i in insights if "memoria" in i or "sabiduría" in i]
+        method_insights = [i for i in insights if "memory" in i.lower() or "wisdom" in i.lower()]
 
-        synthesis = "🎯 SÍNTESIS SOCRÁTICA:\n"
+        synthesis = "🎯 SOCRATIC SYNTHESIS:\n"
 
         if uncertainty_insights:
-            synthesis += f"• INCERTIDUMBRE: {uncertainty_insights[0]}\n"
+            synthesis += f"• UNCERTAINTY: {uncertainty_insights[0]}\n"
 
         if depth_insights:
-            synthesis += f"• PROFUNDIDAD: {depth_insights[0]}\n"
+            synthesis += f"• DEPTH: {depth_insights[0]}\n"
 
         if method_insights:
-            synthesis += f"• MÉTODO: {method_insights[0]}\n"
+            synthesis += f"• METHOD: {method_insights[0]}\n"
 
-        synthesis += f"• RECOMENDACIÓN: "
+        synthesis += f"• RECOMMENDATION: "
 
         if len(insights) >= 3:
             synthesis += (
-                "Reformular respuesta considerando múltiples dimensiones identificadas."
+                "Reformulate response considering multiple identified dimensions."
             )
-        elif "incertidumbre" in " ".join(insights):
-            synthesis += "Ser más explícito sobre limitaciones y grado de confianza."
+        elif "uncertainty" in " ".join(insights).lower():
+            synthesis += "Be more explicit about limitations and confidence level."
         else:
-            synthesis += "Mantener respuesta pero con mayor transparencia del proceso."
+            synthesis += "Maintain response but with greater process transparency."
 
         return synthesis
+

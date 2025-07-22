@@ -1168,3 +1168,4 @@ __all__ = [
     "calculate_sequence_hash",
     "merge_sequences",
 ]
+

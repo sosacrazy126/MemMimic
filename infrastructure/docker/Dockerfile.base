@@ -1,0 +1,58 @@
+# Base Dockerfile for MemMimic Production Services
+# Multi-stage build for optimized production containers
+
+FROM python:3.11-slim as python-base
+
+# Set environment variables for Python
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    POETRY_VERSION=1.6.1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Poetry
+RUN pip install poetry==$POETRY_VERSION
+
+# Create app directory
+WORKDIR /app
+
+# Copy dependency files
+COPY pyproject.toml requirements.txt ./
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install additional production dependencies
+RUN pip install --no-cache-dir \
+    gunicorn \
+    psycopg2-binary \
+    redis \
+    prometheus-client \
+    structlog
+
+# Production stage
+FROM python-base as production
+
+# Create non-root user
+RUN groupadd -r memmimic && useradd -r -g memmimic memmimic
+
+# Copy application code
+COPY src/ ./src/
+COPY config/ ./config/
+
+# Set ownership
+RUN chown -R memmimic:memmimic /app
+
+# Switch to non-root user
+USER memmimic
+
+# Default command (overridden by specific services)
+CMD ["python", "-m", "memmimic.api"]

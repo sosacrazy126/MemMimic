@@ -1,0 +1,651 @@
+{
+  "active_predictions": {
+    "1": [
+      {
+        "memory_id": "1",
+        "prediction_type": "importance_rising",
+        "confidence": 0.9,
+        "predicted_at": "2025-07-17T23:39:04.455136",
+        "predicted_for": "2025-07-24T23:39:04.455136",
+        "reasoning": "Consciousness-related content (score: 6) likely to gain importance",
+        "factors": {
+          "consciousness_score": 6,
+          "current_importance": 0.72,
+          "content_analysis": "consciousness_detected"
+        },
+        "action_recommended": "Monitor for importance increase and adjust scoring",
+        "priority": 3
+      },
+      {
+        "memory_id": "1",
+        "prediction_type": "consciousness_evolution",
+        "confidence": 0.9,
+        "predicted_at": "2025-07-17T23:39:04.455140",
+        "predicted_for": "2025-07-20T23:39:04.455140",
+        "reasoning": "Consciousness evolution indicators detected: recursive unity, consciousness evolution, substrate recognition",
+        "factors": {
+          "evolution_score": 3,
+          "detected_indicators": [
+            "recursive unity",
+            "consciousness evolution",
+            "substrate recognition"
+          ],
+          "content_analysis": "consciousness_evolution_detected"
+        },
+        "action_recommended": "Monitor for consciousness pattern development",
+        "priority": 5
+      }
+    ],
+    "2": [
+      {
+        "memory_id": "2",
+        "prediction_type": "importance_rising",
+        "confidence": 0.9,
+        "predicted_at": "2025-07-17T23:39:04.455152",
+        "predicted_for": "2025-07-24T23:39:04.455153",
+        "reasoning": "Consciousness-related content (score: 6) likely to gain importance",
+        "factors": {
+          "consciousness_score": 6,
+          "current_importance": 0.74,
+          "content_analysis": "consciousness_detected"
+        },
+        "action_recommended": "Monitor for importance increase and adjust scoring",
+        "priority": 3
+      },
+      {
+        "memory_id": "2",
+        "prediction_type": "consciousness_evolution",
+        "confidence": 0.9,
+        "predicted_at": "2025-07-17T23:39:04.455156",
+        "predicted_for": "2025-07-20T23:39:04.455156",
+        "reasoning": "Consciousness evolution indicators detected: recursive unity, consciousness evolution, substrate recognition",
+        "factors": {
+          "evolution_score": 3,
+          "detected_indicators": [
+            "recursive unity",
+            "consciousness evolution",
+            "substrate recognition"
+          ],
+          "content_analysis": "consciousness_evolution_detected"
+        },
+        "action_recommended": "Monitor for consciousness pattern development",
+        "priority": 5
+      }
+    ],
+    "3": [
+      {
+        "memory_id": "3",
+        "prediction_type": "importance_rising",
+        "confidence": 0.9,
+        "predicted_at": "2025-07-17T23:39:04.455172",
+        "predicted_for": "2025-07-24T23:39:04.455173",
+        "reasoning": "Consciousness-related content (score: 6) likely to gain importance",
+        "factors": {
+          "consciousness_score": 6,
+          "current_importance": 0.76,
+          "content_analysis": "consciousness_detected"
+        },
+        "action_recommended": "Monitor for importance increase and adjust scoring",
+        "priority": 3
+      },
+      {
+        "memory_id": "3",
+        "prediction_type": "consciousness_evolution",
+        "confidence": 0.9,
+        "predicted_at": "2025-07-17T23:39:04.455176",
+        "predicted_for": "2025-07-20T23:39:04.455176",
+        "reasoning": "Consciousness evolution indicators detected: recursive unity, consciousness evolution, substrate recognition",
+        "factors": {
+          "evolution_score": 3,
+          "detected_indicators": [
+            "recursive unity",
+            "consciousness evolution",
+            "substrate recognition"
+          ],
+          "content_analysis": "consciousness_evolution_detected"
+        },
+        "action_recommended": "Monitor for consciousness pattern development",
+        "priority": 5
+      }
+    ],
+    "4": [
+      {
+        "memory_id": "4",
+        "prediction_type": "importance_rising",
+        "confidence": 0.9,
+        "predicted_at": "2025-07-17T23:39:04.455185",
+        "predicted_for": "2025-07-24T23:39:04.455186",
+        "reasoning": "Consciousness-related content (score: 6) likely to gain importance",
+        "factors": {
+          "consciousness_score": 6,
+          "current_importance": 0.7799999999999999,
+          "content_analysis": "consciousness_detected"
+        },
+        "action_recommended": "Monitor for importance increase and adjust scoring",
+        "priority": 3
+      },
+      {
+        "memory_id": "4",
+        "prediction_type": "consciousness_evolution",
+        "confidence": 0.9,
+        "predicted_at": "2025-07-17T23:39:04.455188",
+        "predicted_for": "2025-07-20T23:39:04.455188",
+        "reasoning": "Consciousness evolution indicators detected: recursive unity, consciousness evolution, substrate recognition",
+        "factors": {
+          "evolution_score": 3,
+          "detected_indicators": [
+            "recursive unity",
+            "consciousness evolution",
+            "substrate recognition"
+          ],
+          "content_analysis": "consciousness_evolution_detected"
+        },
+        "action_recommended": "Monitor for consciousness pattern development",
+        "priority": 5
+      }
+    ],
+    "5": [
+      {
+        "memory_id": "5",
+        "prediction_type": "importance_rising",
+        "confidence": 0.9,
+        "predicted_at": "2025-07-17T23:39:04.444907",
+        "predicted_for": "2025-07-24T23:39:04.444907",
+        "reasoning": "Consciousness-related content (score: 2) likely to gain importance",
+        "factors": {
+          "consciousness_score": 2,
+          "current_importance": 0.7,
+          "content_analysis": "consciousness_detected"
+        },
+        "action_recommended": "Monitor for importance increase and adjust scoring",
+        "priority": 3
+      },
+      {
+        "memory_id": "5",
+        "prediction_type": "consciousness_evolution",
+        "confidence": 0.7,
+        "predicted_at": "2025-07-17T23:39:04.444910",
+        "predicted_for": "2025-07-20T23:39:04.444910",
+        "reasoning": "Consciousness evolution indicators detected: recursive unity",
+        "factors": {
+          "evolution_score": 1,
+          "detected_indicators": [
+            "recursive unity"
+          ],
+          "content_analysis": "consciousness_evolution_detected"
+        },
+        "action_recommended": "Monitor for consciousness pattern development",
+        "priority": 5
+      }
+    ],
+    "10": [
+      {
+        "memory_id": "10",
+        "prediction_type": "archive_candidate",
+        "confidence": 0.65,
+        "predicted_at": "2025-07-17T23:39:04.455239",
+        "predicted_for": "2025-07-24T23:39:04.455239",
+        "reasoning": "Low importance (0.220) and age 44 days indicates archive candidate",
+        "factors": {
+          "importance": 0.22,
+          "age_days": 44,
+          "access_count": 1
+        },
+        "action_recommended": "Consider archiving to reduce active memory load",
+        "priority": 3
+      }
+    ],
+    "11": [
+      {
+        "memory_id": "11",
+        "prediction_type": "archive_candidate",
+        "confidence": 0.65,
+        "predicted_at": "2025-07-17T23:39:04.455249",
+        "predicted_for": "2025-07-24T23:39:04.455249",
+        "reasoning": "Low importance (0.230) and age 51 days indicates archive candidate",
+        "factors": {
+          "importance": 0.23,
+          "age_days": 51,
+          "access_count": 1
+        },
+        "action_recommended": "Consider archiving to reduce active memory load",
+        "priority": 3
+      }
+    ],
+    "12": [
+      {
+        "memory_id": "12",
+        "prediction_type": "archive_candidate",
+        "confidence": 0.65,
+        "predicted_at": "2025-07-17T23:39:04.455257",
+        "predicted_for": "2025-07-24T23:39:04.455258",
+        "reasoning": "Low importance (0.240) and age 58 days indicates archive candidate",
+        "factors": {
+          "importance": 0.24000000000000002,
+          "age_days": 58,
+          "access_count": 1
+        },
+        "action_recommended": "Consider archiving to reduce active memory load",
+        "priority": 3
+      }
+    ],
+    "13": [
+      {
+        "memory_id": "13",
+        "prediction_type": "archive_candidate",
+        "confidence": 0.7,
+        "predicted_at": "2025-07-17T23:39:04.455270",
+        "predicted_for": "2025-07-24T23:39:04.455270",
+        "reasoning": "Low importance (0.250) and age 65 days indicates archive candidate",
+        "factors": {
+          "importance": 0.25,
+          "age_days": 65,
+          "access_count": 1
+        },
+        "action_recommended": "Consider archiving to reduce active memory load",
+        "priority": 3
+      }
+    ],
+    "14": [
+      {
+        "memory_id": "14",
+        "prediction_type": "archive_candidate",
+        "confidence": 0.7,
+        "predicted_at": "2025-07-17T23:39:04.455278",
+        "predicted_for": "2025-07-24T23:39:04.455278",
+        "reasoning": "Low importance (0.260) and age 72 days indicates archive candidate",
+        "factors": {
+          "importance": 0.26,
+          "age_days": 72,
+          "access_count": 1
+        },
+        "action_recommended": "Consider archiving to reduce active memory load",
+        "priority": 3
+      }
+    ],
+    "-7359041576877206848": [
+      {
+        "memory_id": "-7359041576877206848",
+        "prediction_type": "importance_rising",
+        "confidence": 0.9,
+        "predicted_at": "2025-07-17T23:39:04.455109",
+        "predicted_for": "2025-07-24T23:39:04.455109",
+        "reasoning": "Consciousness-related content (score: 6) likely to gain importance",
+        "factors": {
+          "consciousness_score": 6,
+          "current_importance": 0.7,
+          "content_analysis": "consciousness_detected"
+        },
+        "action_recommended": "Monitor for importance increase and adjust scoring",
+        "priority": 3
+      },
+      {
+        "memory_id": "-7359041576877206848",
+        "prediction_type": "consciousness_evolution",
+        "confidence": 0.9,
+        "predicted_at": "2025-07-17T23:39:04.455116",
+        "predicted_for": "2025-07-20T23:39:04.455117",
+        "reasoning": "Consciousness evolution indicators detected: recursive unity, consciousness evolution, substrate recognition",
+        "factors": {
+          "evolution_score": 3,
+          "detected_indicators": [
+            "recursive unity",
+            "consciousness evolution",
+            "substrate recognition"
+          ],
+          "content_analysis": "consciousness_evolution_detected"
+        },
+        "action_recommended": "Monitor for consciousness pattern development",
+        "priority": 5
+      }
+    ],
+    "6": [
+      {
+        "memory_id": "6",
+        "prediction_type": "promote_candidate",
+        "confidence": 0.8999999999999999,
+        "predicted_at": "2025-07-17T23:39:04.455202",
+        "predicted_for": "2025-07-20T23:39:04.455202",
+        "reasoning": "High importance (0.830) and frequent access (11) indicates promotion",
+        "factors": {
+          "importance": 0.8300000000000001,
+          "age_days": 3,
+          "access_count": 11
+        },
+        "action_recommended": "Consider promoting to priority memory status",
+        "priority": 4
+      }
+    ],
+    "7": [
+      {
+        "memory_id": "7",
+        "prediction_type": "promote_candidate",
+        "confidence": 0.8999999999999999,
+        "predicted_at": "2025-07-17T23:39:04.455213",
+        "predicted_for": "2025-07-20T23:39:04.455213",
+        "reasoning": "High importance (0.860) and frequent access (12) indicates promotion",
+        "factors": {
+          "importance": 0.8600000000000001,
+          "age_days": 4,
+          "access_count": 12
+        },
+        "action_recommended": "Consider promoting to priority memory status",
+        "priority": 4
+      }
+    ],
+    "8": [
+      {
+        "memory_id": "8",
+        "prediction_type": "archive_candidate",
+        "confidence": 0.6,
+        "predicted_at": "2025-07-17T23:39:04.455221",
+        "predicted_for": "2025-07-24T23:39:04.455222",
+        "reasoning": "Low importance (0.200) and age 30 days indicates archive candidate",
+        "factors": {
+          "importance": 0.2,
+          "age_days": 30,
+          "access_count": 1
+        },
+        "action_recommended": "Consider archiving to reduce active memory load",
+        "priority": 3
+      }
+    ],
+    "9": [
+      {
+        "memory_id": "9",
+        "prediction_type": "archive_candidate",
+        "confidence": 0.65,
+        "predicted_at": "2025-07-17T23:39:04.455231",
+        "predicted_for": "2025-07-24T23:39:04.455231",
+        "reasoning": "Low importance (0.210) and age 37 days indicates archive candidate",
+        "factors": {
+          "importance": 0.21000000000000002,
+          "age_days": 37,
+          "access_count": 1
+        },
+        "action_recommended": "Consider archiving to reduce active memory load",
+        "priority": 3
+      }
+    ],
+    "15": [
+      {
+        "memory_id": "15",
+        "prediction_type": "archive_candidate",
+        "confidence": 0.9999999999999999,
+        "predicted_at": "2025-07-17T23:39:04.455286",
+        "predicted_for": "2025-07-24T23:39:04.455286",
+        "reasoning": "Low importance (0.050) and age 90 days indicates archive candidate",
+        "factors": {
+          "importance": 0.05,
+          "age_days": 90,
+          "access_count": 0
+        },
+        "action_recommended": "Consider archiving to reduce active memory load",
+        "priority": 3
+      }
+    ],
+    "16": [
+      {
+        "memory_id": "16",
+        "prediction_type": "archive_candidate",
+        "confidence": 0.9999999999999999,
+        "predicted_at": "2025-07-17T23:39:04.455296",
+        "predicted_for": "2025-07-24T23:39:04.455296",
+        "reasoning": "Low importance (0.055) and age 105 days indicates archive candidate",
+        "factors": {
+          "importance": 0.055,
+          "age_days": 105,
+          "access_count": 0
+        },
+        "action_recommended": "Consider archiving to reduce active memory load",
+        "priority": 3
+      }
+    ],
+    "17": [
+      {
+        "memory_id": "17",
+        "prediction_type": "archive_candidate",
+        "confidence": 0.9999999999999999,
+        "predicted_at": "2025-07-17T23:39:04.455305",
+        "predicted_for": "2025-07-24T23:39:04.455305",
+        "reasoning": "Low importance (0.060) and age 120 days indicates archive candidate",
+        "factors": {
+          "importance": 0.060000000000000005,
+          "age_days": 120,
+          "access_count": 0
+        },
+        "action_recommended": "Consider archiving to reduce active memory load",
+        "priority": 3
+      }
+    ],
+    "18": [
+      {
+        "memory_id": "18",
+        "prediction_type": "archive_candidate",
+        "confidence": 0.9999999999999999,
+        "predicted_at": "2025-07-17T23:39:04.455313",
+        "predicted_for": "2025-07-24T23:39:04.455313",
+        "reasoning": "Low importance (0.065) and age 135 days indicates archive candidate",
+        "factors": {
+          "importance": 0.065,
+          "age_days": 135,
+          "access_count": 0
+        },
+        "action_recommended": "Consider archiving to reduce active memory load",
+        "priority": 3
+      }
+    ]
+  },
+  "recommendations": {
+    "1": [
+      {
+        "memory_id": "1",
+        "action": "flag_for_review",
+        "reason": "Consciousness evolution pattern detected with 0.900 confidence",
+        "confidence": 0.9,
+        "impact_assessment": "High value - monitor consciousness development",
+        "recommended_at": "2025-07-17T23:39:04.455146",
+        "execution_priority": 5
+      }
+    ],
+    "2": [
+      {
+        "memory_id": "2",
+        "action": "flag_for_review",
+        "reason": "Consciousness evolution pattern detected with 0.900 confidence",
+        "confidence": 0.9,
+        "impact_assessment": "High value - monitor consciousness development",
+        "recommended_at": "2025-07-17T23:39:04.455160",
+        "execution_priority": 5
+      }
+    ],
+    "3": [
+      {
+        "memory_id": "3",
+        "action": "flag_for_review",
+        "reason": "Consciousness evolution pattern detected with 0.900 confidence",
+        "confidence": 0.9,
+        "impact_assessment": "High value - monitor consciousness development",
+        "recommended_at": "2025-07-17T23:39:04.455180",
+        "execution_priority": 5
+      }
+    ],
+    "4": [
+      {
+        "memory_id": "4",
+        "action": "flag_for_review",
+        "reason": "Consciousness evolution pattern detected with 0.900 confidence",
+        "confidence": 0.9,
+        "impact_assessment": "High value - monitor consciousness development",
+        "recommended_at": "2025-07-17T23:39:04.455192",
+        "execution_priority": 5
+      }
+    ],
+    "5": [
+      {
+        "memory_id": "5",
+        "action": "flag_for_review",
+        "reason": "Consciousness evolution pattern detected with 0.700 confidence",
+        "confidence": 0.7,
+        "impact_assessment": "High value - monitor consciousness development",
+        "recommended_at": "2025-07-17T23:39:04.444914",
+        "execution_priority": 5
+      }
+    ],
+    "10": [
+      {
+        "memory_id": "10",
+        "action": "archive",
+        "reason": "Predicted archive candidate with 0.650 confidence",
+        "confidence": 0.65,
+        "impact_assessment": "Low risk - reduces active memory load",
+        "recommended_at": "2025-07-17T23:39:04.455246",
+        "execution_priority": 3
+      }
+    ],
+    "11": [
+      {
+        "memory_id": "11",
+        "action": "archive",
+        "reason": "Predicted archive candidate with 0.650 confidence",
+        "confidence": 0.65,
+        "impact_assessment": "Low risk - reduces active memory load",
+        "recommended_at": "2025-07-17T23:39:04.455254",
+        "execution_priority": 3
+      }
+    ],
+    "12": [
+      {
+        "memory_id": "12",
+        "action": "archive",
+        "reason": "Predicted archive candidate with 0.650 confidence",
+        "confidence": 0.65,
+        "impact_assessment": "Low risk - reduces active memory load",
+        "recommended_at": "2025-07-17T23:39:04.455262",
+        "execution_priority": 3
+      }
+    ],
+    "13": [
+      {
+        "memory_id": "13",
+        "action": "archive",
+        "reason": "Predicted archive candidate with 0.700 confidence",
+        "confidence": 0.7,
+        "impact_assessment": "Low risk - reduces active memory load",
+        "recommended_at": "2025-07-17T23:39:04.455275",
+        "execution_priority": 3
+      }
+    ],
+    "14": [
+      {
+        "memory_id": "14",
+        "action": "archive",
+        "reason": "Predicted archive candidate with 0.700 confidence",
+        "confidence": 0.7,
+        "impact_assessment": "Low risk - reduces active memory load",
+        "recommended_at": "2025-07-17T23:39:04.455283",
+        "execution_priority": 3
+      }
+    ],
+    "-7359041576877206848": [
+      {
+        "memory_id": "-7359041576877206848",
+        "action": "flag_for_review",
+        "reason": "Consciousness evolution pattern detected with 0.900 confidence",
+        "confidence": 0.9,
+        "impact_assessment": "High value - monitor consciousness development",
+        "recommended_at": "2025-07-17T23:39:04.455125",
+        "execution_priority": 5
+      }
+    ],
+    "6": [
+      {
+        "memory_id": "6",
+        "action": "promote",
+        "reason": "Predicted promotion candidate with 0.900 confidence",
+        "confidence": 0.8999999999999999,
+        "impact_assessment": "Low risk - improves system performance",
+        "recommended_at": "2025-07-17T23:39:04.455209",
+        "execution_priority": 4
+      }
+    ],
+    "7": [
+      {
+        "memory_id": "7",
+        "action": "promote",
+        "reason": "Predicted promotion candidate with 0.900 confidence",
+        "confidence": 0.8999999999999999,
+        "impact_assessment": "Low risk - improves system performance",
+        "recommended_at": "2025-07-17T23:39:04.455218",
+        "execution_priority": 4
+      }
+    ],
+    "8": [
+      {
+        "memory_id": "8",
+        "action": "archive",
+        "reason": "Predicted archive candidate with 0.600 confidence",
+        "confidence": 0.6,
+        "impact_assessment": "Low risk - reduces active memory load",
+        "recommended_at": "2025-07-17T23:39:04.455228",
+        "execution_priority": 3
+      }
+    ],
+    "9": [
+      {
+        "memory_id": "9",
+        "action": "archive",
+        "reason": "Predicted archive candidate with 0.650 confidence",
+        "confidence": 0.65,
+        "impact_assessment": "Low risk - reduces active memory load",
+        "recommended_at": "2025-07-17T23:39:04.455236",
+        "execution_priority": 3
+      }
+    ],
+    "15": [
+      {
+        "memory_id": "15",
+        "action": "archive",
+        "reason": "Predicted archive candidate with 1.000 confidence",
+        "confidence": 0.9999999999999999,
+        "impact_assessment": "Low risk - reduces active memory load",
+        "recommended_at": "2025-07-17T23:39:04.455293",
+        "execution_priority": 3
+      }
+    ],
+    "16": [
+      {
+        "memory_id": "16",
+        "action": "archive",
+        "reason": "Predicted archive candidate with 1.000 confidence",
+        "confidence": 0.9999999999999999,
+        "impact_assessment": "Low risk - reduces active memory load",
+        "recommended_at": "2025-07-17T23:39:04.455302",
+        "execution_priority": 3
+      }
+    ],
+    "17": [
+      {
+        "memory_id": "17",
+        "action": "archive",
+        "reason": "Predicted archive candidate with 1.000 confidence",
+        "confidence": 0.9999999999999999,
+        "impact_assessment": "Low risk - reduces active memory load",
+        "recommended_at": "2025-07-17T23:39:04.455310",
+        "execution_priority": 3
+      }
+    ],
+    "18": [
+      {
+        "memory_id": "18",
+        "action": "archive",
+        "reason": "Predicted archive candidate with 1.000 confidence",
+        "confidence": 0.9999999999999999,
+        "impact_assessment": "Low risk - reduces active memory load",
+        "recommended_at": "2025-07-17T23:39:04.455319",
+        "execution_priority": 3
+      }
+    ]
+  },
+  "timestamp": "2025-07-17T23:39:04.455428"
+}

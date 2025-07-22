@@ -40,3 +40,4 @@ __all__ = [
 # Add factory to exports if available
 if _has_factory:
     __all__.append("CXDClassifierFactory")
+

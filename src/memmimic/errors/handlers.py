@@ -5,6 +5,7 @@ Provides standardized error handling patterns through decorators and utility cla
 for retry logic, circuit breakers, fallback mechanisms, and structured error logging.
 """
 
+import asyncio
 import functools
 import logging
 import time
@@ -450,7 +451,67 @@ def retry(
     
     def decorator(func: Callable[P, T]) -> Callable[P, T]:
         @functools.wraps(func)
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+            last_exception: Optional[Exception] = None
+            
+            for attempt in range(policy.max_attempts):
+                try:
+                    # Add retry context
+                    add_context_metadata("retry_attempt", attempt + 1)
+                    add_context_metadata("max_attempts", policy.max_attempts)
+                    
+                    if asyncio.iscoroutinefunction(func):
+                        result = await func(*args, **kwargs)
+                    else:
+                        result = func(*args, **kwargs)
+                    
+                    # Success - log if this was a retry
+                    if attempt > 0:
+                        logger.info(
+                            f"Function {func.__name__} succeeded on attempt {attempt + 1}"
+                        )
+                    
+                    return result
+                    
+                except Exception as e:
+                    last_exception = e
+                    
+                    # Check if we should stop on this exception
+                    if policy.stop_on_exceptions and isinstance(e, policy.stop_on_exceptions):
+                        logger.debug(f"Stop exception {type(e).__name__} encountered, not retrying")
+                        raise
+                    
+                    # Check if this exception is retriable
+                    if not isinstance(e, policy.retriable_exceptions):
+                        logger.debug(f"Non-retriable exception {type(e).__name__}, not retrying")
+                        raise
+                    
+                    # Don't retry on last attempt
+                    if attempt == policy.max_attempts - 1:
+                        logger.warning(
+                            f"Function {func.__name__} failed after {policy.max_attempts} attempts"
+                        )
+                        break
+                    
+                    # Calculate delay and wait
+                    delay = policy.backoff.get_delay(attempt)
+                    logger.warning(
+                        f"Function {func.__name__} failed on attempt {attempt + 1}, "
+                        f"retrying in {delay:.2f}s: {str(e)}"
+                    )
+                    
+                    if delay > 0:
+                        await asyncio.sleep(delay)
+            
+            # All attempts failed
+            if last_exception:
+                raise last_exception
+            
+            # This shouldn't happen, but just in case
+            raise RuntimeError(f"Function {func.__name__} failed without exception")
+        
+        @functools.wraps(func)
+        def sync_wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
             last_exception: Optional[Exception] = None
             
             for attempt in range(policy.max_attempts):
@@ -505,8 +566,13 @@ def retry(
             
             # This shouldn't happen, but just in case
             raise RuntimeError(f"Function {func.__name__} failed without exception")
+        
+        # Return appropriate wrapper based on function type
+        if asyncio.iscoroutinefunction(func):
+            return async_wrapper
+        else:
+            return sync_wrapper
             
-        return wrapper
     return decorator
 
 

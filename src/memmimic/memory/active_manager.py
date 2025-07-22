@@ -635,3 +635,4 @@ if __name__ == "__main__":
         print(f"  Avg query time: {status['performance']['avg_query_time_ms']:.2f}ms")
     else:
         print("Usage: python active_manager.py <database_path>")
+

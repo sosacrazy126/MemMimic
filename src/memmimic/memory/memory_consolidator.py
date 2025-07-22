@@ -790,3 +790,4 @@ if __name__ == "__main__":
         print(f"  Processing time: {result['processing_time_ms']}ms")
     else:
         print("Usage: python memory_consolidator.py <database_path>")
+

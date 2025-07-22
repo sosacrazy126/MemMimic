@@ -9,7 +9,7 @@ memory search operations.
 import hashlib
 import time
 from functools import lru_cache
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Union
 
 import numpy as np
 from numpy.typing import NDArray

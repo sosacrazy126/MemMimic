@@ -335,3 +335,4 @@ class ContextualAssistant:
             base_confidence = min(base_confidence + socratic_boost, 0.98)
 
         return base_confidence
+

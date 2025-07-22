@@ -4,7 +4,7 @@
 MemMimic Quality Types - Shared types for memory quality control system
 """
 
-from typing import List, Optional
+from typing import List
 from datetime import datetime
 
 from .storage.amms_storage import Memory

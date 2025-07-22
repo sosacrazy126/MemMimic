@@ -519,3 +519,4 @@ if __name__ == "__main__":
     # Test performance metrics
     metrics = wrapper.get_performance_metrics()
     print(f"Performance metrics: {metrics}")
+

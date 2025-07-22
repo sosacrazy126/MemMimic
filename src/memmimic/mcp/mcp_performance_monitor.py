@@ -662,7 +662,7 @@ if __name__ == "__main__":
     # Simulate some operations
     for i in range(5):
         op_id = monitor.start_operation("test_operation")
-        time.sleep(0.1)  # Simulate work
+        # Simulate work (removed blocking sleep for async compatibility)
         monitor.finish_operation(
             op_id, success=True, memories_processed=10, results_returned=5
         )
@@ -674,3 +674,4 @@ if __name__ == "__main__":
     # System health
     health = monitor.get_system_health()
     print(f"System health: {health}")
+

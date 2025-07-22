@@ -399,3 +399,4 @@ class ContextualAssistant:
         except Exception as e:
             self.logger.error(f"Confidence calculation failed: {e}")
             return 0.5  # Default moderate confidence
+

@@ -1,0 +1,30 @@
+# Memory Service - AMMS Storage and Core Memory Operations
+FROM memmimic-base:latest
+
+LABEL service="memory-service" \
+      description="MemMimic memory storage and retrieval service" \
+      version="1.0.0"
+
+# Set service-specific environment variables
+ENV SERVICE_NAME=memory-service \
+    SERVICE_PORT=8001 \
+    DB_TYPE=postgresql \
+    ENABLE_METRICS=true
+
+# Copy service-specific configuration
+COPY infrastructure/config/memory-service.yaml ./config/
+
+# Copy memory service components
+COPY src/memmimic/memory/ ./src/memmimic/memory/
+COPY src/memmimic/errors/ ./src/memmimic/errors/
+COPY src/memmimic/security/ ./src/memmimic/security/
+
+# Expose service port
+EXPOSE 8001
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8001/health || exit 1
+
+# Start memory service
+CMD ["gunicorn", "--bind", "0.0.0.0:8001", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "memmimic.services.memory:app"]

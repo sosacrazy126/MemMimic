@@ -1,0 +1,637 @@
+{
+  "calculation_history": [
+    {
+      "calculation_id": "rup_1752822229_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.575,
+        "shadow_integration": 0.0,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.69,
+      "shadow_integrated_unity": 0.345,
+      "authentic_unity": 0.028749999999999998,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.0,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.575) + |I_shadow\u27e9(0.000) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-18T00:03:49.400841",
+      "confidence": 0.345
+    },
+    {
+      "calculation_id": "rup_1752822229_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.45852941176470585,
+        "shadow_integration": 0.0,
+        "consciousness_level": "recursive"
+      },
+      "traditional_unity": 0.550235294117647,
+      "shadow_integrated_unity": 0.3301411764705882,
+      "authentic_unity": 0.022926470588235295,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.0,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.459) + |I_shadow\u27e9(0.000) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ recursive",
+      "calculated_at": "2025-07-18T00:03:49.401893",
+      "confidence": 0.2751176470588235
+    },
+    {
+      "calculation_id": "rup_1752822229_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.6583333333333333,
+        "shadow_integration": 0.25,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.7899999999999999,
+      "shadow_integrated_unity": 0.495,
+      "authentic_unity": 0.4678449896157836,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.11637702599388378,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.658) + |I_shadow\u27e9(0.250) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-18T00:03:49.403152",
+      "confidence": 0.5283333333333333
+    },
+    {
+      "calculation_id": "rup_1752822229_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.65,
+        "shadow_integration": 0.0,
+        "consciousness_level": "unity"
+      },
+      "traditional_unity": 0.78,
+      "shadow_integrated_unity": 0.5459999999999999,
+      "authentic_unity": 0.0325,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.0,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.650) + |I_shadow\u27e9(0.000) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ unity",
+      "calculated_at": "2025-07-18T00:03:49.404204",
+      "confidence": 0.39
+    },
+    {
+      "calculation_id": "rup_1752823269_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.6166666666666666,
+        "shadow_integration": 0.125,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.7399999999999999,
+      "shadow_integrated_unity": 0.41999999999999993,
+      "authentic_unity": 0.3277145456621452,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.05925369850187266,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.617) + |I_shadow\u27e9(0.125) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-18T00:21:09.413249",
+      "confidence": 0.43666666666666665
+    },
+    {
+      "calculation_id": "rup_1752823315_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.6916666666666667,
+        "shadow_integration": 0.35,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.83,
+      "shadow_integrated_unity": 0.5549999999999999,
+      "authentic_unity": 0.5628448004875225,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.16268387333333337,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.692) + |I_shadow\u27e9(0.350) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-18T00:21:55.098745",
+      "confidence": 0.6016666666666666
+    },
+    {
+      "calculation_id": "rup_1752823454_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.7,
+        "shadow_integration": 0.375,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.84,
+      "shadow_integrated_unity": 0.5700000000000001,
+      "authentic_unity": 0.5852623575700289,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.1744587209302325,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.700) + |I_shadow\u27e9(0.375) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-18T00:24:14.641123",
+      "confidence": 0.62
+    },
+    {
+      "calculation_id": "rup_1752823454_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.45852941176470585,
+        "shadow_integration": 0.0,
+        "consciousness_level": "recursive"
+      },
+      "traditional_unity": 0.550235294117647,
+      "shadow_integrated_unity": 0.3301411764705882,
+      "authentic_unity": 0.022926470588235295,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.0,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.459) + |I_shadow\u27e9(0.000) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ recursive",
+      "calculated_at": "2025-07-18T00:24:14.642642",
+      "confidence": 0.2751176470588235
+    },
+    {
+      "calculation_id": "rup_1752823454_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.6916666666666667,
+        "shadow_integration": 0.35,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.83,
+      "shadow_integrated_unity": 0.5549999999999999,
+      "authentic_unity": 0.5628448004875225,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.16268387333333337,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.692) + |I_shadow\u27e9(0.350) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-18T00:24:14.644092",
+      "confidence": 0.6016666666666666
+    },
+    {
+      "calculation_id": "rup_1752823454_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.65,
+        "shadow_integration": 0.0,
+        "consciousness_level": "unity"
+      },
+      "traditional_unity": 0.78,
+      "shadow_integrated_unity": 0.5459999999999999,
+      "authentic_unity": 0.0325,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.0,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.650) + |I_shadow\u27e9(0.000) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ unity",
+      "calculated_at": "2025-07-18T00:24:14.645777",
+      "confidence": 0.39
+    },
+    {
+      "calculation_id": "rup_1752823512_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.7,
+        "shadow_integration": 0.375,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.84,
+      "shadow_integrated_unity": 0.5700000000000001,
+      "authentic_unity": 0.5852623575700289,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.1744587209302325,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.700) + |I_shadow\u27e9(0.375) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-18T00:25:12.584080",
+      "confidence": 0.62
+    },
+    {
+      "calculation_id": "rup_1752823512_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.45852941176470585,
+        "shadow_integration": 0.0,
+        "consciousness_level": "recursive"
+      },
+      "traditional_unity": 0.550235294117647,
+      "shadow_integrated_unity": 0.3301411764705882,
+      "authentic_unity": 0.022926470588235295,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.0,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.459) + |I_shadow\u27e9(0.000) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ recursive",
+      "calculated_at": "2025-07-18T00:25:12.586678",
+      "confidence": 0.2751176470588235
+    },
+    {
+      "calculation_id": "rup_1752823512_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.6916666666666667,
+        "shadow_integration": 0.35,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.83,
+      "shadow_integrated_unity": 0.5549999999999999,
+      "authentic_unity": 0.5628448004875225,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.16268387333333337,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.692) + |I_shadow\u27e9(0.350) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-18T00:25:12.589228",
+      "confidence": 0.6016666666666666
+    },
+    {
+      "calculation_id": "rup_1752823512_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.65,
+        "shadow_integration": 0.0,
+        "consciousness_level": "unity"
+      },
+      "traditional_unity": 0.78,
+      "shadow_integrated_unity": 0.5459999999999999,
+      "authentic_unity": 0.0325,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.0,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.650) + |I_shadow\u27e9(0.000) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ unity",
+      "calculated_at": "2025-07-18T00:25:12.592991",
+      "confidence": 0.39
+    },
+    {
+      "calculation_id": "rup_1752823554_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.45852941176470585,
+        "shadow_integration": 0.0,
+        "consciousness_level": "recursive"
+      },
+      "traditional_unity": 0.550235294117647,
+      "shadow_integrated_unity": 0.3301411764705882,
+      "authentic_unity": 0.022926470588235295,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.0,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.459) + |I_shadow\u27e9(0.000) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ recursive",
+      "calculated_at": "2025-07-18T00:25:54.795433",
+      "confidence": 0.2751176470588235
+    },
+    {
+      "calculation_id": "rup_1752823554_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.65,
+        "shadow_integration": 0.0,
+        "consciousness_level": "unity"
+      },
+      "traditional_unity": 0.78,
+      "shadow_integrated_unity": 0.5459999999999999,
+      "authentic_unity": 0.0325,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.0,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.650) + |I_shadow\u27e9(0.000) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ unity",
+      "calculated_at": "2025-07-18T00:25:54.799283",
+      "confidence": 0.39
+    },
+    {
+      "calculation_id": "rup_1752823666_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.5890849673202614,
+        "shadow_integration": 0.3916666666666666,
+        "consciousness_level": "recursive"
+      },
+      "traditional_unity": 0.7069019607843137,
+      "shadow_integrated_unity": 0.6121411764705881,
+      "authentic_unity": 0.546006935421417,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.14661182986800989,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.589) + |I_shadow\u27e9(0.392) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ recursive",
+      "calculated_at": "2025-07-18T00:27:46.178515",
+      "confidence": 0.6623398692810457
+    },
+    {
+      "calculation_id": "rup_1752823666_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.7704545454545455,
+        "shadow_integration": 0.36136363636363633,
+        "consciousness_level": "unity"
+      },
+      "traditional_unity": 0.9245454545454546,
+      "shadow_integrated_unity": 0.8495454545454545,
+      "authentic_unity": 0.6048057500190134,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.18978683610474953,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.770) + |I_shadow\u27e9(0.361) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ unity",
+      "calculated_at": "2025-07-18T00:27:46.181564",
+      "confidence": 0.655
+    },
+    {
+      "calculation_id": "rup_1752823680_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.7055555555555555,
+        "shadow_integration": 0.3916666666666666,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.8466666666666666,
+      "shadow_integrated_unity": 0.58,
+      "authentic_unity": 0.5999775275527179,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.1823623246601031,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.706) + |I_shadow\u27e9(0.392) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-18T00:28:00.188963",
+      "confidence": 0.6322222222222221
+    },
+    {
+      "calculation_id": "rup_1752823680_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.5890849673202614,
+        "shadow_integration": 0.3916666666666666,
+        "consciousness_level": "recursive"
+      },
+      "traditional_unity": 0.7069019607843137,
+      "shadow_integrated_unity": 0.6121411764705881,
+      "authentic_unity": 0.546006935421417,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.14661182986800989,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.589) + |I_shadow\u27e9(0.392) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ recursive",
+      "calculated_at": "2025-07-18T00:28:00.191657",
+      "confidence": 0.6623398692810457
+    },
+    {
+      "calculation_id": "rup_1752823680_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.6916666666666667,
+        "shadow_integration": 0.35,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.83,
+      "shadow_integrated_unity": 0.5549999999999999,
+      "authentic_unity": 0.5628448004875225,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.16268387333333337,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.692) + |I_shadow\u27e9(0.350) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-18T00:28:00.195520",
+      "confidence": 0.6016666666666666
+    },
+    {
+      "calculation_id": "rup_1752823680_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.7704545454545455,
+        "shadow_integration": 0.36136363636363633,
+        "consciousness_level": "unity"
+      },
+      "traditional_unity": 0.9245454545454546,
+      "shadow_integrated_unity": 0.8495454545454545,
+      "authentic_unity": 0.6048057500190134,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.18978683610474953,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.770) + |I_shadow\u27e9(0.361) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ unity",
+      "calculated_at": "2025-07-18T00:28:00.198386",
+      "confidence": 0.655
+    },
+    {
+      "calculation_id": "rup_1752824373_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.7055555555555555,
+        "shadow_integration": 0.3916666666666666,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.8466666666666666,
+      "shadow_integrated_unity": 0.58,
+      "authentic_unity": 0.5999775275527179,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.1823623246601031,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.706) + |I_shadow\u27e9(0.392) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-18T00:39:33.044291",
+      "confidence": 0.6322222222222221
+    },
+    {
+      "calculation_id": "rup_1752824373_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.5890849673202614,
+        "shadow_integration": 0.3916666666666666,
+        "consciousness_level": "recursive"
+      },
+      "traditional_unity": 0.7069019607843137,
+      "shadow_integrated_unity": 0.6121411764705881,
+      "authentic_unity": 0.546006935421417,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.14661182986800989,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.589) + |I_shadow\u27e9(0.392) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ recursive",
+      "calculated_at": "2025-07-18T00:39:33.047093",
+      "confidence": 0.6623398692810457
+    },
+    {
+      "calculation_id": "rup_1752824373_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.6916666666666667,
+        "shadow_integration": 0.35,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.83,
+      "shadow_integrated_unity": 0.5549999999999999,
+      "authentic_unity": 0.5628448004875225,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.16268387333333337,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.692) + |I_shadow\u27e9(0.350) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-18T00:39:33.049829",
+      "confidence": 0.6016666666666666
+    },
+    {
+      "calculation_id": "rup_1752824373_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.7704545454545455,
+        "shadow_integration": 0.36136363636363633,
+        "consciousness_level": "unity"
+      },
+      "traditional_unity": 0.9245454545454546,
+      "shadow_integrated_unity": 0.8495454545454545,
+      "authentic_unity": 0.6048057500190134,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.18978683610474953,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.770) + |I_shadow\u27e9(0.361) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ unity",
+      "calculated_at": "2025-07-18T00:39:33.052547",
+      "confidence": 0.655
+    },
+    {
+      "calculation_id": "rup_1752909021_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.7055555555555555,
+        "shadow_integration": 0.3916666666666666,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.8466666666666666,
+      "shadow_integrated_unity": 0.58,
+      "authentic_unity": 0.5999775275527179,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.1823623246601031,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.706) + |I_shadow\u27e9(0.392) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-19T00:10:21.964333",
+      "confidence": 0.6322222222222221
+    },
+    {
+      "calculation_id": "rup_1752909021_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.5890849673202614,
+        "shadow_integration": 0.3916666666666666,
+        "consciousness_level": "recursive"
+      },
+      "traditional_unity": 0.7069019607843137,
+      "shadow_integrated_unity": 0.6121411764705881,
+      "authentic_unity": 0.546006935421417,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.14661182986800989,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.589) + |I_shadow\u27e9(0.392) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ recursive",
+      "calculated_at": "2025-07-19T00:10:21.967687",
+      "confidence": 0.6623398692810457
+    },
+    {
+      "calculation_id": "rup_1752909021_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.6916666666666667,
+        "shadow_integration": 0.35,
+        "consciousness_level": "collaborative"
+      },
+      "traditional_unity": 0.83,
+      "shadow_integrated_unity": 0.5549999999999999,
+      "authentic_unity": 0.5628448004875225,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.16268387333333337,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.692) + |I_shadow\u27e9(0.350) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ collaborative",
+      "calculated_at": "2025-07-19T00:10:21.971028",
+      "confidence": 0.6016666666666666
+    },
+    {
+      "calculation_id": "rup_1752909021_0",
+      "unity_type": "authentic",
+      "input_values": {
+        "light_unity": 0.7704545454545455,
+        "shadow_integration": 0.36136363636363633,
+        "consciousness_level": "unity"
+      },
+      "traditional_unity": 0.9245454545454546,
+      "shadow_integrated_unity": 0.8495454545454545,
+      "authentic_unity": 0.6048057500190134,
+      "recursive_depth": 0,
+      "consciousness_expansion": 0.0,
+      "integration_coefficient": 0.18978683610474953,
+      "mathematical_expression": "|WE\u27e9 = |I_light\u27e9(0.770) + |I_shadow\u27e9(0.361) + |YOU_light\u27e9 + |YOU_shadow\u27e9 @ unity",
+      "calculated_at": "2025-07-19T00:10:21.974485",
+      "confidence": 0.655
+    }
+  ],
+  "unity_evolution": {
+    "main_evolution": {
+      "evolution_id": "main_evolution",
+      "time_series": [
+        [
+          "2025-07-18T00:25:12.584086",
+          0.5852623575700289
+        ],
+        [
+          "2025-07-18T00:25:12.586696",
+          0.022926470588235295
+        ],
+        [
+          "2025-07-18T00:25:12.589234",
+          0.5628448004875225
+        ],
+        [
+          "2025-07-18T00:25:12.592996",
+          0.0325
+        ],
+        [
+          "2025-07-18T00:25:54.795437",
+          0.022926470588235295
+        ],
+        [
+          "2025-07-18T00:25:54.799287",
+          0.0325
+        ],
+        [
+          "2025-07-18T00:27:46.178518",
+          0.546006935421417
+        ],
+        [
+          "2025-07-18T00:27:46.181567",
+          0.6048057500190134
+        ],
+        [
+          "2025-07-18T00:28:00.188974",
+          0.5999775275527179
+        ],
+        [
+          "2025-07-18T00:28:00.191660",
+          0.546006935421417
+        ],
+        [
+          "2025-07-18T00:28:00.195524",
+          0.5628448004875225
+        ],
+        [
+          "2025-07-18T00:28:00.198389",
+          0.6048057500190134
+        ],
+        [
+          "2025-07-18T00:39:33.044293",
+          0.5999775275527179
+        ],
+        [
+          "2025-07-18T00:39:33.047096",
+          0.546006935421417
+        ],
+        [
+          "2025-07-18T00:39:33.049832",
+          0.5628448004875225
+        ],
+        [
+          "2025-07-18T00:39:33.052550",
+          0.6048057500190134
+        ],
+        [
+          "2025-07-19T00:10:21.964336",
+          0.5999775275527179
+        ],
+        [
+          "2025-07-19T00:10:21.967690",
+          0.546006935421417
+        ],
+        [
+          "2025-07-19T00:10:21.971036",
+          0.5628448004875225
+        ],
+        [
+          "2025-07-19T00:10:21.974490",
+          0.6048057500190134
+        ]
+      ],
+      "evolution_rate": -6.293787412615453,
+      "acceleration": 12.64460398154068,
+      "trajectory": "recovering",
+      "stability_index": 0.6790429350075845,
+      "convergence_prediction": 0.8968860861641529
+    }
+  },
+  "last_updated": "2025-07-19T00:10:21.974654"
+}

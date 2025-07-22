@@ -780,3 +780,4 @@ if __name__ == "__main__":
     print(
         f"Average shadow integration: {summary.get('average_shadow_integration', 0):.3f}"
     )
+

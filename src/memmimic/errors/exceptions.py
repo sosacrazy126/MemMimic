@@ -7,7 +7,7 @@ consistent formatting, and domain-specific exception types.
 
 import uuid
 from datetime import datetime
-from typing import Dict, Any, Optional, Union
+from typing import Dict, Any, Optional
 from enum import Enum
 
 

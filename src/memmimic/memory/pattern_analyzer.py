@@ -142,34 +142,11 @@ class MemoryPatternAnalyzer:
             if not memories:
                 return self._empty_metrics()
 
-            # Basic memory categorization
-            active_memories = []
-            archived_memories = []
-            pruned_memories = []
+            # Categorize memories by status
+            memory_categories = self._categorize_memories(memories)
 
-            for memory in memories:
-                # Categorize by status if available
-                status = getattr(memory, "archive_status", "active")
-                if status == "active":
-                    active_memories.append(memory)
-                elif status == "archived":
-                    archived_memories.append(memory)
-                elif status == "pruned":
-                    pruned_memories.append(memory)
-                else:
-                    active_memories.append(memory)  # Default to active
-
-            # Analyze temporal patterns
-            temporal_patterns = self._analyze_temporal_patterns(memories)
-
-            # Analyze importance trends
-            importance_trends = self._analyze_importance_trends(memories)
-
-            # Analyze access patterns
-            access_patterns = self._analyze_access_patterns(memories)
-
-            # Analyze consciousness patterns
-            consciousness_patterns = self._analyze_consciousness_patterns(memories)
+            # Run all pattern analyses
+            analysis_results = self._run_all_pattern_analyses(memories)
 
             # Calculate health metrics
             health_metrics = self._calculate_health_metrics(memories)
@@ -178,46 +155,8 @@ class MemoryPatternAnalyzer:
             predictions = self._generate_predictions(memories)
 
             # Create comprehensive metrics
-            metrics = AnalyticsMetrics(
-                total_memories=len(memories),
-                active_memories=len(active_memories),
-                archived_memories=len(archived_memories),
-                pruned_memories=len(pruned_memories),
-                patterns_detected=len(temporal_patterns)
-                + len(access_patterns)
-                + len(consciousness_patterns),
-                high_confidence_patterns=len(
-                    [
-                        p
-                        for p in self.detected_patterns.values()
-                        if p.confidence
-                        >= self.analysis_config["min_pattern_confidence"]
-                    ]
-                ),
-                rising_importance_memories=len(
-                    [
-                        t
-                        for trends in self.memory_trends.values()
-                        for t in trends
-                        if t.trend_type == "importance_rising"
-                    ]
-                ),
-                falling_importance_memories=len(
-                    [
-                        t
-                        for trends in self.memory_trends.values()
-                        for t in trends
-                        if t.trend_type == "importance_falling"
-                    ]
-                ),
-                memory_coherence_score=health_metrics.get("coherence_score", 0.0),
-                consciousness_pattern_strength=health_metrics.get(
-                    "consciousness_strength", 0.0
-                ),
-                system_health_score=health_metrics.get("system_health", 0.0),
-                predicted_archive_count=predictions.get("archive_count", 0),
-                predicted_prune_count=predictions.get("prune_count", 0),
-                recommendation_count=predictions.get("recommendation_count", 0),
+            metrics = self._create_final_metrics(
+                memories, memory_categories, analysis_results, health_metrics, predictions
             )
 
             # Save analytics data
@@ -234,88 +173,180 @@ class MemoryPatternAnalyzer:
             self.logger.error(f"Memory pattern analysis failed: {e}")
             return self._empty_metrics()
 
+    def _categorize_memories(self, memories: List[Any]) -> Dict[str, List[Any]]:
+        """Categorize memories by their archive status"""
+        categories = {
+            "active": [],
+            "archived": [],
+            "pruned": []
+        }
+
+        for memory in memories:
+            status = getattr(memory, "archive_status", "active")
+            if status in categories:
+                categories[status].append(memory)
+            else:
+                categories["active"].append(memory)  # Default to active
+
+        return categories
+
+    def _run_all_pattern_analyses(self, memories: List[Any]) -> Dict[str, List[Any]]:
+        """Run all pattern analysis methods"""
+        return {
+            "temporal_patterns": self._analyze_temporal_patterns(memories),
+            "importance_trends": self._analyze_importance_trends(memories),
+            "access_patterns": self._analyze_access_patterns(memories),
+            "consciousness_patterns": self._analyze_consciousness_patterns(memories)
+        }
+
+    def _create_final_metrics(
+        self, 
+        memories: List[Any], 
+        memory_categories: Dict[str, List[Any]], 
+        analysis_results: Dict[str, List[Any]], 
+        health_metrics: Dict[str, float], 
+        predictions: Dict[str, int]
+    ) -> AnalyticsMetrics:
+        """Create the final analytics metrics object"""
+        # Count patterns detected
+        patterns_detected = (
+            len(analysis_results["temporal_patterns"]) +
+            len(analysis_results["access_patterns"]) +
+            len(analysis_results["consciousness_patterns"])
+        )
+
+        # Count high confidence patterns
+        high_confidence_patterns = len([
+            p for p in self.detected_patterns.values()
+            if p.confidence >= self.analysis_config["min_pattern_confidence"]
+        ])
+
+        # Count importance trend memories
+        rising_importance_memories = len([
+            t for trends in self.memory_trends.values() for t in trends
+            if t.trend_type == "importance_rising"
+        ])
+
+        falling_importance_memories = len([
+            t for trends in self.memory_trends.values() for t in trends
+            if t.trend_type == "importance_falling"
+        ])
+
+        return AnalyticsMetrics(
+            total_memories=len(memories),
+            active_memories=len(memory_categories["active"]),
+            archived_memories=len(memory_categories["archived"]),
+            pruned_memories=len(memory_categories["pruned"]),
+            patterns_detected=patterns_detected,
+            high_confidence_patterns=high_confidence_patterns,
+            rising_importance_memories=rising_importance_memories,
+            falling_importance_memories=falling_importance_memories,
+            memory_coherence_score=health_metrics.get("coherence_score", 0.0),
+            consciousness_pattern_strength=health_metrics.get("consciousness_strength", 0.0),
+            system_health_score=health_metrics.get("system_health", 0.0),
+            predicted_archive_count=predictions.get("archive_count", 0),
+            predicted_prune_count=predictions.get("prune_count", 0),
+            recommendation_count=predictions.get("recommendation_count", 0),
+        )
+
     def _analyze_temporal_patterns(self, memories: List[Any]) -> List[MemoryPattern]:
         """Analyze temporal patterns in memory creation and access"""
         patterns = []
 
         try:
-            # Group memories by creation time
-            creation_times = []
-            for memory in memories:
-                created_at = getattr(memory, "created_at", "")
-                if created_at:
-                    try:
-                        # Parse ISO format timestamp
-                        dt = datetime.fromisoformat(
-                            created_at.replace("Z", "+00:00").replace("+00:00", "")
-                        )
-                        creation_times.append(dt)
-                    except:
-                        continue
-
+            creation_times = self._extract_creation_times(memories)
             if len(creation_times) < 3:
                 return patterns
 
-            # Analyze creation patterns by hour of day
-            hourly_creation = defaultdict(int)
-            for dt in creation_times:
-                hourly_creation[dt.hour] += 1
+            # Analyze hourly and daily patterns
+            hourly_pattern = self._detect_hourly_patterns(creation_times)
+            if hourly_pattern:
+                patterns.append(hourly_pattern)
 
-            # Find peak creation hours
-            if hourly_creation:
-                peak_hour = max(hourly_creation, key=hourly_creation.get)
-                peak_count = hourly_creation[peak_hour]
-
-                if peak_count >= 3:  # Minimum threshold
-                    pattern = MemoryPattern(
-                        pattern_id=f"temporal_peak_{peak_hour}",
-                        pattern_type="temporal",
-                        description=f"Peak memory creation at hour {peak_hour}:00 ({peak_count} memories)",
-                        confidence=min(peak_count / len(creation_times), 1.0),
-                        frequency=peak_count,
-                        first_detected=datetime.now(),
-                        last_detected=datetime.now(),
-                        metadata={"hour": peak_hour, "count": peak_count},
-                    )
-                    patterns.append(pattern)
-                    self.detected_patterns[pattern.pattern_id] = pattern
-
-            # Analyze creation patterns by day of week
-            daily_creation = defaultdict(int)
-            for dt in creation_times:
-                daily_creation[dt.weekday()] += 1
-
-            if daily_creation:
-                peak_day = max(daily_creation, key=daily_creation.get)
-                peak_count = daily_creation[peak_day]
-
-                if peak_count >= 3:
-                    day_names = [
-                        "Monday",
-                        "Tuesday",
-                        "Wednesday",
-                        "Thursday",
-                        "Friday",
-                        "Saturday",
-                        "Sunday",
-                    ]
-                    pattern = MemoryPattern(
-                        pattern_id=f"temporal_day_{peak_day}",
-                        pattern_type="temporal",
-                        description=f"Peak memory creation on {day_names[peak_day]} ({peak_count} memories)",
-                        confidence=min(peak_count / len(creation_times), 1.0),
-                        frequency=peak_count,
-                        first_detected=datetime.now(),
-                        last_detected=datetime.now(),
-                        metadata={"day": peak_day, "count": peak_count},
-                    )
-                    patterns.append(pattern)
-                    self.detected_patterns[pattern.pattern_id] = pattern
+            daily_pattern = self._detect_daily_patterns(creation_times)
+            if daily_pattern:
+                patterns.append(daily_pattern)
 
         except Exception as e:
             self.logger.debug(f"Temporal pattern analysis failed: {e}")
 
         return patterns
+
+    def _extract_creation_times(self, memories: List[Any]) -> List[datetime]:
+        """Extract valid creation timestamps from memories"""
+        creation_times = []
+        for memory in memories:
+            created_at = getattr(memory, "created_at", "")
+            if created_at:
+                try:
+                    # Parse ISO format timestamp
+                    dt = datetime.fromisoformat(
+                        created_at.replace("Z", "+00:00").replace("+00:00", "")
+                    )
+                    creation_times.append(dt)
+                except:
+                    continue
+        return creation_times
+
+    def _detect_hourly_patterns(self, creation_times: List[datetime]) -> Optional[MemoryPattern]:
+        """Detect peak creation hours"""
+        hourly_creation = defaultdict(int)
+        for dt in creation_times:
+            hourly_creation[dt.hour] += 1
+
+        if not hourly_creation:
+            return None
+
+        peak_hour = max(hourly_creation, key=hourly_creation.get)
+        peak_count = hourly_creation[peak_hour]
+
+        if peak_count < 3:  # Minimum threshold
+            return None
+
+        pattern = MemoryPattern(
+            pattern_id=f"temporal_peak_{peak_hour}",
+            pattern_type="temporal",
+            description=f"Peak memory creation at hour {peak_hour}:00 ({peak_count} memories)",
+            confidence=min(peak_count / len(creation_times), 1.0),
+            frequency=peak_count,
+            first_detected=datetime.now(),
+            last_detected=datetime.now(),
+            metadata={"hour": peak_hour, "count": peak_count},
+        )
+        self.detected_patterns[pattern.pattern_id] = pattern
+        return pattern
+
+    def _detect_daily_patterns(self, creation_times: List[datetime]) -> Optional[MemoryPattern]:
+        """Detect peak creation days of week"""
+        daily_creation = defaultdict(int)
+        for dt in creation_times:
+            daily_creation[dt.weekday()] += 1
+
+        if not daily_creation:
+            return None
+
+        peak_day = max(daily_creation, key=daily_creation.get)
+        peak_count = daily_creation[peak_day]
+
+        if peak_count < 3:  # Minimum threshold
+            return None
+
+        day_names = [
+            "Monday", "Tuesday", "Wednesday", "Thursday",
+            "Friday", "Saturday", "Sunday",
+        ]
+        pattern = MemoryPattern(
+            pattern_id=f"temporal_day_{peak_day}",
+            pattern_type="temporal",
+            description=f"Peak memory creation on {day_names[peak_day]} ({peak_count} memories)",
+            confidence=min(peak_count / len(creation_times), 1.0),
+            frequency=peak_count,
+            first_detected=datetime.now(),
+            last_detected=datetime.now(),
+            metadata={"day": peak_day, "count": peak_count},
+        )
+        self.detected_patterns[pattern.pattern_id] = pattern
+        return pattern
 
     def _analyze_importance_trends(self, memories: List[Any]) -> List[MemoryTrend]:
         """Analyze trends in memory importance over time"""
@@ -323,56 +354,66 @@ class MemoryPatternAnalyzer:
 
         try:
             for memory in memories:
-                memory_id = getattr(memory, "id", None) or hash(memory.content)
-
-                # Get importance score if available
-                importance_score = getattr(memory, "importance_score", None)
-                if importance_score is None:
-                    continue
-
-                # For now, we'll create a simple trend based on current importance
-                # In a real implementation, we'd track importance over time
-                created_at = getattr(memory, "created_at", "")
-                if created_at:
-                    try:
-                        dt = datetime.fromisoformat(
-                            created_at.replace("Z", "+00:00").replace("+00:00", "")
-                        )
-
-                        # Simple heuristic: high importance recent memories are rising
-                        if importance_score > 0.7 and (datetime.now() - dt).days < 7:
-                            trend = MemoryTrend(
-                                memory_id=str(memory_id),
-                                trend_type="importance_rising",
-                                trend_strength=importance_score,
-                                trend_confidence=0.8,
-                                start_time=dt,
-                                end_time=datetime.now(),
-                                data_points=[(dt, importance_score)],
-                            )
-                            trends.append(trend)
-                            self.memory_trends[str(memory_id)].append(trend)
-
-                        # Low importance old memories are falling
-                        elif importance_score < 0.3 and (datetime.now() - dt).days > 14:
-                            trend = MemoryTrend(
-                                memory_id=str(memory_id),
-                                trend_type="importance_falling",
-                                trend_strength=-importance_score,
-                                trend_confidence=0.7,
-                                start_time=dt,
-                                end_time=datetime.now(),
-                                data_points=[(dt, importance_score)],
-                            )
-                            trends.append(trend)
-                            self.memory_trends[str(memory_id)].append(trend)
-                    except:
-                        continue
+                trend = self._analyze_single_memory_trend(memory)
+                if trend:
+                    trends.append(trend)
+                    self.memory_trends[trend.memory_id].append(trend)
 
         except Exception as e:
             self.logger.debug(f"Importance trend analysis failed: {e}")
 
         return trends
+
+    def _analyze_single_memory_trend(self, memory: Any) -> Optional[MemoryTrend]:
+        """Analyze importance trend for a single memory"""
+        memory_id = getattr(memory, "id", None) or hash(memory.content)
+        importance_score = getattr(memory, "importance_score", None)
+        created_at = getattr(memory, "created_at", "")
+
+        if importance_score is None or not created_at:
+            return None
+
+        try:
+            dt = datetime.fromisoformat(
+                created_at.replace("Z", "+00:00").replace("+00:00", "")
+            )
+            
+            # Check for rising importance trend
+            if self._is_rising_importance(importance_score, dt):
+                return MemoryTrend(
+                    memory_id=str(memory_id),
+                    trend_type="importance_rising",
+                    trend_strength=importance_score,
+                    trend_confidence=0.8,
+                    start_time=dt,
+                    end_time=datetime.now(),
+                    data_points=[(dt, importance_score)],
+                )
+            
+            # Check for falling importance trend
+            elif self._is_falling_importance(importance_score, dt):
+                return MemoryTrend(
+                    memory_id=str(memory_id),
+                    trend_type="importance_falling",
+                    trend_strength=-importance_score,
+                    trend_confidence=0.7,
+                    start_time=dt,
+                    end_time=datetime.now(),
+                    data_points=[(dt, importance_score)],
+                )
+            
+            return None
+            
+        except Exception:
+            return None
+
+    def _is_rising_importance(self, importance_score: float, created_at: datetime) -> bool:
+        """Check if memory shows rising importance pattern"""
+        return importance_score > 0.7 and (datetime.now() - created_at).days < 7
+
+    def _is_falling_importance(self, importance_score: float, created_at: datetime) -> bool:
+        """Check if memory shows falling importance pattern"""
+        return importance_score < 0.3 and (datetime.now() - created_at).days > 14
 
     def _analyze_access_patterns(self, memories: List[Any]) -> List[MemoryPattern]:
         """Analyze patterns in memory access frequency"""
@@ -535,31 +576,9 @@ class MemoryPatternAnalyzer:
             if not memories:
                 return predictions
 
-            # Predict archival candidates
-            archive_candidates = 0
-            prune_candidates = 0
-
-            for memory in memories:
-                importance = getattr(memory, "importance_score", 0.5)
-                created_at = getattr(memory, "created_at", "")
-
-                if created_at:
-                    try:
-                        dt = datetime.fromisoformat(
-                            created_at.replace("Z", "+00:00").replace("+00:00", "")
-                        )
-                        age_days = (datetime.now() - dt).days
-
-                        # Predict archival (low importance + old)
-                        if importance < 0.3 and age_days > 30:
-                            archive_candidates += 1
-
-                        # Predict pruning (very low importance + very old)
-                        elif importance < 0.1 and age_days > 90:
-                            prune_candidates += 1
-                    except:
-                        continue
-
+            # Count archival and prune candidates
+            archive_candidates, prune_candidates = self._count_lifecycle_candidates(memories)
+            
             predictions["archive_count"] = archive_candidates
             predictions["prune_count"] = prune_candidates
             predictions["recommendation_count"] = len(self.detected_patterns)
@@ -568,6 +587,47 @@ class MemoryPatternAnalyzer:
             self.logger.debug(f"Prediction generation failed: {e}")
 
         return predictions
+
+    def _count_lifecycle_candidates(self, memories: List[Any]) -> Tuple[int, int]:
+        """Count memories that are candidates for archival or pruning"""
+        archive_candidates = 0
+        prune_candidates = 0
+
+        for memory in memories:
+            candidate_type = self._classify_lifecycle_candidate(memory)
+            if candidate_type == "archive":
+                archive_candidates += 1
+            elif candidate_type == "prune":
+                prune_candidates += 1
+
+        return archive_candidates, prune_candidates
+
+    def _classify_lifecycle_candidate(self, memory: Any) -> Optional[str]:
+        """Classify a memory as archive, prune, or neither"""
+        importance = getattr(memory, "importance_score", 0.5)
+        created_at = getattr(memory, "created_at", "")
+
+        if not created_at:
+            return None
+
+        try:
+            dt = datetime.fromisoformat(
+                created_at.replace("Z", "+00:00").replace("+00:00", "")
+            )
+            age_days = (datetime.now() - dt).days
+
+            # Predict pruning (very low importance + very old)
+            if importance < 0.1 and age_days > 90:
+                return "prune"
+            
+            # Predict archival (low importance + old)
+            elif importance < 0.3 and age_days > 30:
+                return "archive"
+            
+            return None
+            
+        except Exception:
+            return None
 
     def _empty_metrics(self) -> AnalyticsMetrics:
         """Return empty metrics for error cases"""
@@ -762,3 +822,4 @@ if __name__ == "__main__":
     summary = analyzer.get_analytics_summary()
     print(f"\nAnalytics Summary:")
     print(json.dumps(summary, indent=2))
+

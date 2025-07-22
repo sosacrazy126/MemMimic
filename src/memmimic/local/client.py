@@ -72,3 +72,4 @@ class OllamaClient:
 
 
 __all__ = ["OllamaClient", "OllamaResponse"]
+

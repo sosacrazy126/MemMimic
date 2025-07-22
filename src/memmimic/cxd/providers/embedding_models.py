@@ -1,3 +1,10 @@
+"""
+Embedding Models
+
+MemMimic module for embedding models functionality.
+"""
+
+
 # --- Archivo: src/cxd_classifier/providers/embedding_models.py ---
 import hashlib
 import logging
@@ -737,3 +744,4 @@ __all__ = [
     "SENTENCE_TRANSFORMERS_AVAILABLE",
     "TORCH_AVAILABLE",
 ]
+

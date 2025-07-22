@@ -8,7 +8,7 @@ performance optimization, and comprehensive error handling.
 import logging
 import time
 from datetime import datetime, timedelta
-from typing import List, Optional, Dict, Any
+from typing import List, Optional
 from dataclasses import replace
 
 from .interfaces import (

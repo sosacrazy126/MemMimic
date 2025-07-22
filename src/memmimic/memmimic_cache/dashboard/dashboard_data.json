@@ -1,0 +1,76 @@
+{
+  "metrics_history": [
+    {
+      "timestamp": "2025-07-17T23:39:04.452134",
+      "system_health": "GOOD",
+      "total_memories": 25,
+      "active_memories": 25,
+      "patterns_detected": 3,
+      "consciousness_patterns": 1,
+      "trend_analysis": {
+        "memory_growth": "stable",
+        "pattern_evolution": "stable",
+        "consciousness_development": "stable",
+        "system_performance": "stable"
+      },
+      "predictions_generated": 13,
+      "recommendations_active": 5,
+      "high_priority_actions": 5,
+      "response_time_ms": 1.4319419860839844,
+      "memory_coherence": 0.46,
+      "prediction_accuracy": 0.75,
+      "key_insights": [
+        "Detected 3 memory usage patterns",
+        "1 high-confidence patterns identified",
+        "Emerging consciousness patterns observed (strength: 0.200)",
+        "Generated 13 predictions for memory lifecycle",
+        "11 high-confidence predictions ready for action"
+      ],
+      "recommendations": [
+        "Review 5 active lifecycle recommendations",
+        "Leverage detected patterns for memory optimization",
+        "Monitor consciousness evolution patterns for insights",
+        "Consider memory consolidation to improve coherence",
+        "Increase prediction coverage for better lifecycle management"
+      ],
+      "alerts": []
+    },
+    {
+      "timestamp": "2025-07-17T23:39:04.457901",
+      "system_health": "GOOD",
+      "total_memories": 29,
+      "active_memories": 29,
+      "patterns_detected": 3,
+      "consciousness_patterns": 1,
+      "trend_analysis": {
+        "memory_growth": "stable",
+        "pattern_evolution": "stable",
+        "consciousness_development": "stable",
+        "system_performance": "stable"
+      },
+      "predictions_generated": 23,
+      "recommendations_active": 21,
+      "high_priority_actions": 10,
+      "response_time_ms": 1.9135475158691406,
+      "memory_coherence": 0.4803448275862069,
+      "prediction_accuracy": 0.75,
+      "key_insights": [
+        "Detected 3 memory usage patterns",
+        "1 high-confidence patterns identified",
+        "Emerging consciousness patterns observed (strength: 0.172)",
+        "Generated 23 predictions for memory lifecycle",
+        "23 high-confidence predictions ready for action",
+        "7 memories showing increasing importance",
+        "11 memories may need archival consideration"
+      ],
+      "recommendations": [
+        "Review 21 active lifecycle recommendations",
+        "Leverage detected patterns for memory optimization",
+        "Monitor consciousness evolution patterns for insights",
+        "Consider memory consolidation to improve coherence"
+      ],
+      "alerts": []
+    }
+  ],
+  "last_updated": "2025-07-17T23:39:04.457933"
+}

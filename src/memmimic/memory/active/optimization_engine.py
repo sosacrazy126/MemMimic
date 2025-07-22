@@ -10,7 +10,7 @@ import time
 import threading
 from datetime import datetime, timedelta
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set
 import statistics
 
 from .interfaces import (

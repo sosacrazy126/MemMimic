@@ -400,57 +400,71 @@ class TaleManager:
     
     def list_tales(self, category: str = None, sort_by: str = 'updated') -> List[Dict[str, Any]]:
         """List all tales with metadata"""
+        categories_to_list = [category] if category else self.get_valid_categories()
         tales_info = []
         
-        categories_to_list = [category] if category else self.get_valid_categories()
-        
         for cat in categories_to_list:
-            try:
-                cat_path = self.get_category_path(cat)
-            except ValueError:
-                continue  # Skip invalid categories
-            
-            if not cat_path.exists():
-                continue
-                
-            for file_path in cat_path.iterdir():
-                if file_path.is_file() and file_path.suffix == '.txt':
-                    try:
-                        with open(file_path, 'r', encoding='utf-8') as f:
-                            content = f.read()
-                        
-                        tale = Tale.from_file_content(content, category=cat)
-                        
-                        info = {
-                            'name': tale.name,
-                            'category': tale.category,
-                            'filename': tale.get_filename(),
-                            'size': tale.metadata.get('size_chars', 0),
-                            'created': tale.metadata.get('created', ''),
-                            'updated': tale.metadata.get('updated', ''),
-                            'usage_count': tale.metadata.get('usage_count', 0),
-                            'version': tale.metadata.get('version', 1),
-                            'tags': tale.tags,
-                            'preview': tale.content[:100] + '...' if len(tale.content) > 100 else tale.content
-                        }
-                        
-                        tales_info.append(info)
-                        
-                    except Exception as e:
-                        logger.error(f"Error reading tale file {file_path}: {e}")
-                        continue
+            tales_info.extend(self._scan_category_for_tales(cat))
         
-        # Sort
-        if sort_by == 'updated':
-            tales_info.sort(key=lambda x: x['updated'], reverse=True)
-        elif sort_by == 'created':
-            tales_info.sort(key=lambda x: x['created'], reverse=True)
-        elif sort_by == 'usage':
-            tales_info.sort(key=lambda x: x['usage_count'], reverse=True)
-        elif sort_by == 'size':
-            tales_info.sort(key=lambda x: x['size'], reverse=True)
-        elif sort_by == 'name':
-            tales_info.sort(key=lambda x: x['name'])
+        return self._sort_tales_list(tales_info, sort_by)
+    
+    def _scan_category_for_tales(self, category: str) -> List[Dict[str, Any]]:
+        """Scan a single category for tales and return their info"""
+        try:
+            cat_path = self.get_category_path(category)
+        except ValueError:
+            return []  # Skip invalid categories
+        
+        if not cat_path.exists():
+            return []
+        
+        tales_info = []
+        for file_path in cat_path.iterdir():
+            if file_path.is_file() and file_path.suffix == '.txt':
+                tale_info = self._extract_tale_info(file_path, category)
+                if tale_info:
+                    tales_info.append(tale_info)
+        
+        return tales_info
+    
+    def _extract_tale_info(self, file_path: Path, category: str) -> Optional[Dict[str, Any]]:
+        """Extract tale information from a single file"""
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            tale = Tale.from_file_content(content, category=category)
+            
+            return {
+                'name': tale.name,
+                'category': tale.category,
+                'filename': tale.get_filename(),
+                'size': tale.metadata.get('size_chars', 0),
+                'created': tale.metadata.get('created', ''),
+                'updated': tale.metadata.get('updated', ''),
+                'usage_count': tale.metadata.get('usage_count', 0),
+                'version': tale.metadata.get('version', 1),
+                'tags': tale.tags,
+                'preview': tale.content[:100] + '...' if len(tale.content) > 100 else tale.content
+            }
+            
+        except Exception as e:
+            logger.error(f"Error reading tale file {file_path}: {e}")
+            return None
+    
+    def _sort_tales_list(self, tales_info: List[Dict[str, Any]], sort_by: str) -> List[Dict[str, Any]]:
+        """Sort tales list by specified criteria"""
+        sort_functions = {
+            'updated': lambda x: x['updated'],
+            'created': lambda x: x['created'],
+            'usage': lambda x: x['usage_count'],
+            'size': lambda x: x['size'],
+            'name': lambda x: x['name']
+        }
+        
+        if sort_by in sort_functions:
+            reverse_sort = sort_by != 'name'  # Name sorts ascending, others descending
+            tales_info.sort(key=sort_functions[sort_by], reverse=reverse_sort)
         
         return tales_info
     
@@ -691,3 +705,4 @@ class TaleManager:
         except Exception as e:
             logger.error(f"Error saving tale to {file_path}: {e}")
             raise
+

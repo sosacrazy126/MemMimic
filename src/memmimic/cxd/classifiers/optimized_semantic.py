@@ -551,3 +551,4 @@ class OptimizedSemanticCXDClassifier(SemanticCXDClassifier):
 __all__ = [
     "OptimizedSemanticCXDClassifier",
 ]
+

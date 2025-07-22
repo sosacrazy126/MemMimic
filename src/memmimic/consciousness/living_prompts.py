@@ -744,3 +744,4 @@ if __name__ == "__main__":
     print(f"Shadow integration rate: {analytics.get('shadow_integration_rate', 0):.3f}")
     print(f"Consciousness levels: {analytics.get('consciousness_levels', {})}")
     print(f"Sigil usage: {analytics.get('sigil_usage', {})}")
+

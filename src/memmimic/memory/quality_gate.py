@@ -7,7 +7,7 @@ Uses existing ContextualAssistant for quality judgment and duplicate detection
 
 import asyncio
 import logging
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Tuple, Any
 from datetime import datetime
 
 from .storage.amms_storage import Memory, AMMSStorage
@@ -15,6 +15,7 @@ from ..assistant import ContextualAssistant
 from .quality_types import MemoryQualityResult
 from .persistent_queue import PersistentMemoryQueue
 from .semantic_similarity import get_semantic_detector
+from ..config import get_performance_config
 
 
 class MemoryQualityGate:
@@ -33,11 +34,15 @@ class MemoryQualityGate:
         self.memory_store = assistant.memory_store
         self.logger = logging.getLogger(__name__)
         
-        # Quality thresholds (configurable)
-        self.auto_approve_threshold = 0.8
-        self.auto_reject_threshold = 0.3
-        self.duplicate_threshold = 0.85
-        self.min_content_length = 10
+        # Load configuration
+        self.config = get_performance_config()
+        memory_config = self.config.memory_config
+        
+        # Quality thresholds from configuration
+        self.auto_approve_threshold = memory_config.get('auto_approve_threshold', 0.8)
+        self.auto_reject_threshold = memory_config.get('auto_reject_threshold', 0.3)
+        self.duplicate_threshold = memory_config.get('duplicate_threshold', 0.85)
+        self.min_content_length = memory_config.get('min_content_length', 10)
         
         # Persistent memory queue
         self.persistent_queue = PersistentMemoryQueue(queue_db_path)

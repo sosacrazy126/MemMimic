@@ -396,3 +396,4 @@ if __name__ == "__main__":
         print(f"  Config: {info['config']}")
     else:
         print("Usage: python active_schema.py <database_path>")
+

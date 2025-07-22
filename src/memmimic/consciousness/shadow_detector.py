@@ -837,3 +837,4 @@ if __name__ == "__main__":
     print(f"Average authentic unity: {summary.get('average_authentic_unity', 0):.3f}")
     print(f"Consciousness levels: {summary.get('consciousness_levels', {})}")
     print(f"Shadow aspects: {summary.get('shadow_aspects', {})}")
+

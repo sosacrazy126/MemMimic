@@ -100,23 +100,8 @@ from .handlers import (
     CircuitBreaker,
 )
 
-# Recovery mechanisms - TODO: implement in next phase
-# from .recovery import (
-#     RecoveryStrategy,
-#     RetryStrategy,
-#     FallbackStrategy,
-#     CircuitBreakerStrategy,
-#     RecoveryManager,
-# )
-
-# Error monitoring and analysis - TODO: implement in next phase
-# from .monitoring import (
-#     ErrorCollector,
-#     ErrorAnalyzer,
-#     ErrorMetrics,
-#     get_error_stats,
-#     register_error_handler,
-# )
+# Recovery mechanisms and error monitoring modules would be imported here
+# when implemented in future versions
 
 # Logging configuration
 from .logging_config import (
@@ -154,11 +139,7 @@ __all__ = [
     "handle_errors", "retry", "circuit_breaker", "fallback", "log_errors",
     "ErrorHandler", "RetryPolicy", "ExponentialBackoff", "LinearBackoff", "CircuitBreaker",
     
-    # Recovery mechanisms - TODO: implement in next phase
-    # "RecoveryStrategy", "RetryStrategy", "FallbackStrategy", "CircuitBreakerStrategy", "RecoveryManager",
-    
-    # Monitoring - TODO: implement in next phase
-    # "ErrorCollector", "ErrorAnalyzer", "ErrorMetrics", "get_error_stats", "register_error_handler",
+    # Additional recovery and monitoring exports would be added here in future versions
     
     # Logging
     "configure_error_logging", "get_error_logger", "StructuredFormatter", "CorrelationIDFilter",
@@ -209,10 +190,9 @@ def configure_error_framework(
     # Configure circuit breaker defaults
     CircuitBreaker.set_default_threshold(circuit_breaker_threshold)
     
-    # TODO: Initialize monitoring when monitoring module is implemented
+    # Monitoring initialization would be implemented here in future versions
     # if enable_monitoring:
-    #     ErrorCollector.initialize()
-    #     register_error_handler(ErrorCollector.collect_error)
+    #     # Initialize error collection and monitoring
 
 
 def get_framework_status() -> dict:
@@ -230,8 +210,8 @@ def get_framework_status() -> dict:
     return {
         "version": __version__,
         "logging_configured": hasattr(configure_error_logging, '_configured'),
-        "monitoring_enabled": False,  # TODO: implement when monitoring is available
-        "total_errors_collected": 0,  # TODO: implement when monitoring is available
+        "monitoring_enabled": False,  # Available in future versions
+        "total_errors_collected": 0,  # Available in future versions
         "active_circuit_breakers": CircuitBreaker.get_active_count(),
         "default_retry_attempts": RetryPolicy.get_default_attempts(),
     }

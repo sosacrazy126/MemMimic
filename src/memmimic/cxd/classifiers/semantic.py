@@ -11,6 +11,8 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
+from ...utils.caching import cached_cxd_operation
+
 from ..core.canonical import CanonicalExample
 from ..core.config import CXDConfig
 from ..core.interfaces import (
@@ -184,6 +186,7 @@ class SemanticCXDClassifier(CXDClassifier):
             self._index_built = True
             raise
 
+    @cached_cxd_operation(ttl=1800)  # Cache for 30 minutes
     def classify(self, text: str) -> CXDSequence:
         """
         Classify text using semantic similarity to canonical examples.
@@ -510,3 +513,4 @@ class SemanticCXDClassifier(CXDClassifier):
 __all__ = [
     "SemanticCXDClassifier",
 ]
+

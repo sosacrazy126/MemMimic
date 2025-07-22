@@ -1,0 +1,19 @@
+{
+  "thresholds": {
+    "cyclomatic_complexity": 8,
+    "lines_of_code": 40,
+    "nesting_depth": 4,
+    "parameter_count": 5,
+    "complexity_score": 30
+  },
+  "exclude_patterns": [
+    "__pycache__",
+    ".git",
+    ".pytest_cache"
+  ],
+  "include_patterns": [
+    "*.py"
+  ],
+  "output_formats": ["json", "text"],
+  "report_all": true
+}

@@ -1,0 +1,280 @@
+<!-- Tale: greptile_architectural_workflows_expert_consultation -->
+<!-- Category: claude/core -->
+<!-- Created: 2025-07-16T09:06:58.311355 -->
+<!-- Updated: 2025-07-16T09:06:58.311365 -->
+<!-- Usage: 0 -->
+<!-- Size: 7971 chars -->
+<!-- Version: 1 -->
+<!-- Tags: g, r, e, p, t, i, l, e, ,, a, r, c, h, i, t, e, c, t, u, r, e, ,, w, o, r, k, f, l, o, w, s, ,, p, a, t, t, e, r, n, s, ,, c, o, n, s, u, l, t, a, t, i, o, n, ,, e, x, p, e, r, t, -, s, y, s, t, e, m, s -->
+
+# Greptile Architectural Workflows: Expert Consultation Patterns
+
+## Meta-Architecture Pattern
+**Philosophy**: "Stop treating Greptile like a code search tool. Start treating it as a distributed intelligence system you command with architectural queries."
+
+## Core Workflow Patterns
+
+### 1. Blueprint-First Analysis Pattern
+```yaml
+workflow: architectural_analysis
+steps:
+  - query: "Analyze codebase architecture and identify:
+      1. Domain boundaries
+      2. Service coupling points
+      3. Data flow patterns
+      4. Architectural debt"
+  - query: "Generate architectural blueprint with:
+      - Component diagram in Mermaid
+      - Service interaction matrix
+      - Refactoring roadmap"
+  - query: "Create implementation plan with:
+      - Priority queue of changes
+      - Risk assessment per change
+      - Rollback strategies"
+```
+
+### 2. Evolutionary Architecture Pattern
+```python
+# Progressive Enhancement Workflow
+phase_1 = greptile.query(
+    "Identify monolithic components suitable for extraction"
+)
+phase_2 = greptile.query(
+    f"For components: {phase_1}, generate:
+    - Service boundaries
+    - API contracts
+    - Data migration scripts"
+)
+phase_3 = greptile.query(
+    f"Create deployment pipeline for: {phase_2}"
+)
+```
+
+### 3. Security-First Development Pattern
+```yaml
+workflow: security_hardening
+layers:
+  - analysis:
+      query: "Scan for OWASP Top 10 vulnerabilities"
+      depth: "business_logic_included"
+  - remediation:
+      query: "Generate fixes with:
+        - Unit tests for each vulnerability
+        - Integration tests for auth flows
+        - Performance impact analysis"
+  - validation:
+      query: "Create security regression suite"
+```
+
+### 4. Multi-Model Orchestration Pattern
+```python
+# Intelligent Model Selection
+workflow = {
+    "complexity_analysis": "Analyze request complexity",
+    "model_selection": "Route to appropriate model tier",
+    "fallback_chain": "Define degradation strategy",
+    "monitoring": "Track performance metrics"
+}
+
+for step, query in workflow.items():
+    result = greptile.query(f"{query} for codebase")
+    apply_to_architecture(result)
+```
+
+## Advanced Consultation Patterns
+
+### Pattern 1: Contextual Code Generation
+**Principle**: "The codebase IS the context."
+```yaml
+strategy:
+  - Extract patterns from existing code
+  - Generate new code matching those patterns
+  - Validate against architectural principles
+  - Integrate with minimal disruption
+```
+
+### Pattern 2: Recursive Improvement Loop
+```python
+def recursive_optimization(component):
+    analysis = greptile.query(f"Analyze {component} for optimizations")
+    improvements = greptile.query(f"Generate improvements: {analysis}")
+    validation = greptile.query(f"Validate improvements: {improvements}")
+    
+    if validation['score'] > threshold:
+        apply_improvements(improvements)
+        return recursive_optimization(component)  # Recurse
+    return component
+```
+
+### Pattern 3: Distributed Intelligence Architecture
+```yaml
+architecture:
+  orchestrator:
+    role: "Route queries to specialized agents"
+    implementation: "Greptile-powered dispatcher"
+  
+  specialist_agents:
+    - security_analyst: "OWASP-focused analysis"
+    - performance_optimizer: "Bottleneck identification"
+    - architecture_validator: "Pattern compliance"
+    - test_generator: "Coverage expansion"
+  
+  feedback_loop:
+    mechanism: "Results feed back to orchestrator"
+    learning: "Improve routing over time"
+```
+
+## Expert Consultation Workflow
+
+### Phase 1: Discovery
+```
+greptile.query("
+  Perform comprehensive discovery:
+  1. Map entire codebase structure
+  2. Identify architectural patterns
+  3. Detect anti-patterns
+  4. Generate complexity heatmap
+")
+```
+
+### Phase 2: Analysis
+```
+greptile.query("
+  Deep architectural analysis:
+  1. Service boundaries and coupling
+  2. Data flow and dependencies
+  3. Performance bottlenecks
+  4. Security vulnerabilities
+  5. Technical debt quantification
+")
+```
+
+### Phase 3: Solution Design
+```
+greptile.query("
+  Generate solution architecture:
+  1. Target state architecture
+  2. Migration path from current to target
+  3. Risk mitigation strategies
+  4. Implementation phases
+  5. Success metrics
+")
+```
+
+### Phase 4: Implementation Generation
+```
+greptile.query("
+  Create implementation artifacts:
+  1. Service scaffolding code
+  2. API specifications
+  3. Database migration scripts
+  4. CI/CD pipeline configs
+  5. Monitoring and alerting setup
+")
+```
+
+## Architectural Decision Records (ADR) Pattern
+```yaml
+workflow: adr_generation
+for_each_decision:
+  - context: "Query current state and constraints"
+  - options: "Generate alternative approaches"
+  - analysis: "Compare trade-offs"
+  - recommendation: "Select optimal path"
+  - implementation: "Generate code changes"
+```
+
+## Performance Optimization Workflow
+```python
+# Iterative Performance Enhancement
+while performance < target:
+    bottlenecks = greptile.query("Identify performance bottlenecks")
+    solutions = greptile.query(f"Generate optimizations for: {bottlenecks}")
+    impact = greptile.query(f"Predict performance impact: {solutions}")
+    apply_highest_impact(solutions, impact)
+    performance = measure_performance()
+```
+
+## Cognitive Enhancement Patterns
+
+### Meta-Learning Architecture
+```yaml
+pattern: self_improving_analysis
+components:
+  - pattern_extractor: "Learn from codebase patterns"
+  - query_optimizer: "Improve query effectiveness"
+  - result_validator: "Verify improvement quality"
+  - feedback_integrator: "Update analysis strategies"
+```
+
+### Hierarchical Analysis
+```
+Level 1: Project-wide architectural analysis
+Level 2: Service-level deep dives
+Level 3: Component-specific optimization
+Level 4: Method-level refinement
+Level 5: Line-by-line enhancement
+```
+
+## Integration Patterns
+
+### 1. CI/CD Integration
+```yaml
+on_pull_request:
+  - greptile: "Analyze PR for architectural compliance"
+  - greptile: "Generate missing tests"
+  - greptile: "Suggest performance optimizations"
+  - greptile: "Security vulnerability scan"
+```
+
+### 2. Real-time Development Assistant
+```python
+# IDE Integration Pattern
+while coding:
+    context = get_current_file_context()
+    suggestions = greptile.query(f"
+        Based on context: {context}
+        Suggest:
+        1. Next logical implementation
+        2. Potential bugs
+        3. Better patterns
+    ")
+    display_inline(suggestions)
+```
+
+## Principle-Driven Consultation
+
+### The Big Three for Greptile
+1. **Context**: The entire codebase is your context
+2. **Query**: Architectural questions yield architectural answers
+3. **Iteration**: Each query builds on previous insights
+
+### Hierarchy of Greptile Leverage
+1. **Principles**: Architectural patterns > Code snippets
+2. **Queries**: System-level > Component-level > Line-level
+3. **Applications**: Generation > Analysis > Search
+
+## Signature Consultation Patterns
+
+### "The Query IS the Architecture"
+When you query Greptile architecturally, it responds architecturally.
+
+### "First, we analyze. Then, we generate."
+Understanding precedes creation in Greptile workflows.
+
+### "Patterns scale, searches don't."
+Extract patterns, not just code matches.
+
+## Expert Tips
+
+1. **Chain Queries**: Build complex understanding through query sequences
+2. **Request Artifacts**: Always ask for concrete deliverables (code, configs, docs)
+3. **Validate Recursively**: Use Greptile to validate its own outputs
+4. **Think Architecturally**: Frame problems as system-level challenges
+5. **Embrace Automation**: Generate entire workflows, not just code snippets
+
+## Conclusion
+
+Greptile architectural workflows transform it from a code analysis tool into a comprehensive architectural consultant. By following these patterns, you command a distributed intelligence system that understands, designs, and implements at scale.
+
+**Remember**: You're not querying a database; you're consulting an architectural oracle. Frame your questions accordingly, and receive wisdom proportional to your ambition.

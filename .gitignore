@@ -1,8 +1,12 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# C extensions
 *.so
+
+# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -16,111 +20,155 @@ parts/
 sdist/
 var/
 wheels/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 MANIFEST
 
-# Virtual environments
-venv/
-env/
-ENV/
-.venv/
+# PyInstaller
+*.manifest
+*.spec
 
-# IDE
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
-
-# Type checking
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Local development
-.env
-.env.local
-
-# MemMimic specific
-*.db
-*.sqlite
-*.sqlite3
-cxd_cache/
-models/
-embeddings_cache/
-
-# Generated content and caches
-src/memmimic_cache/
-src/memmimic/memmimic_cache/
-memmimic_memories.db*
-*.db.backup*
-phases_output/
-.archive/
-.taskmaster/
-
-# Consciousness system caches
-src/memmimic/consciousness/cache/
-consciousness_cache/
-sigil_cache/
-living_prompts_cache/
-rup_cache/
-
-# Debug and temporary files
-debug_*.py
-test_*.py
-!tests/
-!test_living_prompts_integration.py
-
-# Memory tales and generated content
-tales/
-prompts/
-Memory/Phase_*/
-
-# Development and cursor files
-.cursor/
-.cursorignore
-.cursorrules
-Phase_*.md
-CLEANUP_SUMMARY.md
-IMPLEMENTATION_*.md
-CODE_REVIEW_*.md
-*_Implementation_Context.md
-commit_summary.md
-
-# Node.js (for MCP server)
+# Node.js (for MCP components)
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# OS
-.DS_Store
-Thumbs.db
+# MemMimic specific
+*.db
+*.sqlite
+*.sqlite3
+import_analysis_report.json
+cache_performance_report.json
+async_vs_sync_benchmark_report.json
+performance_dashboard.json
+optimized_cache_performance_report.json
 
-# Logs
-logs
-*.log
-dev-debug.log
-# Dependency directories
-# Environment variables
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-# OS specific
-
-# Task files
-# tasks.json
-# tasks/ 
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
