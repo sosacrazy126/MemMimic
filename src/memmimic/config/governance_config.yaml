@@ -1,0 +1,108 @@
+# MemMimic v2.0 Governance Configuration
+# Simple Governance Framework with configurable thresholds and enforcement modes
+
+governance:
+  enabled: true
+  enforcement_mode: "strict"  # strict, permissive, audit_only
+  environment: "development"  # development, testing, production
+  
+  thresholds:
+    # Core content limits
+    content_size: 1000000        # 1MB maximum content
+    summary_length: 1000         # 1000 characters
+    metadata_size: 10000         # 10KB metadata
+    
+    # Tag management
+    tag_count: 100               # Maximum tags per memory
+    tag_length: 50               # Maximum characters per tag
+    
+    # Relationship governance
+    relationship_depth: 3        # Maximum relationship depth
+    
+    # Performance governance
+    governance_timeout: 10       # Maximum governance validation time (ms)
+  
+  # Environment-specific overrides
+  environments:
+    development:
+      thresholds:
+        content_size: 2000000    # 2MB for development (more permissive)
+        tag_count: 200           # More tags for testing
+        governance_timeout: 15   # Slightly more relaxed timeout
+      enforcement_mode: "permissive"
+    
+    testing:
+      thresholds:
+        content_size: 500000     # 500KB for testing
+        tag_count: 50            # Limited for test scenarios
+        governance_timeout: 5    # Strict timeout for performance testing
+      enforcement_mode: "audit_only"  # Don't block, just log violations
+    
+    production:
+      thresholds:
+        content_size: 500000     # 500KB for production efficiency
+        summary_length: 500      # Shorter summaries in production
+        tag_count: 50            # Conservative tag limit
+        governance_timeout: 5    # Stricter performance requirements
+      enforcement_mode: "strict"
+
+# Storage configuration with governance integration
+storage:
+  type: "governance_integrated"
+  enable_summary_cache: true
+  summary_cache_size: 1000
+  
+  # Performance targets
+  performance_targets:
+    summary_retrieval_ms: 5      # <5ms summary retrieval target
+    full_context_retrieval_ms: 50 # <50ms full context retrieval target
+    enhanced_remember_ms: 15     # <15ms remember operation target
+    governance_validation_ms: 10 # <10ms governance validation target
+
+# Telemetry and monitoring
+telemetry:
+  enabled: true
+  governance_metrics: true
+  performance_tracking: true
+  export_interval: 3600        # 1 hour
+  
+  # Performance alert thresholds
+  alert_thresholds:
+    response_time_p95_ms: 50           # 95th percentile response time
+    error_rate_percent: 1.0            # Error rate threshold
+    governance_violation_rate_percent: 5.0  # Governance violation rate
+    system_health_score: 90            # Minimum health score
+    governance_timeout_rate_percent: 1.0    # Governance timeout rate
+
+# Audit logging
+audit:
+  governance_decisions: true
+  violation_logging: true
+  remediation_tracking: true
+  retention_days: 90
+
+# Custom validation rules (future extension)
+custom_rules:
+  - name: "no_sensitive_data"
+    pattern: "(?i)(password|secret|key|token|api_key)"
+    message: "Potential sensitive data detected in content"
+    severity: "high"
+    enabled: true
+    
+  - name: "reasonable_tag_names"
+    pattern: "^[a-zA-Z0-9_-]{1,50}$"
+    message: "Tags must be alphanumeric with underscores/hyphens, 1-50 characters"
+    severity: "medium"
+    enabled: true
+    
+  - name: "content_quality_check"
+    pattern: "^.{10,}$"  # At least 10 characters
+    message: "Content should be at least 10 characters for meaningful storage"
+    severity: "low"
+    enabled: false  # Disabled by default
+
+# Hot-reload configuration
+hot_reload:
+  enabled: true
+  watch_config_file: true
+  reload_interval_seconds: 30

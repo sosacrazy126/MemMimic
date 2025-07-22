@@ -43,11 +43,11 @@ async function runPythonTool(toolName, args = []) {
       return;
     }
     
-    // Use project Python environment
+    // Use conda environment Python
     const isWindows = process.platform === 'win32';
     const pythonExecutable = isWindows 
-      ? path.join(MEMMIMIC_DIR, '..', '..', '..', 'venv', 'Scripts', 'python.exe')
-      : path.join(MEMMIMIC_DIR, '..', '..', '..', 'venv', 'bin', 'python');
+      ? 'C:\\Users\\%USERNAME%\\miniconda3\\python.exe'
+      : '/home/evilbastardxd/miniconda3/bin/python3';
     
     const pythonProcess = spawn(pythonExecutable, [scriptPath, ...args], {
       cwd: path.join(MEMMIMIC_DIR, '..', '..', '..'),

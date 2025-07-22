@@ -12,11 +12,28 @@ from .socratic import SocraticDialogue, SocraticEngine
 from .stale_detector import StaleDetectionConfig, StaleMemoryDetector
 
 # AMMS-Only Storage (Post-Migration Architecture)
-from .storage import AMMSStorage, create_amms_storage, Memory
+from .storage.amms_storage import AMMSStorage, Memory
+from .storage import create_amms_storage
+
+# Enhanced Memory Model (v2.0)
+from .enhanced_memory import EnhancedMemory
+from .enhanced_amms_storage import EnhancedAMMSStorage, create_enhanced_amms_storage
+
+# Governance Framework (v2.0)
+from .governance import (
+    SimpleGovernance, GovernanceConfig, GovernanceValidator,
+    ThresholdManager, GovernanceMetrics, GovernanceViolation, 
+    GovernanceResult, GovernanceConfigError
+)
+from .governance_integrated_storage import (
+    GovernanceIntegratedStorage, GovernanceAwareResult, 
+    create_governance_integrated_storage
+)
 
 __all__ = [
     # Core interfaces
     "Memory",
+    "EnhancedMemory",
     "ContextualAssistant",
     "SocraticEngine", 
     "SocraticDialogue",
@@ -31,5 +48,20 @@ __all__ = [
     # AMMS-Only Storage (Post-Migration)
     "AMMSStorage",
     "create_amms_storage",
+    # Enhanced AMMS Storage (v2.0)
+    "EnhancedAMMSStorage", 
+    "create_enhanced_amms_storage",
+    # Governance Framework (v2.0)
+    "SimpleGovernance",
+    "GovernanceConfig", 
+    "GovernanceValidator",
+    "ThresholdManager",
+    "GovernanceMetrics",
+    "GovernanceViolation",
+    "GovernanceResult",
+    "GovernanceConfigError",
+    "GovernanceIntegratedStorage",
+    "GovernanceAwareResult",
+    "create_governance_integrated_storage",
 ]
 
