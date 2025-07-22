@@ -174,19 +174,32 @@ optimized_cache_performance_report.json
 *.backup
 
 # Logs
-logs
+logs/
 dev-debug.log
+
 # Dependency directories
 # Environment variables
+.env
+.env.*
+
 # Editor directories and files
-.idea
-.vscode
+.idea/
+.vscode/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*~
+
 # OS specific
+.DS_Store
+Thumbs.db
+
+# Generated files and directories
+.roomodes
+cxd_cache/
+tales/projects/
 
 # Task files
 # tasks.json
