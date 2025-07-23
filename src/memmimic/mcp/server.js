@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
- * MemMimic MCP Server v1.0 - Clean Professional Edition
+ * MemMimic MCP Server v2.0 - Nervous System Architecture
  * "The Memory System That Learns You Back"
- * 
- * CLEAN API: 11 essential tools, zero debug noise
- * Architecture: MCP + Python bridge + MemMimic core
+ *
+ * NERVOUS SYSTEM API: 10 essential tools with biological reflex processing
+ * Architecture: MCP + Python bridge + Nervous System Core + Enhanced Intelligence
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -164,79 +164,7 @@ const MEMMIMIC_TOOLS = {
     }
   },
   
-  remember_with_quality: {
-    name: 'remember_with_quality',
-    description: 'Store information with intelligent quality control and duplicate detection',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        content: {
-          type: 'string',
-          description: 'Content to remember'
-        },
-        memory_type: {
-          type: 'string',
-          description: 'Type of memory (interaction, reflection, milestone)',
-          default: 'interaction'
-        },
-        force: {
-          type: 'boolean',
-          description: 'Force save without quality check',
-          default: false
-        }
-      },
-      required: ['content']
-    }
-  },
-  
-  review_pending_memories: {
-    name: 'review_pending_memories',
-    description: 'Show memories awaiting quality approval',
-    inputSchema: {
-      type: 'object',
-      properties: {}
-    }
-  },
-  
-  approve_memory: {
-    name: 'approve_memory',
-    description: 'Approve a pending memory for storage',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        queue_id: {
-          type: 'string',
-          description: 'Queue ID of memory to approve'
-        },
-        note: {
-          type: 'string',
-          description: 'Optional reviewer note',
-          default: ''
-        }
-      },
-      required: ['queue_id']
-    }
-  },
-  
-  reject_memory: {
-    name: 'reject_memory',
-    description: 'Reject a pending memory',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        queue_id: {
-          type: 'string',
-          description: 'Queue ID of memory to reject'
-        },
-        reason: {
-          type: 'string',
-          description: 'Reason for rejection',
-          default: 'Rejected by reviewer'
-        }
-      },
-      required: ['queue_id']
-    }
-  },
+  // Quality management tools removed - functionality internalized into remember trigger
   
   think_with_memory: {
     name: 'think_with_memory',
@@ -253,14 +181,7 @@ const MEMMIMIC_TOOLS = {
     }
   },
   
-  status: {
-    name: 'status',
-    description: 'Get MemMimic system status and health',
-    inputSchema: {
-      type: 'object',
-      properties: {}
-    }
-  },
+  // status functionality internalized into nervous system health monitoring
   
   // 📖 TALES SYSTEM (5)
   tales: {
@@ -428,35 +349,45 @@ const MEMMIMIC_TOOLS = {
     }
   },
   
-  analyze_memory_patterns: {
-    name: 'analyze_memory_patterns',
-    description: 'Analyze patterns in memory usage and content',
-    inputSchema: {
-      type: 'object',
-      properties: {}
-    }
-  },
-  
-  // 🧘 COGNITIVE (1)
-  socratic_dialogue: {
-    name: 'socratic_dialogue',
-    description: 'Engage in Socratic self-questioning',
+  // analyze_memory_patterns internalized into recall_cxd trigger
+
+  // 🤖 AGENT GUIDANCE (2)
+  update_memory_guided: {
+    name: 'update_memory_guided',
+    description: 'Update memory with Socratic guidance for agents',
     inputSchema: {
       type: 'object',
       properties: {
-        query: {
-          type: 'string',
-          description: 'Topic for Socratic analysis'
-        },
-        depth: {
+        memory_id: {
           type: 'number',
-          description: 'Depth of questioning (1-5)',
-          default: 3
+          description: 'ID of memory to update'
         }
       },
-      required: ['query']
+      required: ['memory_id']
+    }
+  },
+
+  delete_memory_guided: {
+    name: 'delete_memory_guided',
+    description: 'Delete memory with guided analysis for agents',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        memory_id: {
+          type: 'number',
+          description: 'ID of memory to delete'
+        },
+        confirm: {
+          type: 'boolean',
+          description: 'Confirm deletion',
+          default: false
+        }
+      },
+      required: ['memory_id']
     }
   }
+
+  // Socratic dialogue functionality internalized into think_with_memory trigger
 };
 
 // Create MCP server
@@ -487,70 +418,33 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     log(`Tool called: ${name}`);
     
     switch (name) {
-      // 🔍 SEARCH CORE
+      // 🔍 SEARCH CORE (Enhanced with Nervous System Intelligence)
       case 'recall_cxd': {
         const { query, function_filter = 'ALL', limit = 5, db_name } = args;
-        
+
         const pythonArgs = [query, function_filter, limit.toString()];
         if (db_name) pythonArgs.push('--db', db_name);
-        
-        const result = await runPythonTool('memmimic_recall_cxd', pythonArgs);
+
+        const result = await runPythonTool('memmimic_nervous_recall', pythonArgs);
         return { content: [{ type: 'text', text: result }] };
       }
       
-      // 🧠 MEMORY CORE
+      // 🧠 MEMORY CORE (Enhanced with Nervous System Intelligence)
       case 'remember': {
         const { content, memory_type = 'interaction' } = args;
-        const result = await runPythonTool('memmimic_remember', [content, memory_type]);
+        const result = await runPythonTool('memmimic_nervous_remember', [content, memory_type]);
         return { content: [{ type: 'text', text: result }] };
       }
       
-      case 'remember_with_quality': {
-        const { content, memory_type = 'interaction', force = false } = args;
-        
-        const pythonArgs = [content, memory_type];
-        if (force) pythonArgs.push('--force');
-        
-        const result = await runPythonTool('memmimic_remember_with_quality', pythonArgs);
-        return { content: [{ type: 'text', text: result }] };
-      }
-      
-      case 'review_pending_memories': {
-        const result = await runPythonTool('memmimic_remember_with_quality', ['--review']);
-        return { content: [{ type: 'text', text: result }] };
-      }
-      
-      case 'approve_memory': {
-        const { queue_id, note = '' } = args;
-        
-        const pythonArgs = ['--approve', queue_id];
-        if (note) {
-          pythonArgs.push('--note', note);
-        }
-        
-        const result = await runPythonTool('memmimic_remember_with_quality', pythonArgs);
-        return { content: [{ type: 'text', text: result }] };
-      }
-      
-      case 'reject_memory': {
-        const { queue_id, reason = 'Rejected by reviewer' } = args;
-        
-        const pythonArgs = ['--reject', queue_id, '--reason', reason];
-        
-        const result = await runPythonTool('memmimic_remember_with_quality', pythonArgs);
-        return { content: [{ type: 'text', text: result }] };
-      }
+      // Quality management tools removed - functionality internalized into remember trigger
       
       case 'think_with_memory': {
         const { input_text } = args;
-        const result = await runPythonTool('memmimic_think', [input_text]);
+        const result = await runPythonTool('memmimic_nervous_think', [input_text]);
         return { content: [{ type: 'text', text: result }] };
       }
       
-      case 'status': {
-        const result = await runPythonTool('memmimic_status', []);
-        return { content: [{ type: 'text', text: result }] };
-      }
+      // status functionality internalized into nervous system health monitoring
       
       // 📖 TALES SYSTEM
       case 'tales': {
@@ -633,17 +527,25 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return { content: [{ type: 'text', text: result }] };
       }
       
-      case 'analyze_memory_patterns': {
-        const result = await runPythonTool('memmimic_analyze_patterns', []);
+      // analyze_memory_patterns internalized into recall_cxd trigger
+
+      // 🤖 AGENT GUIDANCE
+      case 'update_memory_guided': {
+        const { memory_id } = args;
+        const result = await runPythonTool('memmimic_update_memory_guided', [memory_id.toString()]);
         return { content: [{ type: 'text', text: result }] };
       }
-      
-      // 🧘 COGNITIVE
-      case 'socratic_dialogue': {
-        const { query, depth = 3 } = args;
-        const result = await runPythonTool('memmimic_socratic', [query, depth.toString()]);
+
+      case 'delete_memory_guided': {
+        const { memory_id, confirm = false } = args;
+        const pythonArgs = [memory_id.toString()];
+        if (confirm) pythonArgs.push('--confirm');
+
+        const result = await runPythonTool('memmimic_delete_memory_guided', pythonArgs);
         return { content: [{ type: 'text', text: result }] };
       }
+
+      // Socratic dialogue functionality internalized into think_with_memory trigger
       
       default:
         throw new Error(`Unknown tool: ${name}`);
@@ -673,8 +575,8 @@ process.on('unhandledRejection', (reason, promise) => {
 
 // Main execution
 async function main() {
-  log('MemMimic MCP Server v1.0 starting...');
-  log('11 essential tools, zero debug noise');
+  log('MemMimic MCP Server v2.0 starting...');
+  log('10 essential tools: 3 nervous system triggers + 2 agent guidance + 5 tales (status internalized)');
   
   const transport = new StdioServerTransport();
   

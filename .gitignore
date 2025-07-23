@@ -201,6 +201,12 @@ Thumbs.db
 cxd_cache/
 tales/projects/
 
+# Database backups and temporary files
+.database_backup_*/
+*.db-shm
+*.db-wal
+*.db-journal
+
 # Task files
 # tasks.json
 # tasks/ 

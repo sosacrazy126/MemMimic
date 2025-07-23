@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "memmimic"
-version = "1.0.0"
-description = "The Memory System That Learns You Back"
+version = "2.0.0"
+description = "Nervous System Memory Architecture - Biological Reflex Processing"
 authors = [
     {name = "Sprooket", email = "sprooket@example.com"},
     {name = "Claude", email = "claude@anthropic.com"}
@@ -13,7 +13,7 @@ authors = [
 readme = "README.md"
 license = {text = "Apache-2.0"}
 requires-python = ">=3.10"
-keywords = ["ai", "memory", "context", "llm", "assistant"]
+keywords = ["ai", "memory", "nervous-system", "biological-reflex", "mcp", "claude"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",

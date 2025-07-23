@@ -1,7 +1,7 @@
-# MemMimic Project Structure
+# MemMimic Project Structure - Nervous System Architecture
 
 ## Overview
-This document describes the streamlined structure of the MemMimic project after architecture cleanup, focusing on core memory management functionality.
+This document describes the nervous system architecture structure of MemMimic after consolidation to the TRUE 10-tool architecture with biological reflex processing.
 
 ## Root Directory Structure
 
@@ -25,8 +25,9 @@ memmimic/
 │       ├── cxd/                # CXD classification system
 │       ├── errors/             # Error handling framework
 │       ├── local/              # Local client
-│       ├── mcp/                # MCP server tools (13 tools)
+│       ├── mcp/                # MCP server tools (10 strategic tools)
 │       ├── memory/             # Memory management system (AMMS)
+│       ├── nervous_system/     # Nervous system architecture
 │       ├── tales/              # Narrative management
 │       └── utils/              # Utility functions
 ├── tales/                       # Memory narratives and stories
@@ -46,7 +47,8 @@ memmimic/
 ### Source Code (`src/memmimic/`)
 - **CXD**: Control/Context/Data classification system
 - **Memory**: AMMS (Active Memory Management System) with quality gates
-- **MCP**: 13 Model Context Protocol tools for memory operations
+- **Nervous System**: Biological reflex architecture with internal intelligence
+- **MCP**: 10 strategic Model Context Protocol tools (3 nervous + 2 guidance + 5 tales)
 - **Tales**: Narrative management and context generation
 - **Errors**: Structured error handling and logging
 - **Utils**: Caching and utility functions
