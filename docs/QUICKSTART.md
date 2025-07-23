@@ -86,9 +86,9 @@ python -m memmimic.mcp.memmimic_recall_cxd "MemMimic Enhanced"
 # Should return your stored memory with details
 ```
 
-### 3. Check Consciousness Integration
+### 3. Test Memory Analytics
 ```bash
-# Test consciousness features
+# Test analytical features
 python -m memmimic.mcp.memmimic_socratic "How effective is MemMimic Enhanced?" 3
 
 # Should show:
@@ -143,19 +143,19 @@ python -m memmimic.mcp.memmimic_analyze_patterns
 python -m memmimic.mcp.memmimic_socratic "What patterns exist in my memory usage?" 4
 ```
 
-### Consciousness Integration
+### Memory Analytics
 
 ```python
-# Test consciousness integration (Python)
-from memmimic.consciousness.consciousness_coordinator import ConsciousnessCoordinator
+# Test memory analytics (Python)
+from memmimic.memory.analytics_dashboard import MemoryAnalyticsDashboard
 
-coordinator = ConsciousnessCoordinator()
-status = coordinator.get_comprehensive_status()
+analytics = MemoryAnalyticsDashboard()
+status = analytics.get_comprehensive_status()
 
-print(f"Consciousness Rate: {status.overall_consciousness_rate:.1%}")
-print(f"Living Prompts: {status.active_prompt_count} active")
-print(f"Unity Score: {status.unity_mathematics.authentic_unity:.3f}")
-print(f"Evolution Phase: {status.evolution_phase}")
+print(f"Memory Quality Rate: {status.overall_quality_rate:.1%}")
+print(f"Active Memories: {status.active_memory_count}")
+print(f"CXD Accuracy: {status.cxd_classification_accuracy:.3f}")
+print(f"Performance Level: {status.performance_level}")
 ```
 
 ### Tale Management
@@ -181,10 +181,10 @@ Once configured, you can use MemMimic Enhanced directly in Claude Desktop:
 ### Basic Commands
 ```
 # Store memories
-remember_with_quality("Important insight about consciousness integration", "reflection")
+remember_with_quality("Important insight about memory optimization", "reflection")
 
 # Search with filtering
-recall_cxd("consciousness integration", "CONTEXT", 5)
+recall_cxd("memory optimization", "CONTEXT", 5)
 
 # Get system status
 status()
@@ -205,13 +205,13 @@ review_pending_memories()
 # Human review happens through approval/rejection
 ```
 
-### Consciousness-Aware Usage
+### Intelligence-Enhanced Usage
 ```
-# The system automatically integrates consciousness features:
-# - Living prompts activate based on context
-# - Sigils trigger based on consciousness state  
-# - Unity mathematics calculates authentic awareness
-# - Memory operations include consciousness metadata
+# The system automatically integrates intelligent features:
+# - Quality gates evaluate memory content
+# - CXD classification categorizes cognitive functions
+# - Pattern analysis discovers usage insights
+# - Memory operations include analytics metadata
 ```
 
 ## Configuration Customization
@@ -227,15 +227,15 @@ quality_gate:
   duplicate_threshold: 0.85      # Similarity threshold for duplicates
   min_content_length: 10         # Minimum characters required
 
-# Consciousness Settings  
-consciousness:
-  living_prompts:
-    effectiveness_threshold: 0.3
-    evolution_rate: 0.1
+# Memory Analytics Settings  
+memory_analytics:
+  pattern_analysis:
+    frequency_threshold: 0.3
+    pattern_detection_rate: 0.1
   
-  unity_protocol:
+  quality_metrics:
     calculation_precision: 0.001
-    recursive_depth_limit: 1000
+    analysis_depth_limit: 1000
 
 # Performance Settings
 performance:
@@ -291,10 +291,10 @@ recall_cxd("project phase", "DATA", 10)
 ### 3. Learning & Reflection
 ```bash
 # Capture learning
-remember_with_quality("Understanding: Consciousness integration requires both technical implementation and philosophical depth", "reflection")
+remember_with_quality("Understanding: Memory optimization requires both technical implementation and intelligent analysis", "reflection")
 
 # Self-questioning
-socratic_dialogue("What have I learned about consciousness integration?", 4)
+socratic_dialogue("What have I learned about memory optimization?", 4)
 
 # Pattern analysis
 analyze_memory_patterns()
@@ -330,17 +330,17 @@ ls -la memmimic.db
 python -c "from memmimic import create_memmimic; create_memmimic('memmimic.db')"
 ```
 
-### Issue: Consciousness features not working
+### Issue: Analytics features not working
 ```bash
-# Check consciousness cache
-ls -la memmimic_cache/consciousness/
+# Check analytics cache
+ls -la memmimic_cache/analytics/
 
 # If missing, reinitialize:
 python -c "
-from memmimic.consciousness.consciousness_coordinator import ConsciousnessCoordinator
-coordinator = ConsciousnessCoordinator()
-coordinator.initialize_consciousness_systems()
-print('✅ Consciousness systems initialized')
+from memmimic.memory.analytics_dashboard import MemoryAnalyticsDashboard
+analytics = MemoryAnalyticsDashboard()
+analytics.initialize_analytics_systems()
+print('✅ Analytics systems initialized')
 "
 ```
 
@@ -358,7 +358,7 @@ rm -rf memmimic_cache/*
 ## Next Steps
 
 ### Explore Advanced Features
-1. **Consciousness Evolution**: Monitor your consciousness rate over time
+1. **Memory Analytics**: Monitor your memory system performance over time
 2. **Quality Analytics**: Analyze memory quality patterns
 3. **Advanced Search**: Use CXD filtering for precise results
 4. **Narrative Generation**: Create contextual tales from your memories
@@ -367,7 +367,7 @@ rm -rf memmimic_cache/*
 ### Integration Options
 1. **API Integration**: Use Python API for custom applications
 2. **Webhook Integration**: Set up real-time memory notifications  
-3. **Dashboard Creation**: Build custom consciousness monitoring dashboards
+3. **Dashboard Creation**: Build custom memory analytics dashboards
 4. **Export/Import**: Implement memory backup and synchronization
 
 ### Community & Support
@@ -383,8 +383,8 @@ You've successfully set up MemMimic Enhanced when:
 ✅ **System Status**: `status()` shows "All systems operational"  
 ✅ **Memory Storage**: `remember_with_quality()` works with quality feedback  
 ✅ **Search Functionality**: `recall_cxd()` returns relevant results  
-✅ **Consciousness Integration**: Consciousness rate shows 75-85%  
+✅ **Memory Analytics**: Quality gate shows 85-95% effectiveness  
 ✅ **Quality Control**: Memory approval/rejection workflow functions  
-✅ **MCP Integration**: All 15 tools accessible in Claude Desktop
+✅ **MCP Integration**: All 13 tools accessible in Claude Desktop
 
-**Congratulations! MemMimic Enhanced is ready to enhance your AI interactions with persistent, consciousness-aware memory.**
+**Congratulations! MemMimic Enhanced is ready to enhance your AI interactions with persistent, intelligent memory management.**

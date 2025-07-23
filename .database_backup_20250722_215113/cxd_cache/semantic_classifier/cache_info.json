@@ -1,5 +1,5 @@
 {
-  "created_at": 1753249714.6836967,
+  "created_at": 1753197702.7460566,
   "vector_store_type": "FAISSVectorStore",
   "embedding_model": "Cached(all-MiniLM-L6-v2)",
   "examples_count": 0,

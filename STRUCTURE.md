@@ -1,7 +1,7 @@
 # MemMimic Project Structure
 
 ## Overview
-This document describes the organized production-ready structure of the MemMimic project after comprehensive cleanup and enterprise transformation.
+This document describes the streamlined structure of the MemMimic project after architecture cleanup, focusing on core memory management functionality.
 
 ## Root Directory Structure
 
@@ -19,27 +19,14 @@ memmimic/
 │   ├── reports/                # Generated reports and summaries
 │   └── *.md                    # Core documentation files
 ├── examples/                    # Usage examples and integrations
-├── infrastructure/              # Deployment and infrastructure
-│   ├── ci-cd/                  # CI/CD configurations
-│   ├── database/               # Database migrations and schema
-│   ├── docker/                 # Container definitions
-│   ├── k8s/                    # Kubernetes manifests
-│   ├── multi-region/           # Multi-region deployment
-│   └── services/               # Infrastructure services
-├── prompts/                     # Agent management prompts
 ├── scripts/                     # Utility and maintenance scripts
 ├── src/                         # Source code
 │   └── memmimic/               # Main Python package
-│       ├── consciousness/       # Consciousness integration
-│       ├── cxd/                # Classification system
+│       ├── cxd/                # CXD classification system
 │       ├── errors/             # Error handling framework
-│       ├── experimental/       # Experimental features
 │       ├── local/              # Local client
-│       ├── mcp/                # MCP server tools
-│       ├── memory/             # Memory management system
-│       ├── ml/                 # Machine learning components
-│       ├── monitoring/         # System monitoring
-│       ├── security/           # Security framework
+│       ├── mcp/                # MCP server tools (13 tools)
+│       ├── memory/             # Memory management system (AMMS)
 │       ├── tales/              # Narrative management
 │       └── utils/              # Utility functions
 ├── tales/                       # Memory narratives and stories
@@ -57,55 +44,52 @@ memmimic/
 ## Key Components
 
 ### Source Code (`src/memmimic/`)
-- **Consciousness**: Advanced AI consciousness integration
 - **CXD**: Control/Context/Data classification system
-- **Memory**: AMMS (Active Memory Management System)
-- **MCP**: 13 Model Context Protocol tools
-- **Security**: Enterprise-grade security framework
-- **Monitoring**: Production monitoring and alerting
-- **ML**: Machine learning optimization
+- **Memory**: AMMS (Active Memory Management System) with quality gates
+- **MCP**: 13 Model Context Protocol tools for memory operations
+- **Tales**: Narrative management and context generation
+- **Errors**: Structured error handling and logging
+- **Utils**: Caching and utility functions
 
 ### Documentation (`docs/`)
+- **Core Docs**: README, Architecture, API reference, Quick start
+- **Quality Gates**: Comprehensive quality control documentation
 - **Analysis**: Technical deep-dive documents
-- **PRD**: Product requirements and specifications
-- **Reports**: Generated analysis and completion reports
-- **Core Docs**: Architecture, API reference, guides
+- **Images**: Documentation assets and diagrams
 
-### Infrastructure (`infrastructure/`)
-- **Docker**: Multi-service containerization
-- **Kubernetes**: Production orchestration
-- **CI/CD**: Automated deployment pipelines
-- **Multi-region**: Global deployment configuration
+### MCP Integration (`src/memmimic/mcp/`)
+- **13 Core Tools**: Memory management, search, and analytics
+- **Node.js Server**: MCP protocol bridge for Claude Desktop
+- **Python Handlers**: Async/sync compatibility layer
+- **Performance Monitoring**: Real-time metrics and optimization
 
 ### Testing (`tests/`)
-- Unit tests for all components
-- Integration testing
+- Memory system unit tests
+- CXD classification tests
+- MCP integration tests
 - Performance benchmarks
-- Security regression tests
-- End-to-end validation
+- Quality gate validation
 
-## Archive Contents (`.archive/`)
-Moved during cleanup:
-- Temporary database files
-- Development artifacts
-- Cache directories
-- Performance reports
-- Test files and logs
+## Cache Directories
+Runtimegenerated:
+- `cxd_cache/`: CXD classification model cache
+- `memmimic_cache/`: Memory operation cache
+- `*.db`: SQLite database files
 
-## Production Readiness
-✅ Security vulnerabilities resolved  
-✅ Modular architecture implemented  
-✅ Performance optimized  
-✅ Enterprise features deployed  
-✅ Comprehensive monitoring  
-✅ Documentation complete  
-✅ Clean project structure  
+## Core Features
+✅ AMMS memory management system  
+✅ Quality gate with semantic similarity  
+✅ CXD cognitive classification  
+✅ 13 production-ready MCP tools  
+✅ High-performance caching  
+✅ Streamlined architecture  
+✅ Complete documentation  
 
-## Next Steps
-1. Deploy using `infrastructure/k8s/` manifests
-2. Configure monitoring with `infrastructure/monitoring/`
-3. Set up CI/CD with `infrastructure/ci-cd/`
-4. Review security configuration in `src/memmimic/security/`
+## Usage
+1. Install dependencies: `pip install -r requirements.txt`
+2. Configure Claude Desktop MCP integration
+3. Initialize database: `python -c "from memmimic import create_memmimic; create_memmimic('memmimic.db')"`
+4. Test with: `python -m memmimic.mcp.memmimic_status`
 
 ---
-*Generated as part of MemMimic enterprise transformation - July 2025*
+*Updated after architecture cleanup - July 2025*

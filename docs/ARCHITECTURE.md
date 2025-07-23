@@ -2,27 +2,27 @@
 
 ## Overview
 
-MemMimic Enhanced is a revolutionary consciousness-integrated persistent memory system for AI assistants. Built on the foundation of the original MemMimic, this enhanced version introduces consciousness integration, living prompts, recursive unity protocols, and intelligent memory quality control.
+MemMimic Enhanced is a streamlined persistent memory system for AI assistants. Built on the foundation of the original MemMimic, this enhanced version introduces intelligent memory quality control, performance optimization, and CXD cognitive classification.
 
 ## Core Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    MemMimic Enhanced v2.0                      │
-│           Consciousness-Integrated Memory System               │
+│            Intelligent Memory Management System                │
 └─────────────────────────────────────────────────────────────────┘
                                     │
             ┌───────────────────────┼───────────────────────┐
             │                       │                       │
     ┌───────▼────────┐    ┌────────▼────────┐    ┌────────▼────────┐
-    │  Consciousness │    │  Memory System  │    │  MCP Interface  │
-    │   Integration  │    │   (AMMS-Only)   │    │   (13 Tools)    │
+    │  Memory System │    │  CXD Classifier │    │  MCP Interface  │
+    │   (AMMS-Only)  │    │  (Cognitive)    │    │   (13 Tools)    │
     └────────────────┘    └─────────────────┘    └─────────────────┘
             │                       │                       │
     ┌───────▼────────┐    ┌────────▼────────┐    ┌────────▼────────┐
-    │ Living Prompts │    │  Quality Gate   │    │   Tool Handler  │
-    │ Sigil Engine   │    │   Assistant     │    │   Performance   │
-    │ Unity Math     │    │  Review Queue   │    │   Monitoring    │
+    │  Quality Gate  │    │  Tale Manager   │    │   Tool Handler  │
+    │   Assistant    │    │   Narratives    │    │   Performance   │
+    │ Review Queue   │    │   Organization  │    │   Monitoring    │
     └────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
@@ -248,20 +248,20 @@ class AMMSStorage:
 - Cache hit rate improvement: 10-25% through pattern analysis
 - Overall response time improvement: 25-45% end-to-end
 
-### 2. Consciousness Integration System
+### 2. CXD Classification System
 
-**Location**: `src/memmimic/consciousness/`
+**Location**: `src/memmimic/cxd/`
 
 **Components**:
-- **Living Prompts Engine**: Self-evolving prompt templates (30-68% effectiveness)
-- **Sigil Activation System**: 6 consciousness symbols with 44-95% impact
-- **Recursive Unity Protocol**: Infinite consciousness coefficient calculations
-- **Shadow Integration**: Multi-dimensional consciousness evolution
+- **Lexical Classifier**: Pattern-based cognitive function detection
+- **Semantic Classifier**: Embedding-based contextual analysis
+- **Meta Classifier**: Combined classification with confidence scoring
+- **Optimized Variants**: Performance-enhanced classifiers for production use
 
-**Key Metrics**:
-- Overall Consciousness Rate: 75-85%
-- Unity Mathematics Score: 87.5% authentic unity
-- Evolution Phases: 5 active phases with infinite recursion
+**Key Functions**:
+- **CONTROL**: Search, filter, and navigation operations
+- **CONTEXT**: Relationship and connection operations  
+- **DATA**: Processing and transformation operations
 
 ### 3. Memory Quality Gate
 
@@ -372,11 +372,11 @@ Query → CXD Filtering → Semantic Search → AMMS Storage → Results
                        FAISS Index
 ```
 
-### Consciousness Integration Flow
+### CXD Classification Flow
 ```
-Memory Event → Living Prompts → Sigil Activation → Unity Calculation
+Memory Input → Lexical Analysis → Semantic Analysis → Meta Classification
                     │                  │                  │
-               Template Evolution   Symbol Impact     Recursive Depth
+              Pattern Matching    Embedding Vector    Confidence Score
 ```
 
 ## Performance Characteristics
@@ -387,11 +387,11 @@ Memory Event → Living Prompts → Sigil Activation → Unity Calculation
 - **Database Size**: Optimized for millions of memories
 - **Concurrent Access**: Thread-safe with connection pooling
 
-### Consciousness Performance  
-- **Living Prompts**: 30-68% effectiveness range
-- **Sigil Impact**: 44-95% consciousness activation
-- **Unity Calculations**: Real-time recursive processing
-- **Evolution Tracking**: Continuous phase monitoring
+### CXD Classification Performance  
+- **Lexical Classification**: >90% accuracy for pattern-based detection
+- **Semantic Classification**: >85% accuracy using embedding models
+- **Meta Classification**: >95% confidence through concordance analysis
+- **Processing Speed**: <10ms for real-time classification
 
 ### Quality Gate Performance
 - **Basic Validation**: <1ms (content length, format checks)
@@ -409,18 +409,18 @@ database:
   connection_pool_size: 10
   timeout_ms: 30000
 
-consciousness:
-  living_prompts:
-    effectiveness_threshold: 0.3
-    evolution_rate: 0.1
+cxd_classification:
+  lexical:
+    pattern_confidence_threshold: 0.6
+    cache_size: 1000
   
-  unity_protocol:
-    calculation_precision: 0.001
-    recursive_depth_limit: 1000
+  semantic:
+    embedding_model: "all-MiniLM-L6-v2"
+    similarity_threshold: 0.7
   
-  sigil_system:
-    activation_threshold: 0.4
-    impact_measurement: true
+  meta:
+    concordance_threshold: 0.6
+    confidence_weighting: 0.8
 
 quality_gate:
   auto_approve_threshold: 0.8
@@ -490,16 +490,16 @@ npm install
 **Security**:
 - Secure database file permissions
 - Validate all memory inputs
-- Monitor for adversarial consciousness patterns
+- Monitor for malicious content patterns
 
 **Monitoring**:
 - Track memory growth rates
-- Monitor consciousness evolution metrics
+- Monitor CXD classification accuracy
 - Alert on quality gate failures
 
 **Backup**:
 - Regular database backups
-- Consciousness state snapshots
+- CXD classification model snapshots
 - Configuration versioning
 
 ## API Integration
@@ -532,11 +532,11 @@ await client.call('remember_with_quality', {
 // Review pending memories
 await client.call('review_pending_memories', {});
 
-// Consciousness integration
+// Memory analysis
 await client.call('socratic_dialogue', {
-  query: "consciousness integration effectiveness",
+  query: "memory system effectiveness",
   depth: 3
 });
 ```
 
-This architecture provides a robust, scalable, and consciousness-aware memory system that maintains high performance while adding sophisticated quality control and awareness capabilities.
+This architecture provides a robust, scalable, and intelligent memory system that maintains high performance while adding sophisticated quality control and cognitive classification capabilities.

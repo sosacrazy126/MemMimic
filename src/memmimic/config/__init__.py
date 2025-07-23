@@ -10,15 +10,7 @@ import yaml
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-# Import security module
-from .security import (
-    SecureCredentials,
-    CredentialSecurityError,
-    load_secure_credentials,
-    get_credentials,
-    initialize_credentials,
-    audit_credential_security
-)
+# Security module removed - basic config only
 
 class PerformanceConfig:
     """Performance configuration manager for MemMimic"""
@@ -173,11 +165,5 @@ def reload_config():
 __all__ = [
     'PerformanceConfig',
     'get_performance_config',
-    'reload_config',
-    'SecureCredentials',
-    'CredentialSecurityError',
-    'load_secure_credentials',
-    'get_credentials',
-    'initialize_credentials',
-    'audit_credential_security'
+    'reload_config'
 ]

@@ -655,21 +655,12 @@ class TestBackwardCompatibility(ComponentTestSuite):
                     'error': str(e)
                 })
             
-            # Test security system if available
-            try:
-                from memmimic.security import validate_input
-                security_result = validate_input("test input", "memory")
-                security_works = security_result is not None
-                functionality_tests.append({
-                    'feature': 'Security System',
-                    'success': security_works
-                })
-            except Exception as e:
-                functionality_tests.append({
-                    'feature': 'Security System', 
-                    'success': False,
-                    'error': str(e)
-                })
+            # Security system removed in enterprise cleanup
+            functionality_tests.append({
+                'feature': 'Security System', 
+                'success': False,
+                'error': 'Security module removed'
+            })
             
             # Report functionality results
             working_features = sum(1 for test in functionality_tests if test['success'])

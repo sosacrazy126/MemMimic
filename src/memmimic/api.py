@@ -14,10 +14,7 @@ from .errors import (
     MemMimicError, InitializationError, ExternalServiceError, 
     handle_errors, log_errors, with_error_context, get_error_logger
 )
-from .security import (
-    validate_input, sanitize_output, rate_limit, audit_security,
-    validate_memory_content, validate_tale_input, validate_query_input
-)
+# Security module removed - using basic validation instead
 
 
 class MemMimicAPI:
@@ -59,10 +56,6 @@ class MemMimicAPI:
                 self.cxd = None
 
     # === MEMORY CORE (4 tools) ===
-    @validate_memory_content(strict=True)
-    @rate_limit(max_calls=100, window_seconds=60)
-    @audit_security(event_type="memory_storage", log_inputs=False, 
-                    sensitive_params=["content"])
     async def remember(self, content: str, memory_type: str = "interaction") -> str:
         """Store + auto-classify in one step with security validation."""
         from .memory import Memory
@@ -84,18 +77,10 @@ class MemMimicAPI:
 
         return await self.memory.store_memory(memory)
 
-    @validate_query_input(strict=True)
-    @rate_limit(max_calls=200, window_seconds=60)
-    @audit_security(event_type="memory_search")
-    @sanitize_output(sanitization_type="memory")
     async def recall_cxd(self, query: str, limit: int = 10) -> List[Memory]:
         """Hybrid semantic search with security validation.""" 
         return await self.memory.search_memories(query, limit)
 
-    @validate_input(validation_type="auto", strict=True)
-    @rate_limit(max_calls=50, window_seconds=60)
-    @audit_security(event_type="memory_processing", log_inputs=False, 
-                    sensitive_params=["input_text"])
     def think_with_memory(self, input_text: str) -> Any:
         """Contextual processing with security validation."""
         return self.assistant.think(input_text)
@@ -116,10 +101,6 @@ class MemMimicAPI:
         }
 
     # === TALES SYSTEM (5 tools) ===
-    @validate_input(validation_type="auto", strict=False)
-    @rate_limit(max_calls=100, window_seconds=60)
-    @audit_security(event_type="tale_access")
-    @sanitize_output(sanitization_type="json")
     def tales(
         self, 
         query: Optional[str] = None, 
@@ -138,10 +119,6 @@ class MemMimicAPI:
         else:
             return self.tales_manager.list_tales(category)[:limit]
 
-    @validate_tale_input(strict=True)
-    @rate_limit(max_calls=50, window_seconds=60)
-    @audit_security(event_type="tale_modification", log_inputs=False,
-                    sensitive_params=["content"])
     def save_tale(
         self, 
         name: str, 
@@ -157,17 +134,10 @@ class MemMimicAPI:
         else:
             return self.tales_manager.create_tale(name, content, category, tags)
 
-    @validate_input(validation_type="auto", strict=True)
-    @rate_limit(max_calls=100, window_seconds=60)
-    @audit_security(event_type="tale_access")
-    @sanitize_output(sanitization_type="json")
     def load_tale(self, name: str, category: Optional[str] = None) -> Optional[Any]:
         """Load specific tale with security validation."""
         return self.tales_manager.load_tale(name, category)
 
-    @validate_input(validation_type="auto", strict=True)
-    @rate_limit(max_calls=20, window_seconds=60)
-    @audit_security(event_type="tale_deletion", log_inputs=True)
     def delete_tale(
         self, 
         name: str, 

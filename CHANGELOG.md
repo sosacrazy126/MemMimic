@@ -5,6 +5,27 @@ All notable changes to MemMimic will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2025-07-23 - Architecture Cleanup
+
+### 🧹 Major Architecture Cleanup
+- **REMOVED**: Enterprise modules (monitoring/, security/, telemetry/, ml/, experimental/)
+- **REMOVED**: Consciousness features (sigils, shadows, recursive unity protocols)
+- **STREAMLINED**: Focus on core memory management and MCP tools
+- **SIMPLIFIED**: Clean, maintainable architecture with 13 core MCP tools
+
+### 📚 Documentation Updates
+- **UPDATED**: All documentation to reflect streamlined architecture
+- **REMOVED**: Enterprise deployment guides and security documentation
+- **REFRESHED**: README.md, ARCHITECTURE.md, API_REFERENCE.md, QUICKSTART.md
+- **FOCUSED**: Emphasis on memory quality, CXD classification, and performance
+
+### 🎯 Core Features Retained
+- **KEPT**: Active Memory Management System (AMMS)
+- **KEPT**: Quality gate system with intelligent approval workflow
+- **KEPT**: CXD classification (Control/Context/Data cognitive functions)
+- **KEPT**: 13 production-ready MCP tools
+- **KEPT**: High-performance caching and connection pooling
+
 ## [2.1.0] - 2025-07-21 - Security & Performance Enhanced
 
 ### 🚨 Critical Security Fixes
