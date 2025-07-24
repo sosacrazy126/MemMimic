@@ -378,6 +378,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   
   try {
     log(`Tool called: ${name}`);
+    log(`Arguments received: ${JSON.stringify(args)}`);
     
     switch (name) {
       // 🔍 SEARCH CORE (Enhanced with Nervous System Intelligence)
@@ -393,7 +394,32 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       
       // 🧠 MEMORY CORE (Enhanced with Nervous System Intelligence)
       case 'remember': {
+        log(`Remember args received: ${JSON.stringify(args)}`);
+        
         const { content, memory_type = 'interaction' } = args;
+        
+        // Validate content parameter
+        if (!content || typeof content !== 'string') {
+          return { 
+            content: [{ 
+              type: 'text', 
+              text: `❌ Error: 'content' parameter must be a non-empty string. Received: ${typeof content}` 
+            }],
+            isError: true
+          };
+        }
+        
+        // Validate memory_type parameter
+        if (memory_type && typeof memory_type !== 'string') {
+          return { 
+            content: [{ 
+              type: 'text', 
+              text: `❌ Error: 'memory_type' parameter must be a string. Received: ${typeof memory_type}` 
+            }],
+            isError: true
+          };
+        }
+        
         const result = await runPythonTool('memmimic_nervous_remember', [content, memory_type]);
         return { content: [{ type: 'text', text: result }] };
       }
