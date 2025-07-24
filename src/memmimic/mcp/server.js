@@ -313,44 +313,6 @@ const MEMMIMIC_TOOLS = {
     }
   },
   
-  // 🔧 MEMORY MANAGEMENT (3)
-  update_memory_guided: {
-    name: 'update_memory_guided',
-    description: 'Update memory with Socratic guidance',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        memory_id: {
-          type: 'number',
-          description: 'ID of memory to update'
-        }
-      },
-      required: ['memory_id']
-    }
-  },
-  
-  delete_memory_guided: {
-    name: 'delete_memory_guided',
-    description: 'Delete memory with guided analysis',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        memory_id: {
-          type: 'number',
-          description: 'ID of memory to delete'
-        },
-        confirm: {
-          type: 'boolean',
-          description: 'Confirm deletion',
-          default: false
-        }
-      },
-      required: ['memory_id']
-    }
-  },
-  
-  // analyze_memory_patterns internalized into recall_cxd trigger
-
   // 🤖 AGENT GUIDANCE (2)
   update_memory_guided: {
     name: 'update_memory_guided',
@@ -501,43 +463,25 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return { content: [{ type: 'text', text: result }] };
       }
       
-      // 🔧 MEMORY MANAGEMENT
-      case 'update_memory_guided': {
-        const { memory_id } = args;
-        
-        if (!memory_id && memory_id !== 0) {
-          return { content: [{ type: 'text', text: '❌ Error: memory_id is required' }] };
-        }
-        
-        const result = await runPythonTool('memmimic_update_memory_guided', [memory_id.toString()]);
-        return { content: [{ type: 'text', text: result }] };
-      }
-      
-      case 'delete_memory_guided': {
-        const { memory_id, confirm = false } = args;
-        
-        if (!memory_id && memory_id !== 0) {
-          return { content: [{ type: 'text', text: '❌ Error: memory_id is required' }] };
-        }
-        
-        const pythonArgs = [memory_id.toString()];
-        if (confirm) pythonArgs.push('--confirm');
-        
-        const result = await runPythonTool('memmimic_delete_memory_guided', pythonArgs);
-        return { content: [{ type: 'text', text: result }] };
-      }
-      
-      // analyze_memory_patterns internalized into recall_cxd trigger
-
       // 🤖 AGENT GUIDANCE
       case 'update_memory_guided': {
         const { memory_id } = args;
+        
+        if (!memory_id && memory_id !== 0) {
+          return { content: [{ type: 'text', text: '❌ Error: memory_id is required' }] };
+        }
+        
         const result = await runPythonTool('memmimic_update_memory_guided', [memory_id.toString()]);
         return { content: [{ type: 'text', text: result }] };
       }
 
       case 'delete_memory_guided': {
         const { memory_id, confirm = false } = args;
+        
+        if (!memory_id && memory_id !== 0) {
+          return { content: [{ type: 'text', text: '❌ Error: memory_id is required' }] };
+        }
+        
         const pythonArgs = [memory_id.toString()];
         if (confirm) pythonArgs.push('--confirm');
 
