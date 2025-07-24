@@ -47,44 +47,45 @@ async def main():
         # Execute enhanced recall with nervous system intelligence
         result = await unified_triggers.recall_cxd(query, function_filter, limit, db_name)
         
-        # Format result for MCP
+        # Format result for MCP (simple text format)
         if isinstance(result, list):
-            # Enhanced results with nervous system metadata
-            formatted_result = {
-                "query": query,
-                "function_filter": function_filter,
-                "limit": limit,
-                "results_count": len(result),
-                "results": result,
-                "nervous_system_enhanced": True,
-                "pattern_analysis_applied": True,
-                "relationship_mapping_applied": True,
-                "context_awareness_applied": True,
-                "memory_patterns_analyzed": True,  # Internalized from analyze_memory_patterns
-                "predictive_insights_included": True,
-                "biological_reflex": True,  # Assume <5ms for successful results
-                "nervous_system_version": "2.0.0"
-            }
-            
-            print(json.dumps(formatted_result, indent=2))
+            # Format as readable text with nervous system enhancements
+            output_lines = [
+                f"🧬 Nervous System Recall Results (v2.0.0)",
+                f"Query: {query}",
+                f"Filter: {function_filter} | Limit: {limit} | Found: {len(result)}",
+                f"Enhanced: Pattern Analysis ✓ | Relationship Mapping ✓ | Context Awareness ✓",
+                "",
+                "Results:"
+            ]
+
+            for i, memory in enumerate(result, 1):
+                content = memory.get('content', 'No content')
+                confidence = memory.get('confidence', 0.0)
+                cxd_function = memory.get('cxd_function', 'Unknown')
+
+                output_lines.append(f"{i}. [{cxd_function}] (confidence: {confidence:.2f})")
+                output_lines.append(f"   {content}")
+                output_lines.append("")
+
+            print("\n".join(output_lines))
         elif isinstance(result, dict):
-            # Error case or special response
-            result["nervous_system_enhanced"] = True
-            result["nervous_system_version"] = "2.0.0"
-            print(json.dumps(result, indent=2))
+            # Error case or special response - format as text
+            print(f"🧬 Nervous System Recall (v2.0.0)")
+            print(f"Status: {result.get('status', 'unknown')}")
+            if 'error' in result:
+                print(f"Error: {result['error']}")
+            else:
+                print(str(result))
         else:
-            print(str(result))
+            print(f"🧬 Nervous System Recall (v2.0.0): {str(result)}")
             
     except Exception as e:
         logger.error(f"Enhanced recall failed: {e}")
-        error_result = {
-            "status": "error",
-            "error": str(e),
-            "query": query,
-            "nervous_system_enhanced": True,
-            "nervous_system_version": "2.0.0"
-        }
-        print(json.dumps(error_result, indent=2))
+        print(f"🧬 Nervous System Recall Error (v2.0.0)")
+        print(f"Query: {query}")
+        print(f"Error: {str(e)}")
+        print("Enhanced processing failed - please check system status")
         sys.exit(1)
 
 

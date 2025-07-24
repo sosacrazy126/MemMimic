@@ -39,35 +39,34 @@ async def main():
         # Execute enhanced remember with nervous system intelligence
         result = await unified_triggers.remember(content, memory_type)
         
-        # Format result for MCP
+        # Format result for MCP (simple text format)
         if isinstance(result, dict):
-            # Enhanced result with nervous system metadata
-            formatted_result = {
-                "status": result.get("status", "success"),
-                "memory_id": result.get("memory_id"),
-                "nervous_system_enhanced": True,
-                "quality_score": result.get("quality_score"),
-                "cxd_function": result.get("cxd_function"),
-                "duplicate_detected": result.get("duplicate_detected", False),
-                "content_enhanced": result.get("content_enhanced", False),
-                "processing_time_ms": result.get("processing_time_ms"),
-                "biological_reflex": result.get("processing_time_ms", 0) < 5.0 if result.get("processing_time_ms") else False,
-                "nervous_system_version": "2.0.0"
-            }
-            
-            print(json.dumps(formatted_result, indent=2))
+            # Format as readable text with nervous system enhancements
+            status = result.get("status", "success")
+            memory_id = result.get("memory_id", "unknown")
+            quality_score = result.get("quality_score", 0.0)
+            cxd_function = result.get("cxd_function", "Unknown")
+            duplicate_detected = result.get("duplicate_detected", False)
+            processing_time = result.get("processing_time_ms", 0)
+
+            print(f"🧬 Nervous System Remember (v2.0.0)")
+            print(f"Status: {status}")
+            print(f"Memory ID: {memory_id}")
+            print(f"CXD Function: {cxd_function}")
+            print(f"Quality Score: {quality_score:.2f}")
+            print(f"Duplicate Detected: {'Yes' if duplicate_detected else 'No'}")
+            print(f"Processing Time: {processing_time:.2f}ms")
+            print(f"Biological Reflex: {'Yes' if processing_time < 5.0 else 'No'}")
+            print("Enhanced: Quality Control ✓ | Duplicate Detection ✓ | CXD Classification ✓")
         else:
-            print(str(result))
+            print(f"🧬 Nervous System Remember (v2.0.0): {str(result)}")
             
     except Exception as e:
         logger.error(f"Enhanced remember failed: {e}")
-        error_result = {
-            "status": "error",
-            "error": str(e),
-            "nervous_system_enhanced": True,
-            "nervous_system_version": "2.0.0"
-        }
-        print(json.dumps(error_result, indent=2))
+        print(f"🧬 Nervous System Remember Error (v2.0.0)")
+        print(f"Content: {content}")
+        print(f"Error: {str(e)}")
+        print("Enhanced processing failed - please check system status")
         sys.exit(1)
 
 

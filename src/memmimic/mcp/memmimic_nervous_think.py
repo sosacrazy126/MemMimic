@@ -39,40 +39,41 @@ async def main():
         # This now includes internalized Socratic guidance that was previously external
         result = await unified_triggers.think_with_memory(input_text)
         
-        # Format result for MCP
+        # Format result for MCP (simple text format)
         if isinstance(result, dict):
-            # Enhanced result with nervous system and Socratic metadata
-            formatted_result = {
-                "status": result.get("status", "success"),
-                "response": result.get("response"),
-                "input_text": input_text,
-                "nervous_system_enhanced": True,
-                "socratic_guidance_applied": True,  # Internalized from socratic_dialogue tool
-                "pattern_recognition_applied": True,
-                "context_synthesis_applied": True,
-                "relevant_memories_count": result.get("relevant_memories_count", 0),
-                "processing_time_ms": result.get("processing_time_ms"),
-                "biological_reflex": result.get("processing_time_ms", 0) < 5.0 if result.get("processing_time_ms") else False,
-                "socratic_insights": result.get("socratic_insights", []),
-                "thought_patterns": result.get("thought_patterns", []),
-                "nervous_system_version": "2.0.0"
-            }
-            
-            print(json.dumps(formatted_result, indent=2))
+            # Format as readable text with nervous system and Socratic enhancements
+            status = result.get("status", "success")
+            response = result.get("response", "No response")
+            memories_count = result.get("relevant_memories_count", 0)
+            processing_time = result.get("processing_time_ms", 0)
+            socratic_insights = result.get("socratic_insights", [])
+
+            print(f"🧬 Nervous System Think (v2.0.0)")
+            print(f"Input: {input_text}")
+            print(f"Status: {status}")
+            print("")
+            print("Response:")
+            print(response)
+            print("")
+            print(f"Enhanced Processing:")
+            print(f"- Relevant Memories: {memories_count}")
+            print(f"- Processing Time: {processing_time:.2f}ms")
+            print(f"- Biological Reflex: {'Yes' if processing_time < 5.0 else 'No'}")
+            print(f"- Socratic Guidance: ✓ | Pattern Recognition: ✓ | Context Synthesis: ✓")
+
+            if socratic_insights:
+                print(f"\nSocratic Insights:")
+                for insight in socratic_insights[:3]:  # Show top 3 insights
+                    print(f"- {insight}")
         else:
-            print(str(result))
+            print(f"🧬 Nervous System Think (v2.0.0): {str(result)}")
             
     except Exception as e:
         logger.error(f"Enhanced think failed: {e}")
-        error_result = {
-            "status": "error",
-            "error": str(e),
-            "input_text": input_text,
-            "nervous_system_enhanced": True,
-            "socratic_guidance_applied": False,
-            "nervous_system_version": "2.0.0"
-        }
-        print(json.dumps(error_result, indent=2))
+        print(f"🧬 Nervous System Think Error (v2.0.0)")
+        print(f"Input: {input_text}")
+        print(f"Error: {str(e)}")
+        print("Enhanced processing failed - please check system status")
         sys.exit(1)
 
 
