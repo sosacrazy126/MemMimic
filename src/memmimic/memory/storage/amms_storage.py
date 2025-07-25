@@ -284,13 +284,30 @@ class AMMSStorage:
             
             memories = []
             with self._get_connection() as conn:
-                cursor = conn.execute(
-                    """SELECT * FROM memories 
-                       WHERE content LIKE ? 
-                       ORDER BY importance_score DESC, created_at DESC 
-                       LIMIT ?""",
-                    (f"%{query}%", limit)
-                )
+                # Split query into words for better matching
+                query_words = query.lower().split()
+
+                if len(query_words) == 1:
+                    # Single word search - use simple LIKE
+                    cursor = conn.execute(
+                        """SELECT * FROM memories
+                           WHERE content LIKE ?
+                           ORDER BY importance_score DESC, created_at DESC
+                           LIMIT ?""",
+                        (f"%{query}%", limit)
+                    )
+                else:
+                    # Multi-word search - require all words to be present
+                    where_conditions = " AND ".join(["content LIKE ?" for _ in query_words])
+                    like_params = [f"%{word}%" for word in query_words]
+
+                    cursor = conn.execute(
+                        f"""SELECT * FROM memories
+                            WHERE {where_conditions}
+                            ORDER BY importance_score DESC, created_at DESC
+                            LIMIT ?""",
+                        like_params + [limit]
+                    )
                 
                 for row in cursor.fetchall():
                     # Safely parse metadata JSON
@@ -300,6 +317,24 @@ class AMMSStorage:
                         self.logger.warning(f"Invalid metadata for memory {row['id']}, using empty dict")
                         metadata = {}
                     
+                    # Calculate basic text similarity for confidence scoring
+                    query_lower = query.lower()
+                    content_lower = row['content'].lower()
+
+                    # Simple similarity calculation based on word overlap
+                    query_words = set(query_lower.split())
+                    content_words = set(content_lower.split())
+
+                    if query_words and content_words:
+                        overlap = len(query_words.intersection(content_words))
+                        similarity = overlap / len(query_words.union(content_words))
+                    else:
+                        similarity = 0.0
+
+                    # Add similarity to metadata for confidence scoring
+                    metadata['search_similarity'] = similarity
+                    metadata['search_query'] = query
+
                     memory = Memory(
                         id=str(row['id']),
                         content=row['content'],

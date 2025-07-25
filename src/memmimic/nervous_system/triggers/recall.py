@@ -368,8 +368,12 @@ class NervousSystemRecall:
         """
         # Calculate composite scores for each result
         for result_data in pattern_analyzed_results:
+            memory = result_data['memory']
+            # Use actual search similarity from AMMS storage
+            search_similarity = getattr(memory, 'metadata', {}).get('search_similarity', 0.5)
+
             scores = {
-                'semantic_similarity': 0.8,  # Would use actual similarity from search
+                'semantic_similarity': search_similarity,  # Use actual similarity from search
                 'relationship_strength': result_data['connection_score'],
                 'recency': 0.7,  # Would calculate from timestamp
                 'quality_score': result_data.get('pattern_analysis', {}).get('insight_potential', 0.5),
@@ -441,11 +445,21 @@ class NervousSystemRecall:
             memory = result_data['memory']
             
             # Base format (maintains compatibility)
+            metadata = getattr(memory, 'metadata', {})
+            # Extract CXD function from metadata (check multiple locations)
+            cxd_function = (
+                metadata.get('cxd_function') or
+                metadata.get('cxd', {}).get('function') or
+                'Data'  # Default to Data instead of Unknown
+            )
+
             formatted_result = {
                 'memory_id': getattr(memory, 'id', f'mem_{i}'),
                 'content': memory.content,
-                'metadata': getattr(memory, 'metadata', {}),
+                'metadata': metadata,
                 'relevance_score': result_data['composite_score'],
+                'confidence': result_data['composite_score'],  # Add confidence field for MCP compatibility
+                'cxd_function': cxd_function,  # Add CXD function for MCP
                 'rank': i + 1
             }
             

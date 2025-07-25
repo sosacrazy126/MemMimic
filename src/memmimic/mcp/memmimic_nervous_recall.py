@@ -61,8 +61,16 @@ async def main():
 
             for i, memory in enumerate(result, 1):
                 content = memory.get('content', 'No content')
-                confidence = memory.get('confidence', 0.0)
-                cxd_function = memory.get('cxd_function', 'Unknown')
+                # Fix: Use relevance_score instead of confidence
+                confidence = memory.get('relevance_score', memory.get('confidence', 0.0))
+                # Fix: Get CXD function from metadata (check multiple possible locations)
+                metadata = memory.get('metadata', {})
+                cxd_function = (
+                    metadata.get('cxd_function') or
+                    metadata.get('cxd', {}).get('function') or
+                    memory.get('intelligence_analysis', {}).get('cxd_function') or
+                    'Data'  # Default to Data instead of Unknown
+                )
 
                 output_lines.append(f"{i}. [{cxd_function}] (confidence: {confidence:.2f})")
                 output_lines.append(f"   {content}")
