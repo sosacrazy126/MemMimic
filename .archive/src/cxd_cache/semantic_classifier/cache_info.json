@@ -1,7 +1,0 @@
-{
-  "created_at": 1750417807.7675722,
-  "vector_store_type": "FAISSVectorStore",
-  "embedding_model": "Cached(all-MiniLM-L6-v2)",
-  "examples_count": 0,
-  "dimension": 384
-}

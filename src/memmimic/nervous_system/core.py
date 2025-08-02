@@ -8,11 +8,13 @@ Performance Target: <5ms response time through intelligent caching and parallel 
 """
 
 import asyncio
+import os
 import time
 from typing import Dict, Any, Optional, List
 from functools import lru_cache
 from dataclasses import dataclass, field
 import logging
+from pathlib import Path
 
 from .interfaces import (
     QualityGateInterface,
@@ -25,6 +27,15 @@ from .interfaces import (
 from ..memory.storage.amms_storage import Memory, create_amms_storage
 from ..cxd import create_optimized_classifier
 from ..errors import MemMimicError, with_error_context, get_error_logger
+from ..synergy import CognitiveSynergyEngine, PatternLibrary
+from ..evolution import (
+    MemoryEvolutionTracker, 
+    MemoryLifecycleManager, 
+    MemoryUsageAnalytics,
+    MemoryEvolutionMetrics,
+    MemoryEventType,
+    create_evolution_system
+)
 
 @dataclass
 class NervousSystemMetrics:
@@ -47,7 +58,8 @@ class NervousSystemCore:
     """
     
     def __init__(self, db_path: str = "memmimic.db", cache_size: int = 1000):
-        self.db_path = db_path
+        # Resolve database path intelligently
+        self.db_path = self._resolve_db_path(db_path)
         self.cache_size = cache_size
         self.logger = get_error_logger("nervous_system_core")
         
@@ -64,6 +76,18 @@ class NervousSystemCore:
         self._cxd_classifier = None
         self._initialized = False
         
+        # Exponential collaboration components
+        self._synergy_engine = None
+        self._pattern_library = None
+        self._exponential_mode_active = False
+        
+        # Memory evolution tracking components
+        self._evolution_tracker = None
+        self._lifecycle_manager = None
+        self._usage_analytics = None
+        self._evolution_metrics = None
+        self._evolution_system_initialized = False
+        
         # LRU caches for <5ms performance
         self._setup_performance_caches()
     
@@ -76,6 +100,39 @@ class NervousSystemCore:
         
         # Performance monitoring
         self._operation_times = []
+    
+    def _resolve_db_path(self, db_path: str) -> str:
+        """
+        Intelligently resolve database path for different execution contexts.
+        
+        Handles cases when running from:
+        - MCP directory: ./memmimic.db
+        - Project root: src/memmimic/mcp/memmimic.db
+        - Absolute path: use as provided
+        """
+        # If already absolute path, use it
+        if os.path.isabs(db_path):
+            return db_path
+            
+        # Try current working directory first (for MCP context)
+        cwd_path = Path.cwd() / db_path
+        if cwd_path.exists():
+            return str(cwd_path)
+            
+        # Try MCP directory relative to this file
+        current_file = Path(__file__)
+        mcp_dir = current_file.parent.parent / "mcp"
+        mcp_path = mcp_dir / db_path
+        if mcp_path.exists():
+            return str(mcp_path)
+            
+        # Try project structure path
+        project_path = Path.cwd() / "src" / "memmimic" / "mcp" / db_path
+        if project_path.exists():
+            return str(project_path)
+            
+        # Default to current working directory (let it create if needed)
+        return str(cwd_path)
     
     async def initialize(self) -> None:
         """
@@ -103,12 +160,28 @@ class NervousSystemCore:
                     quality_task = tg.create_task(self._initialize_quality_gate())
                     duplicate_task = tg.create_task(self._initialize_duplicate_detector())
                     socratic_task = tg.create_task(self._initialize_socratic_guidance())
+                    
+                    # Exponential collaboration components
+                    synergy_task = tg.create_task(self._initialize_synergy_engine())
+                    pattern_task = tg.create_task(self._initialize_pattern_library())
+                    
+                    # Memory evolution tracking
+                    evolution_task = tg.create_task(self._initialize_evolution_system())
                 
                 self._amms_storage = storage_task.result()
                 self._cxd_classifier = classifier_task.result()
                 self._quality_gate = quality_task.result()
                 self._duplicate_detector = duplicate_task.result()
                 self._socratic_guidance = socratic_task.result()
+                self._synergy_engine = synergy_task.result()
+                self._pattern_library = pattern_task.result()
+                
+                # Initialize evolution system
+                evolution_results = evolution_task.result()
+                if evolution_results:
+                    (self._evolution_tracker, self._lifecycle_manager, 
+                     self._usage_analytics, self._evolution_metrics, _) = evolution_results
+                    self._evolution_system_initialized = True
                 
                 self._initialized = True
                 init_time = (time.perf_counter() - start_time) * 1000
@@ -459,3 +532,239 @@ class NervousSystemCore:
             health['performance_warning'] = f"Average response time {self.metrics.average_response_time_ms:.2f}ms exceeds 5ms target"
         
         return health
+    
+    async def _initialize_synergy_engine(self) -> CognitiveSynergyEngine:
+        """Initialize cognitive synergy engine for exponential collaboration"""
+        try:
+            synergy_engine = CognitiveSynergyEngine()
+            
+            # Activate exponential mode by default
+            await synergy_engine.activate_exponential_mode(
+                project="MemMimic Nervous System",
+                goal="Exponential Human-AI Collaboration",
+                mode=None  # Will auto-detect from context
+            )
+            
+            self.logger.info("Cognitive Synergy Engine initialized successfully")
+            return synergy_engine
+            
+        except Exception as e:
+            self.logger.error(f"Failed to initialize synergy engine: {e}")
+            raise MemMimicError(f"Synergy engine initialization failed: {e}")
+    
+    async def _initialize_pattern_library(self) -> PatternLibrary:
+        """Initialize pattern library for collaboration pattern management"""
+        try:
+            pattern_library = PatternLibrary()
+            
+            self.logger.info("Pattern Library initialized with core collaboration patterns")
+            return pattern_library
+            
+        except Exception as e:
+            self.logger.error(f"Failed to initialize pattern library: {e}")
+            raise MemMimicError(f"Pattern library initialization failed: {e}")
+    
+    async def _initialize_evolution_system(self) -> Optional[tuple]:
+        """Initialize memory evolution tracking system"""
+        try:
+            # Create evolution database path based on main database
+            evolution_db_path = self.db_path.replace('.db', '_evolution.db')
+            
+            # Create complete evolution system
+            evolution_components = create_evolution_system(
+                db_path=evolution_db_path,
+                config={
+                    'reports_directory': 'evolution_reports',
+                    'benchmarks': {
+                        'usage_frequency_target': 0.5,
+                        'efficiency_target': 0.8
+                    }
+                }
+            )
+            
+            self.logger.info(
+                f"Memory evolution system initialized with database: {evolution_db_path}",
+                extra={"evolution_db": evolution_db_path}
+            )
+            
+            return evolution_components
+            
+        except Exception as e:
+            self.logger.warning(f"Failed to initialize evolution system: {e}")
+            # Don't fail the entire nervous system if evolution tracking fails
+            return None
+    
+    async def activate_exponential_mode(self, project: str = None, goal: str = None) -> Dict[str, Any]:
+        """Activate exponential collaboration mode for this nervous system instance"""
+        if not self._initialized:
+            await self.initialize()
+        
+        if not self._synergy_engine:
+            raise MemMimicError("Synergy engine not initialized")
+        
+        result = await self._synergy_engine.activate_exponential_mode(project, goal)
+        self._exponential_mode_active = True
+        
+        self.logger.info(
+            f"Exponential collaboration mode activated: {result.get('context', 'Unknown context')}",
+            extra={"exponential_mode": True, "project": project, "goal": goal}
+        )
+        
+        return result
+    
+    async def process_with_exponential_intelligence(self, input_data: str, 
+                                                   human_context: Dict[str, Any] = None) -> Dict[str, Any]:
+        """Process input using exponential collaboration patterns"""
+        if not self._initialized:
+            await self.initialize()
+        
+        if not self._synergy_engine:
+            # Fallback to normal processing
+            return await self.process_intelligence_request(input_data, "interaction")
+        
+        # Apply exponential processing
+        synergy_result = await self._synergy_engine.process_with_synergy(input_data, human_context)
+        
+        # Extract and evolve patterns
+        if self._pattern_library and synergy_result.get("patterns_matched", 0) > 0:
+            await self._pattern_library.evolve_patterns(evolution_pressure=0.1)
+        
+        return synergy_result
+    
+    def get_synergy_metrics(self) -> Dict[str, Any]:
+        """Get exponential collaboration performance metrics"""
+        if not self._synergy_engine or not self._pattern_library:
+            return {"exponential_mode": False, "synergy_available": False}
+        
+        synergy_metrics = self._synergy_engine.get_performance_metrics()
+        pattern_metrics = self._pattern_library.get_pattern_metrics()
+        
+        return {
+            "exponential_mode": self._exponential_mode_active,
+            "synergy_available": True,
+            "synergy_metrics": synergy_metrics,
+            "pattern_metrics": pattern_metrics,
+            "cognitive_fusion_active": True
+        }
+    
+    # Memory Evolution Tracking Methods
+    
+    async def track_memory_creation(self, memory: Memory) -> None:
+        """Track memory creation event for evolution analysis"""
+        if not self._evolution_system_initialized or not self._lifecycle_manager:
+            return
+        
+        try:
+            # Track memory creation in lifecycle manager
+            await self._lifecycle_manager.track_memory_creation(memory)
+            
+            # Track creation event in evolution tracker
+            if self._evolution_tracker:
+                await self._evolution_tracker.track_event(
+                    memory_id=memory.id,
+                    event_type=MemoryEventType.CREATED,
+                    context={
+                        'memory_type': memory.metadata.get('type', 'unknown'),
+                        'importance': memory.importance_score,
+                        'content_length': len(memory.content)
+                    },
+                    trigger='nervous_system_remember'
+                )
+            
+        except Exception as e:
+            self.logger.debug(f"Failed to track memory creation: {e}")
+    
+    async def track_memory_access(self, memory_id: str, access_type: str = "accessed", 
+                                context: Dict[str, Any] = None) -> None:
+        """Track memory access event for evolution analysis"""
+        if not self._evolution_system_initialized or not self._evolution_tracker:
+            return
+        
+        try:
+            # Track access event
+            await self._evolution_tracker.track_event(
+                memory_id=memory_id,
+                event_type=MemoryEventType.ACCESSED if access_type == "accessed" else MemoryEventType.RECALLED,
+                context=context or {},
+                trigger='nervous_system_recall'
+            )
+            
+            # Update lifecycle activity
+            if self._lifecycle_manager:
+                await self._lifecycle_manager.update_memory_activity(
+                    memory_id=memory_id,
+                    activity_type=access_type,
+                    context=context
+                )
+            
+        except Exception as e:
+            self.logger.debug(f"Failed to track memory access: {e}")
+    
+    async def track_memory_modification(self, memory_id: str, 
+                                      previous_state: Dict[str, Any] = None,
+                                      new_state: Dict[str, Any] = None,
+                                      trigger: str = "modification") -> None:
+        """Track memory modification event for evolution analysis"""
+        if not self._evolution_system_initialized or not self._evolution_tracker:
+            return
+        
+        try:
+            await self._evolution_tracker.track_event(
+                memory_id=memory_id,
+                event_type=MemoryEventType.MODIFIED,
+                context={'modification_trigger': trigger},
+                previous_state=previous_state,
+                new_state=new_state,
+                trigger=trigger
+            )
+            
+            # Update lifecycle activity
+            if self._lifecycle_manager:
+                await self._lifecycle_manager.update_memory_activity(
+                    memory_id=memory_id,
+                    activity_type="modified",
+                    context={'trigger': trigger}
+                )
+            
+        except Exception as e:
+            self.logger.debug(f"Failed to track memory modification: {e}")
+    
+    async def get_memory_evolution_insights(self, memory_id: str = None) -> Dict[str, Any]:
+        """Get evolution insights for a specific memory or system-wide"""
+        if not self._evolution_system_initialized:
+            return {"evolution_tracking": False, "message": "Evolution system not initialized"}
+        
+        try:
+            if memory_id:
+                # Get insights for specific memory
+                if self._evolution_metrics:
+                    score = await self._evolution_metrics.calculate_evolution_score(memory_id)
+                    return {
+                        "memory_id": memory_id,
+                        "evolution_score": score.overall_score,
+                        "health_flags": score.health_flags,
+                        "recommendations": score.recommendations,
+                        "trend": score.score_trend
+                    }
+            else:
+                # Get system-wide insights
+                if self._evolution_metrics:
+                    system_metrics = await self._evolution_metrics.calculate_system_metrics()
+                    return {
+                        "system_health": {
+                            "total_memories": system_metrics.total_memories,
+                            "avg_evolution_score": system_metrics.avg_evolution_score,
+                            "healthy_memories": system_metrics.healthy_memories
+                        },
+                        "optimization_opportunities": system_metrics.optimization_opportunities[:3]
+                    }
+            
+        except Exception as e:
+            self.logger.debug(f"Failed to get evolution insights: {e}")
+            return {"error": str(e)}
+        
+        return {"evolution_tracking": True, "data_available": False}
+    
+    def is_evolution_tracking_enabled(self) -> bool:
+        """Check if memory evolution tracking is enabled and operational"""
+        return self._evolution_system_initialized and self._evolution_tracker is not None

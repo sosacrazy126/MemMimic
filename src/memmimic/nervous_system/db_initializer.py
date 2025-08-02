@@ -5,10 +5,12 @@ Ensures proper database setup for enhanced triggers with memory storage.
 """
 
 import asyncio
+import os
 import sqlite3
 import time
 from typing import Optional
 import logging
+from pathlib import Path
 
 from ..memory.storage.amms_storage import AMMSStorage
 from ..errors import get_error_logger, with_error_context
@@ -22,9 +24,37 @@ class DatabaseInitializer:
     """
     
     def __init__(self, db_path: str = "memmimic.db"):
-        self.db_path = db_path
+        self.db_path = self._resolve_db_path(db_path)
         self.logger = get_error_logger("database_initializer")
         self._initialized = False
+    
+    def _resolve_db_path(self, db_path: str) -> str:
+        """
+        Intelligently resolve database path for different execution contexts.
+        """
+        # If already absolute path, use it
+        if os.path.isabs(db_path):
+            return db_path
+            
+        # Try current working directory first (for MCP context)
+        cwd_path = Path.cwd() / db_path
+        if cwd_path.exists():
+            return str(cwd_path)
+            
+        # Try MCP directory relative to this file
+        current_file = Path(__file__)
+        mcp_dir = current_file.parent.parent / "mcp"
+        mcp_path = mcp_dir / db_path
+        if mcp_path.exists():
+            return str(mcp_path)
+            
+        # Try project structure path
+        project_path = Path.cwd() / "src" / "memmimic" / "mcp" / db_path
+        if project_path.exists():
+            return str(project_path)
+            
+        # Default to current working directory (let it create if needed)
+        return str(cwd_path)
     
     async def initialize_database(self) -> bool:
         """
