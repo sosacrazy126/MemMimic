@@ -10,7 +10,7 @@ Performance Target: <5ms response time through intelligent caching and parallel 
 import asyncio
 import os
 import time
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Callable, Tuple
 from functools import lru_cache
 from dataclasses import dataclass, field
 import logging
@@ -27,15 +27,21 @@ from .interfaces import (
 from ..memory.storage.amms_storage import Memory, create_amms_storage
 from ..cxd import create_optimized_classifier
 from ..errors import MemMimicError, with_error_context, get_error_logger
-from ..synergy import CognitiveSynergyEngine, PatternLibrary
+# Synergy components removed - keeping core independent functionality
 from ..evolution import (
-    MemoryEvolutionTracker, 
-    MemoryLifecycleManager, 
+    MemoryEvolutionTracker,
+    MemoryLifecycleManager,
     MemoryUsageAnalytics,
     MemoryEvolutionMetrics,
     MemoryEventType,
     create_evolution_system
 )
+from .archive_intelligence import ArchiveIntelligence, EvolutionMetrics as ArchiveEvolutionMetrics
+from .phase_evolution_tracker import PhaseEvolutionTracker, PhaseStatus, TaskStatus
+from .tale_memory_binder import TaleMemoryBinder, NarrativeContext, BindingMetrics
+from .reflex_latency_optimizer import ReflexLatencyOptimizer, LatencyMetrics
+from .shared_reality_manager import SharedRealityManager, AgentRole, AgentIdentity
+from .theory_of_mind import TheoryOfMindCapabilities, MentalStateType, IntentionPrediction
 
 @dataclass
 class NervousSystemMetrics:
@@ -48,6 +54,16 @@ class NervousSystemMetrics:
     socratic_guidances: int = 0
     errors: int = 0
     last_performance_check: float = field(default_factory=time.time)
+
+    # Archive intelligence metrics
+    archive_patterns_applied: int = 0
+    cleanup_operations: int = 0
+    unused_components_detected: int = 0
+
+    # Phase evolution metrics
+    current_phase: Optional[str] = None
+    phase_progress: float = 0.0
+    completed_phases: int = 0
 
 class NervousSystemCore:
     """
@@ -76,10 +92,7 @@ class NervousSystemCore:
         self._cxd_classifier = None
         self._initialized = False
         
-        # Exponential collaboration components
-        self._synergy_engine = None
-        self._pattern_library = None
-        self._exponential_mode_active = False
+        # Core independent processing - no amplification noise
         
         # Memory evolution tracking components
         self._evolution_tracker = None
@@ -87,6 +100,16 @@ class NervousSystemCore:
         self._usage_analytics = None
         self._evolution_metrics = None
         self._evolution_system_initialized = False
+
+        # Archive intelligence and phase tracking
+        self._archive_intelligence = None
+        self._phase_tracker = None
+        self._tale_memory_binder = None
+
+        # MCP orchestration enhancement
+        self._latency_optimizer = None
+        self._shared_reality_manager = None
+        self._theory_of_mind = None
         
         # LRU caches for <5ms performance
         self._setup_performance_caches()
@@ -161,27 +184,44 @@ class NervousSystemCore:
                     duplicate_task = tg.create_task(self._initialize_duplicate_detector())
                     socratic_task = tg.create_task(self._initialize_socratic_guidance())
                     
-                    # Exponential collaboration components
-                    synergy_task = tg.create_task(self._initialize_synergy_engine())
-                    pattern_task = tg.create_task(self._initialize_pattern_library())
+                    # Core processing - no amplification components
                     
                     # Memory evolution tracking
                     evolution_task = tg.create_task(self._initialize_evolution_system())
+
+                    # Archive intelligence and phase tracking
+                    archive_task = tg.create_task(self._initialize_archive_intelligence())
+                    phase_task = tg.create_task(self._initialize_phase_tracker())
+                    tale_binder_task = tg.create_task(self._initialize_tale_memory_binder())
+
+                    # MCP orchestration enhancement
+                    latency_task = tg.create_task(self._initialize_latency_optimizer())
+                    reality_task = tg.create_task(self._initialize_shared_reality_manager())
+                    tom_task = tg.create_task(self._initialize_theory_of_mind())
                 
                 self._amms_storage = storage_task.result()
                 self._cxd_classifier = classifier_task.result()
                 self._quality_gate = quality_task.result()
                 self._duplicate_detector = duplicate_task.result()
                 self._socratic_guidance = socratic_task.result()
-                self._synergy_engine = synergy_task.result()
-                self._pattern_library = pattern_task.result()
+                # Core components initialized - no amplification noise
                 
                 # Initialize evolution system
                 evolution_results = evolution_task.result()
                 if evolution_results:
-                    (self._evolution_tracker, self._lifecycle_manager, 
+                    (self._evolution_tracker, self._lifecycle_manager,
                      self._usage_analytics, self._evolution_metrics, _) = evolution_results
                     self._evolution_system_initialized = True
+
+                # Initialize archive intelligence and phase tracking
+                self._archive_intelligence = archive_task.result()
+                self._phase_tracker = phase_task.result()
+                self._tale_memory_binder = tale_binder_task.result()
+
+                # Initialize MCP orchestration enhancement
+                self._latency_optimizer = latency_task.result()
+                self._shared_reality_manager = reality_task.result()
+                self._theory_of_mind = tom_task.result()
                 
                 self._initialized = True
                 init_time = (time.perf_counter() - start_time) * 1000
@@ -290,6 +330,12 @@ class NervousSystemCore:
                 if enable_socratic_guidance and self._socratic_guidance:
                     tasks['socratic'] = tg.create_task(
                         self._get_socratic_guidance_cached(content, memory_type)
+                    )
+
+                # Narrative enhancement (if tale-memory binder available)
+                if self._tale_memory_binder:
+                    tasks['narrative'] = tg.create_task(
+                        self._tale_memory_binder.enhance_memory_with_narrative(content, memory_type)
                     )
             
             # Collect results
@@ -419,6 +465,7 @@ class NervousSystemCore:
             'duplicate_analysis': results.get('duplicate'),
             'cxd_classification': results.get('cxd'),
             'socratic_guidance': results.get('socratic'),
+            'narrative_enhancement': results.get('narrative'),
             'recommended_action': 'store',  # Default action
             'confidence': 0.8,  # Default confidence
             'enhancement_needed': False,
@@ -449,7 +496,22 @@ class NervousSystemCore:
         cxd = results.get('cxd')
         if cxd:
             synthesis['storage_metadata']['cxd'] = cxd
-        
+
+        # Narrative enhancement metadata
+        narrative = results.get('narrative')
+        if narrative and narrative.get('narrative_context'):
+            synthesis['storage_metadata']['narrative'] = narrative
+
+            # Enhance CXD classification with narrative context
+            if narrative.get('enhanced_cxd'):
+                if 'cxd' not in synthesis['storage_metadata']:
+                    synthesis['storage_metadata']['cxd'] = {}
+                synthesis['storage_metadata']['cxd']['narrative_enhancement'] = narrative['enhanced_cxd']
+
+            # Add thematic tags
+            if narrative.get('thematic_tags'):
+                synthesis['storage_metadata']['thematic_tags'] = narrative['thematic_tags']
+
         return synthesis
     
     def _update_performance_metrics(self, processing_time_ms: float) -> None:
@@ -533,36 +595,7 @@ class NervousSystemCore:
         
         return health
     
-    async def _initialize_synergy_engine(self) -> CognitiveSynergyEngine:
-        """Initialize cognitive synergy engine for exponential collaboration"""
-        try:
-            synergy_engine = CognitiveSynergyEngine()
-            
-            # Activate exponential mode by default
-            await synergy_engine.activate_exponential_mode(
-                project="MemMimic Nervous System",
-                goal="Exponential Human-AI Collaboration",
-                mode=None  # Will auto-detect from context
-            )
-            
-            self.logger.info("Cognitive Synergy Engine initialized successfully")
-            return synergy_engine
-            
-        except Exception as e:
-            self.logger.error(f"Failed to initialize synergy engine: {e}")
-            raise MemMimicError(f"Synergy engine initialization failed: {e}")
-    
-    async def _initialize_pattern_library(self) -> PatternLibrary:
-        """Initialize pattern library for collaboration pattern management"""
-        try:
-            pattern_library = PatternLibrary()
-            
-            self.logger.info("Pattern Library initialized with core collaboration patterns")
-            return pattern_library
-            
-        except Exception as e:
-            self.logger.error(f"Failed to initialize pattern library: {e}")
-            raise MemMimicError(f"Pattern library initialization failed: {e}")
+    # Synergy/amplification methods removed - keeping core independent processing
     
     async def _initialize_evolution_system(self) -> Optional[tuple]:
         """Initialize memory evolution tracking system"""
@@ -594,58 +627,11 @@ class NervousSystemCore:
             # Don't fail the entire nervous system if evolution tracking fails
             return None
     
-    async def activate_exponential_mode(self, project: str = None, goal: str = None) -> Dict[str, Any]:
-        """Activate exponential collaboration mode for this nervous system instance"""
-        if not self._initialized:
-            await self.initialize()
-        
-        if not self._synergy_engine:
-            raise MemMimicError("Synergy engine not initialized")
-        
-        result = await self._synergy_engine.activate_exponential_mode(project, goal)
-        self._exponential_mode_active = True
-        
-        self.logger.info(
-            f"Exponential collaboration mode activated: {result.get('context', 'Unknown context')}",
-            extra={"exponential_mode": True, "project": project, "goal": goal}
-        )
-        
-        return result
+    # Exponential mode removed - keeping core independent processing
     
-    async def process_with_exponential_intelligence(self, input_data: str, 
-                                                   human_context: Dict[str, Any] = None) -> Dict[str, Any]:
-        """Process input using exponential collaboration patterns"""
-        if not self._initialized:
-            await self.initialize()
-        
-        if not self._synergy_engine:
-            # Fallback to normal processing
-            return await self.process_intelligence_request(input_data, "interaction")
-        
-        # Apply exponential processing
-        synergy_result = await self._synergy_engine.process_with_synergy(input_data, human_context)
-        
-        # Extract and evolve patterns
-        if self._pattern_library and synergy_result.get("patterns_matched", 0) > 0:
-            await self._pattern_library.evolve_patterns(evolution_pressure=0.1)
-        
-        return synergy_result
+    # Exponential processing removed - using core intelligence only
     
-    def get_synergy_metrics(self) -> Dict[str, Any]:
-        """Get exponential collaboration performance metrics"""
-        if not self._synergy_engine or not self._pattern_library:
-            return {"exponential_mode": False, "synergy_available": False}
-        
-        synergy_metrics = self._synergy_engine.get_performance_metrics()
-        pattern_metrics = self._pattern_library.get_pattern_metrics()
-        
-        return {
-            "exponential_mode": self._exponential_mode_active,
-            "synergy_available": True,
-            "synergy_metrics": synergy_metrics,
-            "pattern_metrics": pattern_metrics,
-            "cognitive_fusion_active": True
-        }
+    # Synergy metrics removed - core metrics only
     
     # Memory Evolution Tracking Methods
     
@@ -768,3 +754,235 @@ class NervousSystemCore:
     def is_evolution_tracking_enabled(self) -> bool:
         """Check if memory evolution tracking is enabled and operational"""
         return self._evolution_system_initialized and self._evolution_tracker is not None
+
+    async def _initialize_archive_intelligence(self) -> Optional[ArchiveIntelligence]:
+        """Initialize archive intelligence system"""
+        try:
+            archive_intelligence = ArchiveIntelligence(
+                archive_path=".archive",
+                db_path=self.db_path
+            )
+            await archive_intelligence.initialize()
+            self.logger.info("Archive intelligence initialized successfully")
+            return archive_intelligence
+        except Exception as e:
+            self.logger.warning(f"Failed to initialize archive intelligence: {e}")
+            return None
+
+    async def _initialize_phase_tracker(self) -> Optional[PhaseEvolutionTracker]:
+        """Initialize phase evolution tracker"""
+        try:
+            phase_tracker = PhaseEvolutionTracker(
+                memory_path="Memory",
+                db_path=self.db_path
+            )
+            await phase_tracker.initialize()
+            self.logger.info("Phase evolution tracker initialized successfully")
+            return phase_tracker
+        except Exception as e:
+            self.logger.warning(f"Failed to initialize phase tracker: {e}")
+            return None
+
+    async def _initialize_tale_memory_binder(self) -> Optional[TaleMemoryBinder]:
+        """Initialize tale-memory binder for narrative-driven memory integration"""
+        try:
+            tale_binder = TaleMemoryBinder(
+                tales_path="tales",
+                db_path=self.db_path
+            )
+            await tale_binder.initialize()
+            self.logger.info("Tale-memory binder initialized successfully")
+            return tale_binder
+        except Exception as e:
+            self.logger.warning(f"Failed to initialize tale-memory binder: {e}")
+            return None
+
+    async def apply_archive_pattern(self, pattern_name: str, target_path: str, **kwargs) -> Dict[str, Any]:
+        """Apply an archive migration pattern"""
+        if not self._archive_intelligence:
+            raise MemMimicError("Archive intelligence not initialized")
+
+        result = await self._archive_intelligence.apply_migration_pattern(
+            pattern_name, target_path, **kwargs
+        )
+
+        # Update metrics
+        if result.get("success", False):
+            self.metrics.archive_patterns_applied += 1
+
+        return result
+
+    async def get_phase_status(self) -> Dict[str, Any]:
+        """Get current phase evolution status"""
+        if not self._phase_tracker:
+            return {"phase_tracking": False, "message": "Phase tracker not initialized"}
+
+        status = self._phase_tracker.get_evolution_status()
+
+        # Update nervous system metrics
+        if status.get("metrics"):
+            metrics = status["metrics"]
+            self.metrics.current_phase = status.get("current_phase")
+            self.metrics.phase_progress = metrics.overall_progress
+            self.metrics.completed_phases = metrics.completed_phases
+
+        return status
+
+    async def start_development_phase(self, phase_id: str) -> bool:
+        """Start a development phase"""
+        if not self._phase_tracker:
+            raise MemMimicError("Phase tracker not initialized")
+
+        return await self._phase_tracker.start_phase(phase_id)
+
+    async def complete_development_phase(self, phase_id: str) -> bool:
+        """Complete a development phase"""
+        if not self._phase_tracker:
+            raise MemMimicError("Phase tracker not initialized")
+
+        return await self._phase_tracker.complete_phase(phase_id)
+
+    async def update_phase_task(self, phase_id: str, task_id: str, status: TaskStatus,
+                              metrics: Dict[str, Any] = None) -> bool:
+        """Update the status of a phase task"""
+        if not self._phase_tracker:
+            raise MemMimicError("Phase tracker not initialized")
+
+        return await self._phase_tracker.update_task_status(phase_id, task_id, status, metrics)
+
+    def get_archive_patterns(self) -> List[str]:
+        """Get list of available archive patterns"""
+        if not self._archive_intelligence:
+            return []
+
+        return self._archive_intelligence.get_available_patterns()
+
+    def get_archive_evolution_metrics(self) -> Optional[ArchiveEvolutionMetrics]:
+        """Get archive evolution metrics"""
+        if not self._archive_intelligence:
+            return None
+
+        return self._archive_intelligence.get_evolution_metrics()
+
+    def get_narrative_themes(self) -> Dict[str, Any]:
+        """Get available narrative themes"""
+        if not self._tale_memory_binder:
+            return {}
+
+        return self._tale_memory_binder.get_narrative_themes()
+
+    def get_narrative_binding_metrics(self) -> Optional[BindingMetrics]:
+        """Get narrative-memory binding metrics"""
+        if not self._tale_memory_binder:
+            return None
+
+        return self._tale_memory_binder.get_binding_metrics()
+
+    async def search_by_narrative_theme(self, theme_name: str, limit: int = 10) -> List[Dict[str, Any]]:
+        """Search memories by narrative theme"""
+        if not self._tale_memory_binder:
+            return []
+
+        return await self._tale_memory_binder.search_by_narrative_theme(theme_name, limit)
+
+    async def _initialize_latency_optimizer(self) -> Optional[ReflexLatencyOptimizer]:
+        """Initialize reflex latency optimizer for sub-5ms response times"""
+        try:
+            optimizer = ReflexLatencyOptimizer(target_latency_ms=5.0)
+            await optimizer.initialize()
+            self.logger.info("Reflex latency optimizer initialized successfully")
+            return optimizer
+        except Exception as e:
+            self.logger.warning(f"Failed to initialize latency optimizer: {e}")
+            return None
+
+    async def _initialize_shared_reality_manager(self) -> Optional[SharedRealityManager]:
+        """Initialize shared reality manager for multi-agent coordination"""
+        try:
+            reality_manager = SharedRealityManager(db_path=self.db_path)
+            await reality_manager.initialize()
+            self.logger.info("Shared reality manager initialized successfully")
+            return reality_manager
+        except Exception as e:
+            self.logger.warning(f"Failed to initialize shared reality manager: {e}")
+            return None
+
+    async def _initialize_theory_of_mind(self) -> Optional[TheoryOfMindCapabilities]:
+        """Initialize theory of mind capabilities"""
+        try:
+            tom = TheoryOfMindCapabilities(agent_id=f"nervous_system_{id(self)}")
+            await tom.initialize()
+            self.logger.info("Theory of mind capabilities initialized successfully")
+            return tom
+        except Exception as e:
+            self.logger.warning(f"Failed to initialize theory of mind: {e}")
+            return None
+
+    async def optimize_operation_latency(self, operation_name: str, operation_func: Callable,
+                                       *args, **kwargs) -> Tuple[Any, float]:
+        """Optimize operation for minimum latency using the latency optimizer"""
+        if not self._latency_optimizer:
+            # Fallback to direct execution
+            start_time = time.perf_counter()
+            if asyncio.iscoroutinefunction(operation_func):
+                result = await operation_func(*args, **kwargs)
+            else:
+                result = operation_func(*args, **kwargs)
+            execution_time = (time.perf_counter() - start_time) * 1000
+            return result, execution_time
+
+        return await self._latency_optimizer.optimize_operation(operation_name, operation_func, *args, **kwargs)
+
+    async def register_agent_in_shared_reality(self, agent_id: str, name: str, role: AgentRole,
+                                             capabilities: List[str] = None, priority: int = 1) -> Optional[str]:
+        """Register an agent in shared reality for coordination"""
+        if not self._shared_reality_manager:
+            return None
+
+        return await self._shared_reality_manager.register_agent(
+            agent_id, name, role, capabilities, priority
+        )
+
+    async def observe_agent_action(self, agent_id: str, action: str, context: Dict[str, Any]) -> None:
+        """Observe and learn from another agent's action for theory of mind"""
+        if self._theory_of_mind:
+            await self._theory_of_mind.observe_agent_action(agent_id, action, context)
+
+    async def predict_agent_behavior(self, agent_id: str, time_horizon: float = None) -> List[IntentionPrediction]:
+        """Predict another agent's future behavior"""
+        if not self._theory_of_mind:
+            return []
+
+        return await self._theory_of_mind.predict_agent_behavior(agent_id, time_horizon)
+
+    async def generate_empathetic_response(self, agent_id: str, situation: str) -> Optional[str]:
+        """Generate an empathetic response based on agent's mental state"""
+        if not self._theory_of_mind:
+            return None
+
+        return await self._theory_of_mind.generate_empathetic_response(agent_id, situation)
+
+    def get_latency_metrics(self) -> Dict[str, Any]:
+        """Get latency optimization metrics"""
+        if not self._latency_optimizer:
+            return {}
+
+        return {
+            'latency_metrics': self._latency_optimizer.get_latency_metrics(),
+            'optimization_summary': self._latency_optimizer.get_optimization_summary(),
+            'target_achieved': self._latency_optimizer.is_target_latency_achieved()
+        }
+
+    def get_shared_reality_status(self) -> Dict[str, Any]:
+        """Get shared reality coordination status"""
+        if not self._shared_reality_manager:
+            return {}
+
+        return self._shared_reality_manager.get_reality_status()
+
+    def get_theory_of_mind_metrics(self) -> Dict[str, Any]:
+        """Get theory of mind performance metrics"""
+        if not self._theory_of_mind:
+            return {}
+
+        return self._theory_of_mind.get_theory_of_mind_metrics()

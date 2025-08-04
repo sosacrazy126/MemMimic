@@ -209,4 +209,37 @@ tales/projects/
 
 # Task files
 # tasks.json
-# tasks/ 
+# tasks/
+
+# ============================================================================
+# MemMimic Project-Specific Organization
+# ============================================================================
+# Data and Caches (Operational Files)
+data/databases/*.db
+data/databases/*.db-shm
+data/databases/*.db-wal
+data/caches/
+data/logs/*.log
+data/logs/*.out
+data/logs/*.err
+
+# Development workspace files (should be in specs/ instead)
+AGENT.md
+CLAUDE.md
+think.md
+*.draft.md
+workspace/
+scratch/
+
+# Performance test outputs
+benchmark_results/
+performance_reports/
+
+# Keep Important Empty Directories
+!data/databases/.gitkeep
+!data/caches/.gitkeep
+!data/logs/.gitkeep
+!docs/api/.gitkeep
+!docs/guides/.gitkeep
+!docs/architecture/.gitkeep
+!docs/reports/.gitkeep
