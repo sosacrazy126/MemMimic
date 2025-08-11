@@ -109,7 +109,7 @@ async function runPythonTool(toolName, args = []) {
 }
 
 // ============================================================================
-// MEMMIMIC CLEAN API - 11 ESSENTIAL TOOLS
+// MEMMIMIC CLEAN API - 11 ESSENTIAL TOOLS (ORIGINAL DESIGN RESTORED)
 // ============================================================================
 
 const MEMMIMIC_TOOLS = {
@@ -318,42 +318,7 @@ const MEMMIMIC_TOOLS = {
     }
   },
   
-  // 🔧 MEMORY MANAGEMENT (3)
-  update_memory_guided: {
-    name: 'update_memory_guided',
-    description: 'Update memory with Socratic guidance',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        memory_id: {
-          type: 'number',
-          description: 'ID of memory to update'
-        }
-      },
-      required: ['memory_id']
-    }
-  },
-  
-  delete_memory_guided: {
-    name: 'delete_memory_guided',
-    description: 'Delete memory with guided analysis',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        memory_id: {
-          type: 'number',
-          description: 'ID of memory to delete'
-        },
-        confirm: {
-          type: 'boolean',
-          description: 'Confirm deletion',
-          default: false
-        }
-      },
-      required: ['memory_id']
-    }
-  },
-  
+  // 🔧 ADVANCED FEATURES (2)
   analyze_memory_patterns: {
     name: 'analyze_memory_patterns',
     description: 'Analyze patterns in memory usage and content',
@@ -497,23 +462,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return { content: [{ type: 'text', text: result }] };
       }
       
-      // 🔧 MEMORY MANAGEMENT
-      case 'update_memory_guided': {
-        const { memory_id } = args;
-        const result = await runPythonTool('memmimic_update_memory_guided', [memory_id.toString()]);
-        return { content: [{ type: 'text', text: result }] };
-      }
-      
-      case 'delete_memory_guided': {
-        const { memory_id, confirm = false } = args;
-        
-        const pythonArgs = [memory_id.toString()];
-        if (confirm) pythonArgs.push('--confirm');
-        
-        const result = await runPythonTool('memmimic_delete_memory_guided', pythonArgs);
-        return { content: [{ type: 'text', text: result }] };
-      }
-      
+      // 🔧 ADVANCED FEATURES
       case 'analyze_memory_patterns': {
         const result = await runPythonTool('memmimic_analyze_patterns', []);
         return { content: [{ type: 'text', text: result }] };
@@ -555,7 +504,7 @@ process.on('unhandledRejection', (reason, promise) => {
 // Main execution
 async function main() {
   log('MemMimic MCP Server v1.0 starting...');
-  log('11 essential tools, zero debug noise');
+  log('11 essential tools, original design restored');
   
   const transport = new StdioServerTransport();
   
