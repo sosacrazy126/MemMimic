@@ -1,2 +1,0 @@
-2025-08-11 15:06:32,886 - INFO - Backup created at .migration_backup/memmimic_backup_20250811_150632.db
-2025-08-11 15:06:32,888 - ERROR - Migration failed: 'dict' object has no attribute 'lower'
