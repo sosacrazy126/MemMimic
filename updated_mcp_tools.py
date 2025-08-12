@@ -13,6 +13,8 @@ from typing import Dict, List, Optional
 
 # Import the storage adapter
 from storage_adapter import create_storage_adapter, Memory
+# Import enhanced thinking system
+from enhanced_think_with_memory import EnhancedThinkWithMemory
 
 # Configuration - can be overridden by environment variables
 STORAGE_TYPE = os.environ.get('MEMMIMIC_STORAGE', 'hybrid')  # 'sqlite', 'markdown', or 'hybrid'
@@ -129,43 +131,51 @@ class MemMimicMCP:
                 'status': 'error'
             }]
     
-    def think_with_memory(self, input_text: str) -> Dict:
+    def think_with_memory(self, input_text: str, mode: str = 'enhanced', max_thoughts: int = 10) -> Dict:
         """
         Process input with memory context
         
         Args:
             input_text: Input to process
+            mode: 'simple' for basic search, 'enhanced' for sequential thinking
+            max_thoughts: Maximum thoughts for enhanced mode
         
         Returns:
             Response with relevant memories and analysis
         """
         try:
-            # Find relevant memories
-            memories = self.adapter.search(input_text, limit=5)
-            
-            # Build context
-            context = []
-            for memory in memories:
-                context.append({
-                    'content': memory.content[:200],  # Preview
-                    'relevance': self._calculate_relevance(input_text, memory.content),
-                    'cxd': memory.metadata.get('cxd', 'unknown')
-                })
-            
-            # Sort by relevance
-            context.sort(key=lambda x: x['relevance'], reverse=True)
-            
-            # Generate response
-            response = {
-                'status': 'success',
-                'input': input_text,
-                'relevant_memories': len(memories),
-                'context': context[:3],  # Top 3 most relevant
-                'analysis': self._generate_analysis(input_text, memories),
-                'storage': STORAGE_TYPE
-            }
-            
-            return response
+            if mode == 'enhanced':
+                # Use the enhanced thinking system
+                thinker = EnhancedThinkWithMemory(self.adapter)
+                return thinker.think(input_text, max_thoughts=max_thoughts)
+            else:
+                # Use simple mode (legacy)
+                # Find relevant memories
+                memories = self.adapter.search(input_text, limit=5)
+                
+                # Build context
+                context = []
+                for memory in memories:
+                    context.append({
+                        'content': memory.content[:200],  # Preview
+                        'relevance': self._calculate_relevance(input_text, memory.content),
+                        'cxd': memory.metadata.get('cxd', 'unknown')
+                    })
+                
+                # Sort by relevance
+                context.sort(key=lambda x: x['relevance'], reverse=True)
+                
+                # Generate response
+                response = {
+                    'status': 'success',
+                    'input': input_text,
+                    'relevant_memories': len(memories),
+                    'context': context[:3],  # Top 3 most relevant
+                    'analysis': self._generate_analysis(input_text, memories),
+                    'storage': STORAGE_TYPE
+                }
+                
+                return response
             
         except Exception as e:
             return {
