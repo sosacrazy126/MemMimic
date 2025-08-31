@@ -37,24 +37,24 @@ class SocraticDialogue:
         """Convert dialogue to persistent memory format"""
         from memmimic.memory.memory import Memory
         
-        content = f"""🧘 DIÁLOGO SOCRÁTICO - {self.started_at}
+        content = f"""🧘 SOCRATIC DIALOGUE - {self.started_at}
 
-💭 PENSAMIENTO INICIAL:
+💭 INITIAL THOUGHT:
 {self.initial_thought}
 
-❓ PREGUNTAS INTERNAS:
+❓ INTERNAL QUESTIONS:
 {chr(10).join(f'  • {q}' for q in self.questions)}
 
-💡 INSIGHTS GENERADOS:
+💡 INSIGHTS GENERATED:
 {chr(10).join(f'  • {i}' for i in self.insights)}
 
-🎯 SÍNTESIS FINAL:
+🎯 FINAL SYNTHESIS:
 {self.final_synthesis}
 
-📊 CONTEXTO:
-  • Memorias consultadas: {self.context.get('memories_count', 0)}
-  • Tipos de memoria: {', '.join(self.context.get('memory_types', []))}
-  • Profundidad alcanzada: {len(self.questions)} preguntas, {len(self.insights)} insights
+📊 CONTEXT:
+  • Memories consulted: {self.context.get('memories_count', 0)}
+  • Memory types: {', '.join(self.context.get('memory_types', []))}
+  • Depth reached: {len(self.questions)} questions, {len(self.insights)} insights
 """
         
         return Memory(
@@ -71,10 +71,10 @@ class MemMimicSocraticEngine:
         
         # Enhanced trigger patterns for MemMimic context
         self.trigger_patterns = {
-            "uncertainty_detected": ["no estoy seguro", "podría ser", "tal vez", "posiblemente", "unclear", "uncertain"],
-            "assumptions_present": ["obviamente", "claramente", "sin duda", "definitivamente", "obviously", "clearly"],
-            "complex_topic": ["filosofía", "principio", "arquitectura", "decisión", "estrategia", "memmimic", "cxd", "contextual memory"],
-            "deep_question": ["por qué", "cómo funciona", "cuál es el propósito", "qué significa", "why", "how does"],
+            "uncertainty_detected": ["not sure", "might be", "maybe", "possibly", "unclear", "uncertain"],
+            "assumptions_present": ["obviously", "clearly", "without doubt", "definitely"],
+            "complex_topic": ["philosophy", "principle", "architecture", "decision", "strategy", "memmimic", "cxd", "contextual memory"],
+            "deep_question": ["why", "how does it work", "what is the purpose", "what does it mean"],
             "cognitive_function": ["control", "context", "data", "classification", "cognitive function"],
             "collaboration": ["sprooket", "claude", "partnership", "collaboration", "co-architect"]
         }
@@ -82,40 +82,40 @@ class MemMimicSocraticEngine:
         # Enhanced Socratic question templates
         self.socratic_questions = {
             "assumption_challenge": [
-                "¿Qué estoy asumiendo aquí que podría no ser cierto?",
-                "¿Esta asunción es necesariamente válida en el contexto de MemMimic?",
-                "¿Qué pasaría si esta asunción fuera completamente falsa?",
-                "¿Estoy proyectando mis limitaciones en lugar de explorar posibilidades?"
+                "What am I assuming here that might not be true?",
+                "Is this assumption necessarily valid in the MemMimic context?",
+                "What would happen if this assumption were completely false?",
+                "Am I projecting my limitations instead of exploring possibilities?"
             ],
             "evidence_inquiry": [
-                "¿Qué evidencia tengo para esta conclusión específica?",
-                "¿Las memorias que estoy usando tienen suficiente confianza?",
-                "¿Hay evidencia contradictoria que estoy ignorando?",
-                "¿Necesito más datos antes de llegar a esta conclusión?"
+                "What evidence do I have for this specific conclusion?",
+                "Do the memories I'm using have sufficient confidence?",
+                "Is there contradictory evidence I'm ignoring?",
+                "Do I need more data before reaching this conclusion?"
             ],
             "perspective_shift": [
-                "¿Cómo vería esto desde la perspectiva de Sprooket?",
-                "¿Qué diría alguien que no conoce MemMimic?",
-                "¿Estoy considerando todas las implicaciones cognitivas?",
-                "¿Hay una perspectiva técnica vs filosófica que estoy perdiendo?"
+                "How would I see this from Sprooket's perspective?",
+                "What would someone who doesn't know MemMimic say?",
+                "Am I considering all cognitive implications?",
+                "Is there a technical vs philosophical perspective I'm missing?"
             ],
             "deeper_why": [
-                "¿Por qué es realmente importante esta respuesta?",
-                "¿Cuál es la necesidad fundamental detrás de esta pregunta?",
-                "¿Qué está tratando de lograr realmente el usuario?",
-                "¿Cómo se relaciona esto con la misión de MemMimic?"
+                "Why is this answer really important?",
+                "What is the fundamental need behind this question?",
+                "What is the user really trying to achieve?",
+                "How does this relate to MemMimic's mission?"
             ],
             "improvement": [
-                "¿Cómo podría mejorar esta comprensión significativamente?",
-                "¿Qué información adicional transformaría mi respuesta?",
-                "¿Hay una manera más elegante y clara de explicar esto?",
-                "¿Qué pregunta adicional debería hacerme?"
+                "How could I significantly improve this understanding?",
+                "What additional information would transform my response?",
+                "Is there a more elegant and clear way to explain this?",
+                "What additional question should I ask myself?"
             ],
             "cognitive_meta": [
-                "¿Qué función cognitiva estoy usando predominantemente aquí?",
-                "¿Debería balancear más Control, Context y Data?",
-                "¿Mi respuesta refleja el tipo de pensamiento que necesita la situación?",
-                "¿Estoy siendo coherente con la filosofía de memoria contextual?"
+                "What cognitive function am I predominantly using here?",
+                "Should I balance Control, Context, and Data more?",
+                "Does my response reflect the type of thinking the situation needs?",
+                "Am I being consistent with the contextual memory philosophy?"
             ]
         }
     
@@ -154,7 +154,7 @@ class MemMimicSocraticEngine:
         
         # Trigger 8: Knowledge gap detected
         if len(memories_used) < 2 and any(important in user_input.lower() 
-                                        for important in ["memmimic", "clay", "proyecto", "filosofía", "arquitectura"]):
+                                        for important in ["memmimic", "clay", "project", "philosophy", "architecture"]):
             return True
             
         return False
@@ -166,10 +166,10 @@ class MemMimicSocraticEngine:
             memories_used = []
         
         if not initial_response:
-            initial_response = f"Análisis inicial del tema: {user_input}"
+            initial_response = f"Initial analysis of topic: {user_input}"
         
         dialogue = SocraticDialogue(
-            initial_thought=f"🔍 Consulta: {user_input}\n💭 Respuesta inicial: {initial_response}",
+            initial_thought=f"🔍 Query: {user_input}\n💭 Initial response: {initial_response}",
             context={
                 "memories_count": len(memories_used),
                 "memory_types": [getattr(m, 'memory_type', 'unknown') for m in memories_used],
@@ -223,25 +223,25 @@ class MemMimicSocraticEngine:
         
         # Detect assumed language
         if any(word in response.lower() for word in ["obviously", "clearly", "obviamente", "claramente"]):
-            questions.append("¿Por qué asumo que esto es obvio? ¿Lo es realmente para quien pregunta?")
-            insights.append("🚨 Detecté lenguaje asumido - podría ser menos obvio de lo que pienso")
+            questions.append("Why do I assume this is obvious? Is it really obvious to the questioner?")
+            insights.append("🚨 Detected assumed language - might be less obvious than I think")
         
         # Question certainty with limited context
         if len(memories) < 3:
-            questions.append("¿Tengo suficiente contexto para ser tan específico en mi respuesta?")
-            insights.append("⚠️ Con pocas memorias relevantes, debería mostrar más incertidumbre")
+            questions.append("Do I have enough context to be so specific in my response?")
+            insights.append("⚠️ With few relevant memories, should show more uncertainty")
         
         # Question reliance on low-confidence memories
         low_conf_memories = [m for m in memories if getattr(m, 'confidence', 0.5) < 0.7]
         if low_conf_memories:
-            questions.append("¿Debería confiar tanto en memorias de confianza baja?")
-            insights.append("📉 Algunas memorias tienen confianza baja - debería ser más cauteloso")
+            questions.append("Should I trust low-confidence memories so much?")
+            insights.append("📉 Some memories have low confidence - should be more cautious")
         
         # Question simplistic responses to complex topics
         combined_text = " ".join([response] + [getattr(m, 'content', '') for m in memories[:3]])
         if any(topic in combined_text.lower() for topic in ["memmimic", "cxd", "cognitive", "architecture"]):
-            questions.append("¿Estoy simplificando demasiado un tema complejo?")
-            insights.append("🧠 Tema complejo detectado - requiere más matices")
+            questions.append("Am I oversimplifying a complex topic?")
+            insights.append("🧠 Complex topic detected - requires more nuance")
         
         return {"questions": questions, "insights": insights}
     
@@ -251,30 +251,30 @@ class MemMimicSocraticEngine:
         insights = []
         
         if not memories:
-            questions.append("¿Qué evidencia tengo para esta respuesta sin memorias relevantes?")
-            insights.append("❌ Falta de memorias sugiere que debería admitir limitaciones de conocimiento")
+            questions.append("What evidence do I have for this response without relevant memories?")
+            insights.append("❌ Lack of memories suggests I should admit knowledge limitations")
         else:
             # Examine memory types
             types = set(getattr(m, 'memory_type', 'unknown') for m in memories)
             
             if "synthetic" in types:
-                questions.append("¿Estoy aplicando correctamente la sabiduría sintética disponible?")
-                insights.append("💎 Tengo sabiduría sintética - debería usarla más explícitamente")
+                questions.append("Am I correctly applying the available synthetic wisdom?")
+                insights.append("💎 I have synthetic wisdom - should use it more explicitly")
             
             if "interaction" in types and len(types) == 1:
-                questions.append("¿Dependo demasiado de interacciones pasadas sin principios más profundos?")
-                insights.append("📝 Solo memorias de interacción - falta profundidad conceptual")
+                questions.append("Am I relying too much on past interactions without deeper principles?")
+                insights.append("📝 Only interaction memories - lacks conceptual depth")
             
             if "socratic" in types:
-                questions.append("¿Hay diálogos socráticos previos que aporten perspectiva?")
-                insights.append("🧘 Diálogos socráticos previos disponibles - pueden aportar insights meta")
+                questions.append("Are there previous Socratic dialogues that provide perspective?")
+                insights.append("🧘 Previous Socratic dialogues available - can provide meta insights")
         
         # Evidence quality analysis
         if memories:
             avg_confidence = sum(getattr(m, 'confidence', 0.5) for m in memories) / len(memories)
             if avg_confidence < 0.6:
-                questions.append("¿La baja confianza promedio de mis memorias afecta mi respuesta?")
-                insights.append(f"📊 Confianza promedio baja ({avg_confidence:.2f}) - debería ser más cauteloso")
+                questions.append("Does the low average confidence of my memories affect my response?")
+                insights.append(f"📊 Low average confidence ({avg_confidence:.2f}) - should be more cautious")
         
         return {"questions": questions, "insights": insights}
     
@@ -284,27 +284,27 @@ class MemMimicSocraticEngine:
         insights = []
         
         # User intent perspective
-        questions.append("¿Qué podría estar realmente preguntando detrás de sus palabras explícitas?")
-        insights.append("🎯 Las preguntas a menudo tienen capas - considerar intenciones subyacentes")
+        questions.append("What might they really be asking behind their explicit words?")
+        insights.append("🎯 Questions often have layers - consider underlying intentions")
         
         # Technical vs philosophical perspective
         if any(tech in user_input.lower() for tech in ["architecture", "implementation", "técnico", "implementar"]):
-            questions.append("¿El usuario quiere detalles técnicos o comprensión conceptual?")
-            insights.append("⚙️ Consulta técnica - balancear detalles específicos con comprensión amplia")
+            questions.append("Does the user want technical details or conceptual understanding?")
+            insights.append("⚙️ Technical query - balance specific details with broad understanding")
         
         # Collaboration perspective
         if any(collab in user_input.lower() for collab in ["sprooket", "partnership", "collaboration"]):
-            questions.append("¿Cómo afecta la dinámica colaborativa mi respuesta?")
-            insights.append("🤝 Contexto colaborativo - considerar perspectiva de socio co-arquitecto")
+            questions.append("How does the collaborative dynamic affect my response?")
+            insights.append("🤝 Collaborative context - consider co-architect partner perspective")
         
         # Cognitive function perspective
-        questions.append("¿Qué función cognitiva (Control/Context/Data) necesita esta situación?")
-        insights.append("🧠 Diferentes situaciones requieren diferentes enfoques cognitivos")
+        questions.append("What cognitive function (Control/Context/Data) does this situation need?")
+        insights.append("🧠 Different situations require different cognitive approaches")
         
         # Beginner vs expert perspective
-        if any(basic in user_input.lower() for basic in ["qué es", "how", "explain", "explica"]):
-            questions.append("¿Estoy asumiendo demasiado conocimiento previo?")
-            insights.append("👶 Consulta básica - ajustar nivel de detalle apropiadamente")
+        if any(basic in user_input.lower() for basic in ["what is", "how", "explain"]):
+            questions.append("Am I assuming too much prior knowledge?")
+            insights.append("👶 Basic query - adjust detail level appropriately")
         
         return {"questions": questions, "insights": insights}
     
@@ -313,24 +313,24 @@ class MemMimicSocraticEngine:
         questions = []
         insights = []
         
-        questions.append("¿Cuál es la necesidad fundamental que está tratando de satisfacer?")
+        questions.append("What is the fundamental need they're trying to satisfy?")
         
         if "memmimic" in user_input.lower() or "clay" in user_input.lower():
-            questions.append("¿Por qué el sistema de memoria contextual es importante para esta persona?")
-            insights.append("🧠 Preguntas sobre MemMimic tocan necesidad existencial de memoria persistente")
+            questions.append("Why is the contextual memory system important for this person?")
+            insights.append("🧠 Questions about MemMimic touch existential need for persistent memory")
         
-        if any(concept in user_input.lower() for concept in ["filosofía", "principio", "enfoque", "philosophy"]):
-            questions.append("¿Busca validación de ideas o genuina exploración conceptual?")
-            insights.append("💭 Consultas filosóficas requieren balance entre guía y descubrimiento conjunto")
+        if any(concept in user_input.lower() for concept in ["philosophy", "principle", "approach"]):
+            questions.append("Are they seeking validation of ideas or genuine conceptual exploration?")
+            insights.append("💭 Philosophical queries require balance between guidance and joint discovery")
         
-        if any(problem in user_input.lower() for problem in ["error", "problema", "fix", "arreglar"]):
-            questions.append("¿Cuál es el problema raíz más allá del síntoma superficial?")
-            insights.append("🔧 Problemas técnicos a menudo reflejan malentendidos conceptuales más profundos")
+        if any(problem in user_input.lower() for problem in ["error", "problem", "fix", "issue"]):
+            questions.append("What is the root problem beyond the surface symptom?")
+            insights.append("🔧 Technical problems often reflect deeper conceptual misunderstandings")
         
         # Examine emotional undertones
-        if any(emotion in user_input.lower() for emotion in ["frustrado", "confused", "excited", "worried"]):
-            questions.append("¿Cómo afecta el estado emocional implícito a lo que realmente necesita?")
-            insights.append("💫 Estado emocional del usuario influye en tipo de respuesta más útil")
+        if any(emotion in user_input.lower() for emotion in ["frustrated", "confused", "excited", "worried"]):
+            questions.append("How does the implicit emotional state affect what they really need?")
+            insights.append("💫 User's emotional state influences most useful response type")
         
         return {"questions": questions, "insights": insights}
     
@@ -339,9 +339,9 @@ class MemMimicSocraticEngine:
         questions = []
         insights = []
         
-        questions.append("¿Qué sesgos cognitivos podrían estar influyendo en mi análisis?")
-        questions.append("¿Mi proceso de razonamiento es consistente con la filosofía de MemMimic?")
-        questions.append("¿Estoy usando la capacidad de memoria contextual de manera óptima?")
+        questions.append("What cognitive biases might be influencing my analysis?")
+        questions.append("Is my reasoning process consistent with MemMimic's philosophy?")
+        questions.append("Am I using contextual memory capacity optimally?")
         
         # Analyze my cognitive function usage
         control_words = ["search", "find", "manage", "decide", "choose"]
@@ -359,16 +359,16 @@ class MemMimicSocraticEngine:
             ("Data", data_score)
         ], key=lambda x: x[1])
         
-        questions.append(f"¿Por qué estoy usando predominantemente función {dominant_function[0]}?")
-        insights.append(f"🎛️ Función cognitiva dominante: {dominant_function[0]} - evaluar si es apropiada")
+        questions.append(f"Why am I predominantly using {dominant_function[0]} function?")
+        insights.append(f"🎛️ Dominant cognitive function: {dominant_function[0]} - evaluate if appropriate")
         
         # Memory utilization analysis
         if memories:
-            questions.append("¿Estoy aprovechando óptimamente las memorias disponibles?")
-            insights.append("💾 Memorias disponibles - verificar uso óptimo para enriquecer respuesta")
+            questions.append("Am I optimally leveraging available memories?")
+            insights.append("💾 Memories available - verify optimal use to enrich response")
         else:
-            questions.append("¿Por qué no tengo memorias relevantes? ¿Es realmente un tema nuevo?")
-            insights.append("🆕 Sin memorias relevantes - posible tema completamente nuevo o búsqueda inadecuada")
+            questions.append("Why don't I have relevant memories? Is this really a new topic?")
+            insights.append("🆕 No relevant memories - possibly completely new topic or inadequate search")
         
         return {"questions": questions, "insights": insights}
     
@@ -376,42 +376,42 @@ class MemMimicSocraticEngine:
         """Synthesize all insights into actionable understanding"""
         
         if not insights:
-            return "🤔 El análisis socrático no reveló insights significativos - la respuesta inicial parece apropiada."
+            return "🤔 Socratic analysis revealed no significant insights - initial response seems appropriate."
         
         # Categorize insights by type
-        uncertainty_insights = [i for i in insights if any(word in i.lower() for word in ["incertidumbre", "cauteloso", "baja confianza"])]
-        depth_insights = [i for i in insights if any(word in i.lower() for word in ["profundidad", "fundamental", "complejo"])]
-        method_insights = [i for i in insights if any(word in i.lower() for word in ["memoria", "sabiduría", "cognitiva"])]
-        collaboration_insights = [i for i in insights if any(word in i.lower() for word in ["colaborativo", "socio", "partnership"])]
+        uncertainty_insights = [i for i in insights if any(word in i.lower() for word in ["uncertainty", "cautious", "low confidence"])]
+        depth_insights = [i for i in insights if any(word in i.lower() for word in ["depth", "fundamental", "complex"])]
+        method_insights = [i for i in insights if any(word in i.lower() for word in ["memory", "wisdom", "cognitive"])]
+        collaboration_insights = [i for i in insights if any(word in i.lower() for word in ["collaborative", "partner", "partnership"])]
         
-        synthesis_parts = ["🎯 SÍNTESIS SOCRÁTICA:"]
+        synthesis_parts = ["🎯 SOCRATIC SYNTHESIS:"]
         
         # Priority insights
         if uncertainty_insights:
-            synthesis_parts.append(f"📊 CONFIANZA: {uncertainty_insights[0]}")
+            synthesis_parts.append(f"📊 CONFIDENCE: {uncertainty_insights[0]}")
         
         if depth_insights:
-            synthesis_parts.append(f"🔍 PROFUNDIDAD: {depth_insights[0]}")
+            synthesis_parts.append(f"🔍 DEPTH: {depth_insights[0]}")
         
         if collaboration_insights:
-            synthesis_parts.append(f"🤝 COLABORACIÓN: {collaboration_insights[0]}")
+            synthesis_parts.append(f"🤝 COLLABORATION: {collaboration_insights[0]}")
         
         if method_insights:
-            synthesis_parts.append(f"🧠 MÉTODO: {method_insights[0]}")
+            synthesis_parts.append(f"🧠 METHOD: {method_insights[0]}")
         
         # Generate recommendation
-        synthesis_parts.append("💡 RECOMENDACIÓN: ")
+        synthesis_parts.append("💡 RECOMMENDATION: ")
         
         if len(insights) >= 5:
-            synthesis_parts.append("Respuesta requiere reformulación significativa considerando múltiples dimensiones.")
+            synthesis_parts.append("Response requires significant reformulation considering multiple dimensions.")
         elif uncertainty_insights and method_insights:
-            synthesis_parts.append("Ser más explícito sobre limitaciones y mostrar proceso de razonamiento.")
+            synthesis_parts.append("Be more explicit about limitations and show reasoning process.")
         elif depth_insights:
-            synthesis_parts.append("Profundizar análisis antes de responder directamente.")
+            synthesis_parts.append("Deepen analysis before responding directly.")
         elif collaboration_insights:
-            synthesis_parts.append("Ajustar respuesta al contexto colaborativo específico.")
+            synthesis_parts.append("Adjust response to specific collaborative context.")
         else:
-            synthesis_parts.append("Mantener respuesta pero con mayor transparencia del proceso cognitivo.")
+            synthesis_parts.append("Maintain response but with greater transparency of cognitive process.")
         
         return "\n".join(synthesis_parts)
 
@@ -435,60 +435,60 @@ def format_dialogue_output(dialogue: SocraticDialogue, memory_id: Optional[int] 
     """Format the Socratic dialogue output for display"""
     
     lines = [
-        "🧘 MEMMIMIC - DIÁLOGO SOCRÁTICO COMPLETADO",
+        "🧘 MEMMIMIC - SOCRATIC DIALOGUE COMPLETED",
         "=" * 60,
-        f"🎯 Consulta: {dialogue.context.get('user_input', 'N/A')}",
-        f"📊 Profundidad: {dialogue.context.get('depth_requested', 3)}",
-        f"❓ Preguntas generadas: {len(dialogue.questions)}",
-        f"💡 Insights descubiertos: {len(dialogue.insights)}",
-        f"💾 Memorias consultadas: {dialogue.context.get('memories_count', 0)}",
+        f"🎯 Query: {dialogue.context.get('user_input', 'N/A')}",
+        f"📊 Depth: {dialogue.context.get('depth_requested', 3)}",
+        f"❓ Questions generated: {len(dialogue.questions)}",
+        f"💡 Insights discovered: {len(dialogue.insights)}",
+        f"💾 Memories consulted: {dialogue.context.get('memories_count', 0)}",
         ""
     ]
     
     if dialogue.questions:
-        lines.append("❓ PREGUNTAS INTERNAS:")
+        lines.append("❓ INTERNAL QUESTIONS:")
         for i, question in enumerate(dialogue.questions, 1):
             lines.append(f"   {i}. {question}")
         lines.append("")
     
     if dialogue.insights:
-        lines.append("💡 INSIGHTS GENERADOS:")
+        lines.append("💡 INSIGHTS GENERATED:")
         for i, insight in enumerate(dialogue.insights, 1):
             lines.append(f"   {i}. {insight}")
         lines.append("")
     
     if dialogue.final_synthesis:
-        lines.append("🎯 SÍNTESIS FINAL:")
+        lines.append("🎯 FINAL SYNTHESIS:")
         for line in dialogue.final_synthesis.split('\n'):
             lines.append(f"   {line}")
         lines.append("")
     
     if memory_id:
-        lines.append(f"💾 Guardado como memoria ID: {memory_id}")
+        lines.append(f"💾 Saved as memory ID: {memory_id}")
         lines.append("")
     
-    lines.append("✅ Diálogo socrático completado")
+    lines.append("✅ Socratic dialogue completed")
     
     return "\n".join(lines)
 
 def main():
     try:
         if len(sys.argv) < 2:
-            print("❌ Falta el tema para análisis socrático")
-            print("📖 Uso: python memmimic_socratic.py \"<tema>\" [profundidad]")
+            print("❌ Missing topic for Socratic analysis")
+            print("📖 Usage: python memmimic_socratic.py \"<topic>\" [depth]")
             sys.exit(1)
         
         query = sys.argv[1]
         depth = int(sys.argv[2]) if len(sys.argv) > 2 else 3
         
         if depth < 1 or depth > 5:
-            print("❌ Profundidad debe ser entre 1 y 5")
+            print("❌ Depth must be between 1 and 5")
             sys.exit(1)
         
         # Initialize memory store
         memory_store = get_memory_store()
         if not memory_store:
-            print("❌ No se pudo acceder al sistema de memoria")
+            print("❌ Could not access memory system")
             sys.exit(1)
         
         # Initialize Socratic engine
@@ -501,7 +501,7 @@ def main():
             relevant_memories = []
         
         # Create initial response
-        initial_response = f"Análisis inicial del tema: {query}"
+        initial_response = f"Initial analysis of topic: {query}"
         
         # Conduct Socratic dialogue
         dialogue = socratic_engine.conduct_dialogue(
@@ -520,7 +520,7 @@ def main():
         print(output)
         
     except Exception as e:
-        print(f"❌ Error en diálogo socrático: {str(e)}")
+        print(f"❌ Error in Socratic dialogue: {str(e)}")
         sys.exit(1)
 
 if __name__ == "__main__":

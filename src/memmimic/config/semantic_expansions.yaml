@@ -1,0 +1,80 @@
+# Semantic Expansions Configuration for MemMimic Search
+# These expansions enhance search by including related concepts
+
+philosophical_concepts:
+  uncertainty:
+    - certainty
+    - doubt
+    - honesty
+    - admit
+    - principle
+  
+  philosophy:
+    - principle
+    - wisdom
+    - approach
+    - belief
+  
+  transparency:
+    - process
+    - reasoning
+    - visible
+    - clear
+
+technical_concepts:
+  architecture:
+    - component
+    - structure
+    - design
+    - system
+  
+  search:
+    - find
+    - recall
+    - memory
+    - relevant
+  
+  reflection:
+    - analysis
+    - pattern
+    - insight
+    - meta
+
+project_concepts:
+  clay:
+    - memory
+    - persistent
+    - assistant
+    - context
+  
+  collaborator:
+    - team
+    - leader
+    - project
+    - human
+    - claude
+  
+  milestone:
+    - milestone
+    - achievement
+    - completed
+    - phase
+
+development_concepts:
+  simplicity:
+    - complex
+    - simple
+    - elegant
+    - minimal
+  
+  context:
+    - memory
+    - preserve
+    - continuity
+    - remember
+  
+  learning:
+    - evolution
+    - improvement
+    - pattern
+    - knowledge

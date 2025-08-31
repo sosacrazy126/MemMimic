@@ -292,15 +292,15 @@ def generate_recommendations(insights, content_patterns, temporal_patterns, usag
     if efficiency:
         utilization = efficiency.get('memory_utilization', 0)
         if utilization < 0.3:
-            recommendations.append("💤 Baja utilización - revisar y activar memorias infrautilizadas")
+            recommendations.append("💤 Low utilization - review and activate underutilized memories")
         elif utilization > 0.8:
-            recommendations.append("🔥 Alta utilización - excelente aprovechamiento del sistema")
+            recommendations.append("🔥 High utilization - excellent system usage")
     
     # Quality recommendations
     if content_patterns['confidence_distribution']:
         low_conf_count = sum(1 for c in content_patterns['confidence_distribution'] if c < 0.5)
         if low_conf_count > len(content_patterns['confidence_distribution']) * 0.3:
-            recommendations.append("🔍 Muchas memorias baja confianza - revisar calidad de contenido")
+            recommendations.append("🔍 Many low confidence memories - review content quality")
     
     # Temporal recommendations
     recent_activity = sum(len(bucket) for name, bucket in temporal_patterns.items() 
@@ -432,7 +432,7 @@ def main():
         # Initialize memory store
         memory_store = get_memory_store()
         if not memory_store:
-            print("❌ No se pudo acceder al sistema de memoria")
+            print("❌ Could not access memory system")
             sys.exit(1)
 
         # Get memories for analysis

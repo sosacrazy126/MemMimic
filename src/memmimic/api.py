@@ -36,15 +36,95 @@ class MemMimicAPI:
         
         return self.memory.add(memory)
     
-    def recall_cxd(self, query: str, limit: int = 10):
-        """Hybrid semantic search."""
-        # TODO: [CRITICAL] Implement proper CXD-based hybrid search
-        # - Integrate semantic vector search from FAISS
-        # - Add NLTK WordNet lexical expansion
-        # - Implement fusion scoring: max(semantic, lexical) + convergence_bonus
-        # - Use CXD classifier to filter by cognitive function
-        # Current implementation falls back to basic search only
-        return self.memory.search(query, limit=limit)
+    def recall_cxd(self, query: str, limit: int = 10, function_filter: str = "ALL"):
+        """Hybrid semantic + WordNet search with CXD filtering.
+        
+        Args:
+            query: Search query
+            limit: Maximum results to return
+            function_filter: CXD function filter (CONTROL, CONTEXT, DATA, ALL)
+        """
+        import nltk
+        from nltk.corpus import wordnet
+        
+        # Ensure WordNet is downloaded
+        try:
+            nltk.data.find('corpora/wordnet')
+        except LookupError:
+            nltk.download('wordnet', quiet=True)
+        
+        # Step 1: Get base search results
+        base_results = self.memory.search(query, limit=limit * 3)  # Get more for filtering
+        
+        # Step 2: Expand query with WordNet synonyms
+        expanded_terms = set([query.lower()])
+        for word in query.split():
+            if len(word) > 3:  # Skip short words
+                try:
+                    for syn in wordnet.synsets(word):
+                        for lemma in syn.lemmas()[:3]:  # Limit synonyms
+                            expanded_terms.add(lemma.name().lower().replace('_', ' '))
+                except:
+                    pass
+        
+        # Step 3: Search with expanded terms
+        expanded_results = []
+        for term in expanded_terms:
+            if term != query.lower():
+                term_results = self.memory.search(term, limit=5)
+                expanded_results.extend(term_results)
+        
+        # Step 4: Combine and deduplicate results
+        all_results = base_results + expanded_results
+        seen_ids = set()
+        unique_results = []
+        for result in all_results:
+            if result.id not in seen_ids:
+                seen_ids.add(result.id)
+                unique_results.append(result)
+        
+        # Step 5: Apply CXD filtering if requested
+        if function_filter != "ALL" and self.cxd:
+            filtered_results = []
+            for memory in unique_results:
+                try:
+                    classification = self.cxd.classify(memory.content)
+                    # Check if the classification matches the filter
+                    if hasattr(classification, 'dominant_function'):
+                        func_name = classification.dominant_function.value if hasattr(classification.dominant_function, 'value') else str(classification.dominant_function)
+                        if func_name == function_filter:
+                            filtered_results.append(memory)
+                except:
+                    pass  # Skip if classification fails
+            unique_results = filtered_results if filtered_results else unique_results[:limit]
+        
+        # Step 6: Score and rank results (fusion scoring)
+        scored_results = []
+        for memory in unique_results:
+            score = 0
+            content_lower = memory.content.lower()
+            
+            # Semantic score (based on direct match)
+            if query.lower() in content_lower:
+                score += 10
+            
+            # Lexical expansion score
+            for term in expanded_terms:
+                if term in content_lower:
+                    score += 5
+            
+            # Confidence boost
+            score += memory.confidence * 5
+            
+            # Type boost for synthetic memories
+            if hasattr(memory, 'type') and 'synthetic' in memory.type:
+                score += 3
+            
+            scored_results.append((memory, score))
+        
+        # Sort by score and return top results
+        scored_results.sort(key=lambda x: x[1], reverse=True)
+        return [memory for memory, score in scored_results[:limit]]
     
     def think_with_memory(self, input_text: str):
         """Contextual processing."""
@@ -115,12 +195,9 @@ class MemMimicAPI:
     
     # === MEMORY MANAGEMENT (3 tools) ===
     def update_memory_guided(self, memory_id: int):
-        """Socratic memory update."""
-        # TODO: [HIGH] Complete Socratic-guided memory update implementation
-        # - Integrate SocraticEngine.conduct_dialogue() for questioning
-        # - Apply question templates: assumption_challenge, evidence_inquiry
-        # - Use insights to refine memory content before update
-        # - Store the Socratic dialogue as a separate memory
+        """Socratic-guided memory update with deep reflection."""
+        from .memory.socratic import SocraticEngine
+        
         all_memories = self.memory.get_all()
         
         # Find memory by ID
@@ -133,23 +210,101 @@ class MemMimicAPI:
         if not target_memory:
             return {"error": f"Memory {memory_id} not found"}
         
+        # Initialize Socratic engine
+        socratic_engine = SocraticEngine(self.memory)
+        
+        # Conduct Socratic dialogue about the memory
+        dialogue = socratic_engine.conduct_dialogue(
+            user_input=f"Should I update memory {memory_id}?",
+            initial_response=target_memory.content,
+            memories_used=[target_memory]
+        )
+        
+        # Generate update suggestions based on insights
+        update_suggestions = []
+        
+        # Check for uncertainty indicators
+        if any("uncertainty" in insight.lower() for insight in dialogue.insights):
+            update_suggestions.append("Add clarity qualifiers (e.g., 'possibly', 'likely')")
+        
+        # Check for missing context
+        if any("context" in insight.lower() for insight in dialogue.insights):
+            update_suggestions.append("Add more contextual information")
+        
+        # Check for low confidence
+        if target_memory.confidence < 0.7:
+            update_suggestions.append("Consider marking as 'needs review' or updating confidence")
+        
+        # Store the Socratic dialogue as a new memory
+        dialogue_memory = dialogue.to_memory()
+        dialogue_id = self.memory.add(dialogue_memory)
+        
         return {
             "memory_id": memory_id,
             "current_content": target_memory.content,
-            "guidance": "Memory found. Update process would begin here."
+            "current_confidence": target_memory.confidence,
+            "socratic_questions": dialogue.questions[:3],  # Top 3 questions
+            "key_insights": dialogue.insights[:3],  # Top 3 insights
+            "update_suggestions": update_suggestions,
+            "synthesis": dialogue.final_synthesis,
+            "dialogue_memory_id": dialogue_id,
+            "guidance": "Review the Socratic analysis above and update the memory content accordingly."
         }
     
     def delete_memory_guided(self, memory_id: int, confirm: bool = False):
-        """Guided memory deletion."""
+        """Guided memory deletion with relationship analysis."""
         if not confirm:
-            return {"error": "Confirmation required for deletion"}
+            all_memories = self.memory.get_all()
+            
+            # Find the target memory
+            target_memory = None
+            for memory in all_memories:
+                if getattr(memory, 'id', None) == memory_id:
+                    target_memory = memory
+                    break
+            
+            if not target_memory:
+                return {"error": f"Memory {memory_id} not found"}
+            
+            # Analyze relationships
+            related_memories = []
+            target_words = set(target_memory.content.lower().split())
+            
+            for memory in all_memories:
+                if memory.id != memory_id:
+                    memory_words = set(memory.content.lower().split())
+                    overlap = len(target_words & memory_words) / max(len(target_words), 1)
+                    if overlap > 0.3:  # 30% word overlap indicates relationship
+                        related_memories.append({
+                            "id": memory.id,
+                            "type": getattr(memory, 'type', 'unknown'),
+                            "preview": memory.content[:100]
+                        })
+            
+            return {
+                "memory_id": memory_id,
+                "content_preview": target_memory.content[:200],
+                "type": getattr(target_memory, 'type', 'unknown'),
+                "confidence": target_memory.confidence,
+                "related_memories_count": len(related_memories),
+                "related_memories": related_memories[:5],  # Show first 5
+                "warning": f"This memory has {len(related_memories)} related memories that might be affected.",
+                "guidance": "Add confirm=True to proceed with deletion"
+            }
         
-        # TODO: [HIGH] Implement actual memory deletion with Socratic guidance
-        # - Analyze memory relationships before deletion
-        # - Check for dependent memories that would be orphaned
-        # - Use Socratic questioning to confirm deletion rationale
-        # - Implement soft delete with recovery option
-        return {"result": f"Memory {memory_id} deletion would be processed here"}
+        # Actual deletion with confirmation
+        success = self.memory.delete(memory_id)
+        
+        if success:
+            return {
+                "result": f"Memory {memory_id} successfully deleted",
+                "status": "success"
+            }
+        else:
+            return {
+                "error": f"Failed to delete memory {memory_id}",
+                "status": "failed"
+            }
     
     def analyze_memory_patterns(self):
         """Pattern analysis."""

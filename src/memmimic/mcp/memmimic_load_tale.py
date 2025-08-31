@@ -39,9 +39,9 @@ def main():
         tale_manager = TaleManager()
         
         # Load the tale
-        tale_data = tale_manager.load_tale(args.name, category=args.category)
+        tale = tale_manager.load_tale(args.name, category=args.category)
         
-        if not tale_data:
+        if not tale:
             print(f"❌ Tale not found: '{args.name}'")
             print("")
             print("💡 SUGGESTIONS:")
@@ -50,16 +50,16 @@ def main():
             print("  tales(category='specific') # Browse by category")
             sys.exit(1)
         
-        # Extract tale information
-        tale_name = tale_data.get('name', args.name)
-        tale_category = tale_data.get('category', 'unknown')
-        tale_size = tale_data.get('size', 0)
-        tale_updated = tale_data.get('updated', 'unknown')
-        tale_created = tale_data.get('created', 'unknown')
-        tale_version = tale_data.get('version', 1)
-        tale_usage_count = tale_data.get('usage_count', 0)
-        tale_tags = tale_data.get('tags', [])
-        tale_content = tale_data.get('content', '')
+        # Extract tale information from Tale object
+        tale_name = tale.name
+        tale_category = tale.category
+        tale_size = tale.metadata.get('size_chars', len(tale.content))
+        tale_updated = tale.metadata.get('updated', tale.metadata.get('created', 'unknown'))
+        tale_created = tale.metadata.get('created', 'unknown')
+        tale_version = tale.metadata.get('version', 1)
+        tale_usage_count = tale.metadata.get('usage_count', 0)  # Fixed: usage_count is in metadata
+        tale_tags = tale.metadata.get('tags', [])
+        tale_content = tale.content
         
         # Format category emoji
         category_emoji = "🧠" if tale_category.startswith('claude') else "🔧" if tale_category.startswith('projects') else "📦"

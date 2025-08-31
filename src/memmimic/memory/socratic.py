@@ -1,7 +1,7 @@
-# memmimic/memory/socratic.py - Sistema de diálogos socráticos internos
+# memmimic/memory/socratic.py - Internal Socratic dialogue system
 """
-Diálogos Socráticos: Auto-cuestionamiento para comprensión profunda
-MemMimic no solo piensa - se cuestiona su propio pensamiento
+Socratic Dialogues: Self-questioning for deep understanding
+MemMimic doesn't just think - it questions its own thinking
 """
 import json
 from datetime import datetime
@@ -9,7 +9,7 @@ from typing import Dict, List, Optional
 from .memory import Memory, MemoryStore
 
 class SocraticDialogue:
-    """Un diálogo interno de auto-cuestionamiento"""
+    """An internal self-questioning dialogue"""
     
     def __init__(self, initial_thought: str, context: Dict):
         self.initial_thought = initial_thought
@@ -20,18 +20,18 @@ class SocraticDialogue:
         self.started_at = datetime.now().isoformat()
         
     def to_memory(self) -> Memory:
-        """Convertir diálogo a memoria persistente"""
-        content = f"""🧘 DIÁLOGO SOCRÁTICO - {self.started_at}
+        """Convert dialogue to persistent memory"""
+        content = f"""🧘 SOCRATIC DIALOGUE - {self.started_at}
 
-💭 PENSAMIENTO INICIAL: {self.initial_thought}
+💭 INITIAL THOUGHT: {self.initial_thought}
 
-❓ PREGUNTAS INTERNAS:
+❓ INTERNAL QUESTIONS:
 {chr(10).join(f'• {q}' for q in self.questions)}
 
-💡 INSIGHTS GENERADOS:
+💡 INSIGHTS GENERATED:
 {chr(10).join(f'• {i}' for i in self.insights)}
 
-🎯 SÍNTESIS FINAL: {self.final_synthesis}
+🎯 FINAL SYNTHESIS: {self.final_synthesis}
 """
         
         return Memory(
@@ -41,61 +41,61 @@ class SocraticDialogue:
         )
 
 class SocraticEngine:
-    """Motor de auto-cuestionamiento socrático para MemMimic"""
+    """Socratic self-questioning engine for MemMimic"""
     
     def __init__(self, memory_store: MemoryStore):
         self.memory_store = memory_store
         
-        # Patrones que disparan diálogos socráticos (actualizados para MemMimic)
+        # Patterns that trigger Socratic dialogues (updated for MemMimic)
         self.trigger_patterns = {
-            "uncertainty_detected": ["no estoy seguro", "podría ser", "tal vez", "posiblemente"],
-            "assumptions_present": ["obviamente", "claramente", "sin duda", "definitivamente"],
-            "complex_topic": ["filosofía", "principio", "arquitectura", "decisión", "estrategia", "memmimic", "cxd"],
-            "conflicting_memories": [],  # Se llena dinámicamente
-            "deep_question": ["por qué", "cómo funciona", "cuál es el propósito", "qué significa"]
+            "uncertainty_detected": ["not sure", "might be", "maybe", "possibly"],
+            "assumptions_present": ["obviously", "clearly", "without doubt", "definitely"],
+            "complex_topic": ["philosophy", "principle", "architecture", "decision", "strategy", "memmimic", "cxd"],
+            "conflicting_memories": [],  # Filled dynamically
+            "deep_question": ["why", "how does it work", "what is the purpose", "what does it mean"]
         }
         
-        # Templates de preguntas socráticas
+        # Socratic question templates
         self.socratic_questions = {
             "assumption_challenge": [
-                "¿Qué estoy asumiendo aquí?",
-                "¿Esta asunción es necesariamente cierta?",
-                "¿Qué pasaría si esta asunción fuera falsa?"
+                "What am I assuming here?",
+                "Is this assumption necessarily true?",
+                "What would happen if this assumption were false?"
             ],
             "evidence_inquiry": [
-                "¿Qué evidencia tengo para esta conclusión?",
-                "¿Hay evidencia que contradiga mi pensamiento?",
-                "¿Las memorias que estoy usando son suficientemente confiables?"
+                "What evidence do I have for this conclusion?",
+                "Is there evidence that contradicts my thinking?",
+                "Are the memories I'm using sufficiently reliable?"
             ],
             "perspective_shift": [
-                "¿Cómo vería esto desde otra perspectiva?",
-                "¿Qué diría alguien que piensa diferente?",
-                "¿Estoy considerando todas las implicaciones?"
+                "How would I see this from another perspective?",
+                "What would someone who thinks differently say?",
+                "Am I considering all implications?"
             ],
             "deeper_why": [
-                "¿Por qué es importante esta respuesta?",
-                "¿Cuál es la raíz del problema real?",
-                "¿Qué está tratando de entender realmente el usuario?"
+                "Why is this answer important?",
+                "What is the root of the real problem?",
+                "What is the user really trying to understand?"
             ],
             "improvement": [
-                "¿Cómo podría mejorar esta comprensión?",
-                "¿Qué información adicional me ayudaría?",
-                "¿Hay una manera más elegante de explicar esto?"
+                "How could I improve this understanding?",
+                "What additional information would help me?",
+                "Is there a more elegant way to explain this?"
             ]
         }
     
     def should_trigger_dialogue(self, user_input: str, initial_response: str, memories_used: List[Memory]) -> bool:
-        """Determinar si se debe iniciar un diálogo socrático"""
+        """Determine if a Socratic dialogue should be initiated"""
         
-        # Trigger 1: Respuesta inicial muestra incertidumbre
+        # Trigger 1: Initial response shows uncertainty
         if any(pattern in initial_response.lower() for pattern in self.trigger_patterns["uncertainty_detected"]):
             return True
             
-        # Trigger 2: Respuesta contiene asunciones fuertes
+        # Trigger 2: Response contains strong assumptions
         if any(pattern in initial_response.lower() for pattern in self.trigger_patterns["assumptions_present"]):
             return True
             
-        # Trigger 3: Tema complejo detectado
+        # Trigger 3: Complex topic detected
         if any(pattern in user_input.lower() for pattern in self.trigger_patterns["complex_topic"]):
             return True
             

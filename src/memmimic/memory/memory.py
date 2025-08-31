@@ -2,12 +2,12 @@
 # TODO: [REFACTOR] Extract semantic expansions to configuration file
 import json
 import sqlite3
+import threading
 from datetime import datetime
 from typing import List, Optional, Dict
 
 class Memory:
-    """A unit of memory"""
-    # TODO: [ENHANCEMENT] Add embedding cache to Memory object for faster retrieval
+    """A unit of memory with optional embedding cache"""
     def __init__(self, content: str, memory_type: str = "interaction", confidence: float = 0.8, id: Optional[int] = None):
         self.id = id  # Add ID field for database operations
         self.content = content
@@ -16,7 +16,25 @@ class Memory:
         self.confidence = confidence
         self.created_at = datetime.now().isoformat()
         self.access_count = 0
+        self._embedding = None  # Cache for embedding vector
+        self._embedding_model = None  # Track which model generated the embedding
         
+    def get_embedding(self, model_name: str = None):
+        """Get cached embedding or None if not cached or model differs."""
+        if self._embedding is not None and self._embedding_model == model_name:
+            return self._embedding
+        return None
+    
+    def set_embedding(self, embedding, model_name: str):
+        """Cache an embedding vector with its model name."""
+        self._embedding = embedding
+        self._embedding_model = model_name
+    
+    def clear_embedding_cache(self):
+        """Clear the cached embedding."""
+        self._embedding = None
+        self._embedding_model = None
+    
     def to_dict(self) -> Dict:
         return {
             "id": self.id,
@@ -24,13 +42,17 @@ class Memory:
             "type": self.type,
             "confidence": self.confidence,
             "created_at": self.created_at,
-            "access_count": self.access_count
+            "access_count": self.access_count,
+            "has_embedding": self._embedding is not None
         }
 
 class MemoryStore:
-    """SQLite con búsqueda inteligente"""
+    """SQLite with intelligent search and thread safety"""
     def __init__(self, db_path: str = "memories.db"):
-        self.conn = sqlite3.connect(db_path)
+        # Use check_same_thread=False for thread safety with proper locking
+        self.db_path = db_path
+        self.lock = threading.Lock()  # Thread safety lock
+        self.conn = sqlite3.connect(db_path, check_same_thread=False)
         self.conn.execute("PRAGMA encoding = 'UTF-8'")
         self.conn.execute("PRAGMA foreign_keys = ON")
         self.conn.row_factory = sqlite3.Row
@@ -60,7 +82,8 @@ class MemoryStore:
         }
         
     def _init_db(self):
-        """Crear la tabla si no existe"""
+        """Create table if it doesn't exist and add indexes for performance"""
+        # Create main table
         self.conn.execute("""
             CREATE TABLE IF NOT EXISTS memories (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -71,22 +94,90 @@ class MemoryStore:
                 access_count INTEGER DEFAULT 0
             )
         """)
+        
+        # Add indexes for performance
+        # Index on type for filtering by memory type
+        self.conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_memories_type 
+            ON memories(type)
+        """)
+        
+        # Index on created_at for temporal queries
+        self.conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_memories_created_at 
+            ON memories(created_at DESC)
+        """)
+        
+        # Index on confidence for ranking
+        self.conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_memories_confidence 
+            ON memories(confidence DESC)
+        """)
+        
+        # Composite index for common query pattern
+        self.conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_memories_type_confidence 
+            ON memories(type, confidence DESC)
+        """)
+        
         self.conn.commit()
+    
+    def _load_semantic_expansions(self) -> Dict:
+        """Load semantic expansions from YAML configuration file."""
+        # Try to find the config file
+        possible_paths = [
+            os.path.join(os.path.dirname(__file__), '..', 'config', 'semantic_expansions.yaml'),
+            os.path.join(os.path.dirname(__file__), '..', '..', 'config', 'semantic_expansions.yaml'),
+            'src/memmimic/config/semantic_expansions.yaml'
+        ]
+        
+        for path in possible_paths:
+            if os.path.exists(path):
+                try:
+                    with open(path, 'r', encoding='utf-8') as f:
+                        config = yaml.safe_load(f)
+                        
+                    # Flatten the nested structure into the format expected by search
+                    expansions = {}
+                    for category in config.values():
+                        for term, related in category.items():
+                            expansions[term] = related
+                    
+                    return expansions
+                except Exception as e:
+                    print(f"Warning: Could not load semantic expansions from {path}: {e}")
+        
+        # Fallback to default expansions if config not found
+        return {
+            "uncertainty": ["certainty", "doubt", "honesty", "admit", "principle"],
+            "philosophy": ["principle", "wisdom", "approach", "belief"],
+            "transparency": ["process", "reasoning", "visible", "clear"],
+            "architecture": ["component", "structure", "design", "system"],
+            "search": ["find", "recall", "memory", "relevant"],
+            "reflection": ["analysis", "pattern", "insight", "meta"],
+            "clay": ["memory", "persistent", "assistant", "context"],
+            "collaborator": ["team", "leader", "project", "human", "claude"],
+            "milestone": ["milestone", "achievement", "completed", "phase"],
+            "simplicity": ["complex", "simple", "elegant", "minimal"],
+            "context": ["memory", "preserve", "continuity", "remember"],
+            "learning": ["evolution", "improvement", "pattern", "knowledge"]
+        }
         
     def add(self, memory: Memory) -> int:
-        """Guardar una memoria"""
-        cursor = self.conn.execute(
-            """INSERT INTO memories (content, type, confidence, created_at, access_count) 
-               VALUES (?, ?, ?, ?, ?)""",
-            (memory.content, memory.type, memory.confidence, memory.created_at, memory.access_count)
-        )
-        self.conn.commit()
-        return cursor.lastrowid
+        """Save a memory with thread safety"""
+        with self.lock:
+            cursor = self.conn.execute(
+                """INSERT INTO memories (content, type, confidence, created_at, access_count) 
+                   VALUES (?, ?, ?, ?, ?)""",
+                (memory.content, memory.type, memory.confidence, memory.created_at, memory.access_count)
+            )
+            self.conn.commit()
+            return cursor.lastrowid
         
     def search(self, query: str, limit: int = 5) -> List[Memory]:
         """
-        Motor de búsqueda inteligente que encuentra memorias relevantes
-        incluyendo sintéticas usando expansión semántica y ranking
+        Intelligent search engine that finds relevant memories
+        including synthetic ones using semantic expansion and ranking
         """
         query_lower = query.lower()
         search_results = []
@@ -272,7 +363,7 @@ class MemoryStore:
         return memories
     
     def get_all(self) -> List[Memory]:
-        """Obtener todas las memorias para status y análisis"""
+        """Get all memories for status and analysis"""
         cursor = self.conn.execute(
             """SELECT * FROM memories 
                ORDER BY created_at DESC"""
@@ -284,3 +375,45 @@ class MemoryStore:
             memories.append(mem)
             
         return memories
+    
+    def delete(self, memory_id: int) -> bool:
+        """Delete a memory by ID with thread safety."""
+        with self.lock:
+            try:
+                cursor = self.conn.execute(
+                    "DELETE FROM memories WHERE id = ?",
+                    (memory_id,)
+                )
+                self.conn.commit()
+                return cursor.rowcount > 0  # True if a row was deleted
+            except Exception as e:
+                print(f"Error deleting memory {memory_id}: {e}")
+                return False
+    
+    def update(self, memory_id: int, content: str = None, confidence: float = None) -> bool:
+        """Update a memory's content or confidence."""
+        with self.lock:
+            try:
+                updates = []
+                params = []
+                
+                if content is not None:
+                    updates.append("content = ?")
+                    params.append(content)
+                
+                if confidence is not None:
+                    updates.append("confidence = ?")
+                    params.append(confidence)
+                
+                if not updates:
+                    return False  # Nothing to update
+                
+                params.append(memory_id)
+                query = f"UPDATE memories SET {', '.join(updates)} WHERE id = ?"
+                
+                cursor = self.conn.execute(query, params)
+                self.conn.commit()
+                return cursor.rowcount > 0
+            except Exception as e:
+                print(f"Error updating memory {memory_id}: {e}")
+                return False
