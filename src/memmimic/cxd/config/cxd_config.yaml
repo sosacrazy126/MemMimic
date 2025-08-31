@@ -6,7 +6,7 @@ description: "CXD Classifier Configuration v2.0"
 # =============================================================================
 paths:
   cache_dir: "./cxd_cache"
-  canonical_examples: "./config/canonical_examples.yaml"
+  canonical_examples: "./src/memmimic/cxd/config/canonical_examples.yaml"
   log_dir: "./logs"
   models_dir: "./models"
 
@@ -141,7 +141,7 @@ validation:
   # Input validation
   max_text_length: 10000
   min_text_length: 1
-  allowed_languages: ["en", "es", "fr", "de"]  # empty = all allowed
+  allowed_languages: ["en"]  # English only
   
   # Quality assurance
   enable_regression_testing: true

@@ -1,14 +1,14 @@
-# clay/assistant.py - Con diálogos socráticos integrados
+# clay/assistant.py - With integrated Socratic dialogues
 """
-El asistente que recuerda y se auto-cuestiona.
-No para impresionar, sino para persistir y profundizar.
+The assistant that remembers and self-questions.
+Not to impress, but to persist and deepen understanding.
 """
 from typing import Dict, List, Optional
 from .memory import Memory, MemoryStore
 from .socratic import SocraticEngine
 
 class ContextualAssistant:
-    """Un asistente que preserva contexto y se auto-cuestiona"""
+    """An assistant that preserves context and self-questions"""
     
     def __init__(self, name: str, db_path: str = None):
         self.name = name
@@ -25,19 +25,19 @@ class ContextualAssistant:
         # 1. RECORDAR - Buscar memorias relevantes
         relevant_memories = self.memory_store.search(user_input)
         
-        # 2. RAZONAR - Construir contexto con memorias
+        # 2. REASON - Build context with memories
         thought_process = self._build_thought_process(user_input, relevant_memories)
         
         # 3. RESPONDER - Generar respuesta inicial
         initial_response = self._generate_response(user_input, thought_process, relevant_memories)
         
-        # 4. AUTO-CUESTIONARSE - Diálogo socrático si es apropiado
+        # 4. SELF-QUESTION - Socratic dialogue if appropriate
         socratic_result = self._conduct_socratic_analysis(user_input, initial_response, relevant_memories)
         
-        # 5. REFINAR - Usar insights socráticos para mejorar respuesta
+        # 5. REFINE - Use Socratic insights to improve response
         final_response = self._refine_response(initial_response, socratic_result)
         
-        # 6. APRENDER - Guardar interacción y diálogo socrático
+        # 6. LEARN - Save interaction and Socratic dialogue
         self._save_learning(user_input, final_response, socratic_result)
         
         return {
@@ -49,16 +49,16 @@ class ContextualAssistant:
         }
     
     def _conduct_socratic_analysis(self, user_input: str, initial_response: str, memories: List[Memory]) -> Optional[Dict]:
-        """Realizar análisis socrático si es apropiado"""
+        """Perform Socratic analysis if appropriate"""
         
-        # Decidir si vale la pena auto-cuestionarse
+        # Decide if it's worth self-questioning
         if not self.socratic_engine.should_trigger_dialogue(user_input, initial_response, memories):
             return None
         
-        # Realizar diálogo socrático completo
+        # Perform complete Socratic dialogue
         dialogue = self.socratic_engine.conduct_dialogue(user_input, initial_response, memories)
         
-        # Guardar diálogo como memoria
+        # Save dialogue as memory
         dialogue_memory = dialogue.to_memory()
         self.memory_store.add(dialogue_memory)
         
@@ -76,40 +76,40 @@ class ContextualAssistant:
         if not socratic_result:
             return initial_response
         
-        # Extraer recomendaciones de la síntesis
+        # Extract recommendations from synthesis
         synthesis = socratic_result["synthesis"]
         
-        # Aplicar refinamientos según síntesis
+        # Apply refinements according to synthesis
         if "Reformular respuesta" in synthesis:
-            # Reformulación mayor
-            refined = f"{initial_response}\n\n[Tras auto-reflexión]: {self._extract_synthesis_insight(synthesis)}"
-        elif "más explícito sobre limitaciones" in synthesis:
-            # Añadir transparencia sobre incertidumbre
-            refined = f"{initial_response}\n\n[Nota de transparencia]: Debo admitir que mi confianza en esta respuesta es limitada por el contexto disponible."
-        elif "mayor transparencia del proceso" in synthesis:
-            # Explicar proceso de pensamiento
-            refined = f"{initial_response}\n\n[Transparencia]: Llegué a esta respuesta considerando {socratic_result['questions_asked']} preguntas internas y generando {socratic_result['insights_generated']} insights sobre mi propio razonamiento."
+            # Major reformulation
+            refined = f"{initial_response}\n\n[After self-reflection]: {self._extract_synthesis_insight(synthesis)}"
+        elif "more explicit about limitations" in synthesis:
+            # Add transparency about uncertainty
+            refined = f"{initial_response}\n\n[Transparency note]: I must admit my confidence in this response is limited by available context."
+        elif "greater process transparency" in synthesis:
+            # Explain thought process
+            refined = f"{initial_response}\n\n[Transparency]: I reached this response considering {socratic_result['questions_asked']} internal questions and generating {socratic_result['insights_generated']} insights about my own reasoning."
         else:
-            # Mantener respuesta pero indicar que hubo auto-reflexión
-            refined = f"{initial_response}\n\n[Auto-reflexión aplicada]: He cuestionado mi razonamiento interno para ofrecer una perspectiva más matizada."
+            # Keep response but indicate self-reflection occurred
+            refined = f"{initial_response}\n\n[Self-reflection applied]: I have questioned my internal reasoning to offer a more nuanced perspective."
         
         return refined
     
     def _extract_synthesis_insight(self, synthesis: str) -> str:
-        """Extraer insight clave de la síntesis socrática"""
+        """Extract key insight from Socratic synthesis"""
         lines = synthesis.split('\n')
         for line in lines:
             if "RECOMENDACIÓN:" in line:
                 return line.replace("• RECOMENDACIÓN:", "").strip()
-        return "He aplicado auto-cuestionamiento para profundizar mi comprensión."
+        return "I have applied self-questioning to deepen my understanding."
     
     def _save_learning(self, user_input: str, final_response: str, socratic_result: Optional[Dict]):
         """Guardar interacción y aprendizaje"""
         
-        # Guardar interacción principal
-        interaction_content = f"Usuario: {user_input}\nRespuesta: {final_response}"
+        # Save main interaction
+        interaction_content = f"User: {user_input}\nResponse: {final_response}"
         if socratic_result:
-            interaction_content += f"\n[Diálogo socrático aplicado: {socratic_result['questions_asked']} preguntas, {socratic_result['insights_generated']} insights]"
+            interaction_content += f"\n[Socratic dialogue applied: {socratic_result['questions_asked']} questions, {socratic_result['insights_generated']} insights]"
         
         interaction_memory = Memory(
             content=interaction_content,
@@ -119,7 +119,7 @@ class ContextualAssistant:
         self.memory_store.add(interaction_memory)
     
     def _build_thought_process(self, user_input: str, memories: List[Memory]) -> Dict:
-        """Construir el proceso de pensamiento de forma transparente"""
+        """Build thought process transparently"""
         process = {
             "input_understood": user_input,
             "memories_activated": len(memories),
@@ -134,13 +134,13 @@ class ContextualAssistant:
         for memory in memories:
             memory_lower = memory.content.lower()
             
-            # Detectar patrones de continuidad
+            # Detect continuity patterns
             if any(word in memory_lower for word in input_lower.split() if len(word) > 3):
-                process["connections_made"].append(f"Continuidad detectada con memoria previa: {memory.type}")
+                process["connections_made"].append(f"Continuity detected with previous memory: {memory.type}")
                 
-            # Detectar preguntas de profundización
-            if any(trigger in input_lower for trigger in ["más", "detalles", "explica", "cómo", "por qué"]):
-                process["connections_made"].append("Usuario solicita profundización")
+            # Detect deepening questions
+            if any(trigger in input_lower for trigger in ["more", "details", "explain", "how", "why"]):
+                process["connections_made"].append("User requests deepening")
                 process["socratic_potential"] = True
                 
         return process
@@ -154,46 +154,46 @@ class ContextualAssistant:
         if synthetic_memories:
             # Priorizar memorias sintéticas más relevantes
             best_synthetic = synthetic_memories[0]
-            if any(keyword in input_lower for keyword in ["filosofía", "principio", "arquitectura", "origen"]):
-                return f"Basándome en lo que recuerdo: {best_synthetic.content}\n\nClay está operativo con memoria persistente funcionando."
+            if any(keyword in input_lower for keyword in ["philosophy", "principle", "architecture", "origin"]):
+                return f"Based on what I remember: {best_synthetic.content}\n\nClay is operational with persistent memory working."
         
-        # CASO 1: Usuario solicita información sobre el proyecto Clay
-        if any(term in input_lower for term in ["clay", "proyecto", "estado", "memoria", "asistente"]):
+        # CASE 1: User requests information about Clay project
+        if any(term in input_lower for term in ["clay", "project", "status", "memory", "assistant"]):
             return self._respond_about_project(memories)
             
-        # CASO 2: Usuario pide continuidad/profundización
-        if any(term in input_lower for term in ["más", "detalles", "continúa", "sigue", "explica mejor"]):
+        # CASE 2: User asks for continuity/deepening
+        if any(term in input_lower for term in ["more", "details", "continue", "go on", "explain better"]):
             return self._respond_with_continuity(memories, user_input)
             
-        # CASO 3: Respuesta con contexto de memorias
+        # CASE 3: Response with memory context
         if memories:
             return self._respond_with_context(user_input, memories)
             
-        # CASO 4: Primera interacción o sin memorias relevantes
+        # CASE 4: First interaction or no relevant memories
         return self._respond_without_context(user_input)
     
     def _respond_about_project(self, memories: List[Memory]) -> str:
         """Responder sobre el estado del proyecto Clay usando memorias"""
         project_memories = [m for m in memories if any(term in m.content.lower() 
-                                                      for term in ["clay", "proyecto", "memoria", "estado"])]
+                                                      for term in ["clay", "project", "memory", "status"])]
         
         if project_memories:
             latest = project_memories[0].content
-            return f"Basándome en lo que recuerdo: {latest}\n\nClay está operativo con memoria persistente funcionando."
+            return f"Based on what I remember: {latest}\n\nClay is operational with persistent memory working."
         
-        return "Clay es nuestro sistema de memoria persistente. Está funcionando y almacenando nuestras interacciones."
+        return "Clay is our persistent memory system. It's working and storing our interactions."
     
     def _respond_with_continuity(self, memories: List[Memory], user_input: str) -> str:
         """Responder pidiendo más detalles sobre interacciones previas"""
         if not memories:
-            return "No tengo suficiente contexto previo para profundizar. ¿Podrías darme más información?"
+            return "I don't have enough prior context to go deeper. Could you give me more information?"
             
         recent_interactions = [m for m in memories if m.type == "interaction"]
         if recent_interactions:
             last_interaction = recent_interactions[0].content
-            return f"Continuando con lo que discutíamos: {last_interaction}\n¿En qué aspecto específico quieres que profundice?"
+            return f"Continuing with what we discussed: {last_interaction}\nWhat specific aspect would you like me to elaborate on?"
             
-        return "Recuerdo nuestras conversaciones anteriores. ¿Sobre qué tema específico quieres más detalles?"
+        return "I remember our previous conversations. What specific topic would you like more details about?"
     
     def _respond_with_context(self, user_input: str, memories: List[Memory]) -> str:
         """Responder usando el contexto de las memorias recuperadas"""
@@ -203,35 +203,35 @@ class ContextualAssistant:
         # Construir respuesta contextual
         context_summary = self._extract_key_context(memory_content)
         
-        response = f"Considerando nuestras conversaciones anteriores sobre {context_summary}, "
+        response = f"Considering our previous conversations about {context_summary}, "
         
         # Añadir respuesta específica al input actual
-        if "cómo" in user_input.lower():
-            response += "puedo explicarte el proceso paso a paso."
-        elif "por qué" in user_input.lower():
-            response += "las razones son importantes de entender."
-        elif "qué" in user_input.lower():
-            response += "déjame clarificarte ese concepto."
+        if "how" in user_input.lower():
+            response += "I can explain the process step by step."
+        elif "why" in user_input.lower():
+            response += "the reasons are important to understand."
+        elif "what" in user_input.lower():
+            response += "let me clarify that concept for you."
         else:
-            response += "puedo darte una perspectiva informada."
+            response += "I can give you an informed perspective."
             
         return response
     
     def _respond_without_context(self, user_input: str) -> str:
         """Responder sin memorias previas, pero de forma útil"""
-        if "hola" in user_input.lower() or "hi" in user_input.lower():
-            return "¡Hola! Soy Clay, tu asistente con memoria persistente. ¿En qué puedo ayudarte?"
+        if "hello" in user_input.lower() or "hi" in user_input.lower():
+            return "Hello! I'm Clay, your assistant with persistent memory. How can I help you?"
             
-        return f"Entiendo que preguntas sobre '{user_input}'. Aunque no tengo contexto previo sobre este tema, puedo ayudarte. ¿Puedes darme más detalles?"
+        return f"I understand you're asking about '{user_input}'. Although I don't have prior context on this topic, I can help you. Can you give me more details?"
     
     def _extract_key_context(self, memory_content: str) -> str:
         """Extraer conceptos clave del contenido de memorias"""
-        # Palabras clave técnicas comunes
+        # Common technical keywords
         key_terms = []
         content_lower = memory_content.lower()
         
-        # Buscar términos relevantes
-        technical_terms = ["clay", "memoria", "asistente", "proyecto", "base de datos", 
+        # Search for relevant terms
+        technical_terms = ["clay", "memory", "assistant", "project", "database", 
                           "persistente", "contexto", "mcp", "servidor"]
         
         for term in technical_terms:
@@ -239,25 +239,25 @@ class ContextualAssistant:
                 key_terms.append(term)
                 
         if key_terms:
-            return ", ".join(key_terms[:3])  # Top 3 términos
+            return ", ".join(key_terms[:3])  # Top 3 terms
         else:
-            return "nuestros temas de conversación"
+            return "our conversation topics"
     
     def _calculate_confidence(self, memories: List[Memory], socratic_result: Optional[Dict]) -> float:
         """Calcular confianza basada en memorias y análisis socrático"""
         if not memories:
             base_confidence = 0.3  # Baja confianza sin contexto
         else:
-            # Más memorias relevantes = más confianza
+            # More relevant memories = more confidence
             base_confidence = min(0.3 + (len(memories) * 0.15), 0.9)
             
             # Boost por memorias de alta confianza
             avg_memory_confidence = sum(m.confidence for m in memories) / len(memories)
             base_confidence = min(base_confidence + (avg_memory_confidence * 0.1), 0.95)
         
-        # Boost por análisis socrático
+        # Boost from Socratic analysis
         if socratic_result:
-            # Auto-cuestionamiento aumenta confianza en la respuesta final
+            # Self-questioning increases confidence in final response
             socratic_boost = 0.1 if socratic_result["insights_generated"] >= 3 else 0.05
             base_confidence = min(base_confidence + socratic_boost, 0.98)
             

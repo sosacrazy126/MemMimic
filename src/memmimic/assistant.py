@@ -1,14 +1,14 @@
-# clay/assistant.py - Con diálogos socráticos integrados
+# assistant.py - With integrated Socratic dialogues
 """
-El asistente que recuerda y se auto-cuestiona.
-No para impresionar, sino para persistir y profundizar.
+The assistant that remembers and self-questions.
+Not to impress, but to persist and deepen understanding.
 """
 from typing import Dict, List, Optional
 from .memory import Memory, MemoryStore
 from .memory.socratic import SocraticEngine
 
 class ContextualAssistant:
-    """Un asistente que preserva contexto y se auto-cuestiona"""
+    """An assistant that preserves context and self-questions"""
     
     def __init__(self, name: str, db_path: str = None):
         self.name = name
@@ -19,25 +19,25 @@ class ContextualAssistant:
         
     def think(self, user_input: str) -> Dict:
         """
-        Pensar ahora incluye auto-cuestionamiento socrático.
-        Recordar → Razonar → Responder → Auto-cuestionar → Refinar → Aprender
+        Thinking now includes Socratic self-questioning.
+        Remember → Reason → Respond → Self-Question → Refine → Learn
         """
-        # 1. RECORDAR - Buscar memorias relevantes
+        # 1. REMEMBER - Search for relevant memories
         relevant_memories = self.memory_store.search(user_input)
         
-        # 2. RAZONAR - Construir contexto con memorias
+        # 2. REASON - Build context with memories
         thought_process = self._build_thought_process(user_input, relevant_memories)
         
-        # 3. RESPONDER - Generar respuesta inicial
+        # 3. RESPOND - Generate initial response
         initial_response = self._generate_response(user_input, thought_process, relevant_memories)
         
-        # 4. AUTO-CUESTIONARSE - Diálogo socrático si es apropiado
+        # 4. SELF-QUESTION - Socratic dialogue if appropriate
         socratic_result = self._conduct_socratic_analysis(user_input, initial_response, relevant_memories)
         
-        # 5. REFINAR - Usar insights socráticos para mejorar respuesta
+        # 5. REFINE - Use Socratic insights to improve response
         final_response = self._refine_response(initial_response, socratic_result)
         
-        # 6. APRENDER - Guardar interacción y diálogo socrático
+        # 6. LEARN - Save interaction and Socratic dialogue
         self._save_learning(user_input, final_response, socratic_result)
         
         return {

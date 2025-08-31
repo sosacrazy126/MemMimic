@@ -14,9 +14,9 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any, Union, Type
 from enum import Enum
 
-# Pydantic V2: BaseSettings se importa de pydantic_settings
+# Pydantic V2: BaseSettings is imported from pydantic_settings
 from pydantic_settings import BaseSettings, SettingsConfigDict
-# Pydantic V2: Field y los nuevos decoradores de validación se importan de pydantic
+# Pydantic V2: Field and the new validation decorators are imported from pydantic
 from pydantic import Field, field_validator, model_validator
 import yaml
 

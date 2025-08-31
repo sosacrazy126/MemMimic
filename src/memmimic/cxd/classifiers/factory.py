@@ -3,33 +3,33 @@
 from typing import Optional, Union, Literal
 
 from ..core.config import CXDConfig, create_default_config, create_production_config, create_development_config
-from ..core.interfaces import CXDClassifier  # Interfaz base para todos los clasificadores
+from ..core.interfaces import CXDClassifier  # Base interface for all classifiers
 
-# Importación de todos los tipos de clasificadores que la factoría podría construir
+# Import all classifier types that the factory could build
 from .lexical import LexicalCXDClassifier
 from .semantic import SemanticCXDClassifier
 from .optimized_semantic import OptimizedSemanticCXDClassifier
 from .meta import MetaCXDClassifier
-from .optimized_meta import OptimizedMetaCXDClassifier, create_fast_classifier # create_fast_classifier es una función de fábrica útil
+from .optimized_meta import OptimizedMetaCXDClassifier, create_fast_classifier # create_fast_classifier is a useful factory function
 
 
-# Definimos los tipos de clasificadores que la factoría puede crear para mejor type hinting y validación
+# Define the classifier types the factory can create for better type hinting and validation
 ClassifierType = Literal[
     "lexical",
     "semantic",
     "optimized_semantic",
     "meta",
-    "optimized_meta", # Podría ser el default o "production"
+    "optimized_meta", # Could be the default or "production"
     "fast",
-    "development", # Para OptimizedMetaCXDClassifier con config de desarrollo
-    "production"   # Para OptimizedMetaCXDClassifier con config de producción
+    "development", # For OptimizedMetaCXDClassifier with development config
+    "production"   # For OptimizedMetaCXDClassifier with production config
 ]
 
 
 class CXDClassifierFactory:
     """
-    Factoría para crear instancias de diferentes tipos de clasificadores CXD.
-    Permite una creación centralizada y configurable de los componentes de clasificación.
+    Factory for creating instances of different CXD classifier types.
+    Allows centralized and configurable creation of classification components.
     """
 
     @staticmethod
@@ -39,26 +39,26 @@ class CXDClassifierFactory:
         **kwargs
     ) -> CXDClassifier:
         """
-        Crea y devuelve una instancia de un clasificador CXD.
+        Creates and returns an instance of a CXD classifier.
 
         Args:
-            classifier_type: El tipo de clasificador a crear.
-                Opciones válidas: "lexical", "semantic", "optimized_semantic",
-                                 "meta", "optimized_meta", "fast",
-                                 "development", "production".
-                Por defecto es "optimized_meta".
-            config: Una instancia opcional de CXDConfig. Si es None,
-                    se usará una configuración apropiada para el tipo de clasificador
-                    o una configuración por defecto.
-            **kwargs: Argumentos adicionales que se pasarán al constructor
-                      del clasificador (especialmente útil para OptimizedMetaCXDClassifier
-                      y OptimizedSemanticCXDClassifier).
+            classifier_type: The type of classifier to create.
+                Valid options: "lexical", "semantic", "optimized_semantic",
+                              "meta", "optimized_meta", "fast",
+                              "development", "production".
+                Default is "optimized_meta".
+            config: An optional CXDConfig instance. If None,
+                    an appropriate configuration for the classifier type
+                    or a default configuration will be used.
+            **kwargs: Additional arguments to pass to the classifier
+                      constructor (especially useful for OptimizedMetaCXDClassifier
+                      and OptimizedSemanticCXDClassifier).
 
         Returns:
-            Una instancia de una clase que implementa la interfaz CXDClassifier.
+            An instance of a class that implements the CXDClassifier interface.
 
         Raises:
-            ValueError: Si se especifica un classifier_type desconocido.
+            ValueError: If an unknown classifier_type is specified.
         """
 
         if classifier_type == "lexical":
@@ -67,50 +67,50 @@ class CXDClassifierFactory:
 
         elif classifier_type == "semantic":
             effective_config = config or create_default_config()
-            # SemanticCXDClassifier puede tomar embedding_model, example_provider, vector_store
-            # Si se pasan en kwargs, se usarán. Si no, usará sus defaults.
+            # SemanticCXDClassifier can take embedding_model, example_provider, vector_store
+            # If passed in kwargs, they'll be used. Otherwise, it will use its defaults.
             return SemanticCXDClassifier(config=effective_config, **kwargs)
 
         elif classifier_type == "optimized_semantic":
             effective_config = config or create_default_config()
-            # OptimizedSemanticCXDClassifier también puede tomar componentes y flags de caché en kwargs
+            # OptimizedSemanticCXDClassifier can also take components and cache flags in kwargs
             return OptimizedSemanticCXDClassifier(config=effective_config, **kwargs)
 
         elif classifier_type == "meta":
             effective_config = config or create_default_config()
-            # MetaCXDClassifier puede tomar lexical_classifier y semantic_classifier en kwargs
-            # o creará los suyos por defecto.
+            # MetaCXDClassifier can take lexical_classifier and semantic_classifier in kwargs
+            # or will create its own by default.
             return MetaCXDClassifier(config=effective_config, **kwargs)
 
         elif classifier_type == "optimized_meta":
             effective_config = config or create_default_config()
-            # OptimizedMetaCXDClassifier usa kwargs para enable_cache_persistence, rebuild_cache, etc.
+            # OptimizedMetaCXDClassifier uses kwargs for enable_cache_persistence, rebuild_cache, etc.
             return OptimizedMetaCXDClassifier(config=effective_config, **kwargs)
 
         elif classifier_type == "fast":
-            # create_fast_classifier es una función de fábrica en optimized_meta.py
-            # que ya maneja la configuración para la velocidad.
-            effective_config = config # Permite al usuario pasar una config si quiere, si no create_fast_classifier usa la suya
+            # create_fast_classifier is a factory function in optimized_meta.py
+            # that already handles configuration for speed.
+            effective_config = config # Allows user to pass a config if desired, otherwise create_fast_classifier uses its own
             return create_fast_classifier(config=effective_config, **kwargs)
 
         elif classifier_type == "production":
             effective_config = config or create_production_config()
-            # Asumimos que "production" implica OptimizedMetaCXDClassifier con configuración de producción
+            # We assume "production" implies OptimizedMetaCXDClassifier with production configuration
             return OptimizedMetaCXDClassifier.create_production_classifier(config=effective_config)
 
 
         elif classifier_type == "development":
             effective_config = config or create_development_config()
-            # Asumimos que "development" implica OptimizedMetaCXDClassifier con configuración de desarrollo
+            # We assume "development" implies OptimizedMetaCXDClassifier with development configuration
             return OptimizedMetaCXDClassifier.create_development_classifier(config=effective_config)
 
         else:
-            raise ValueError(f"Tipo de clasificador desconocido: '{classifier_type}'. "
-                             f"Opciones válidas: 'lexical', 'semantic', 'optimized_semantic', "
+            raise ValueError(f"Unknown classifier type: '{classifier_type}'. "
+                             f"Valid options: 'lexical', 'semantic', 'optimized_semantic', "
                              f"'meta', 'optimized_meta', 'fast', 'production', 'development'.")
 
-# Podrías también tener una función de conveniencia a nivel de módulo si lo prefieres,
-# similar a lo que ya tienes en src/cxd_classifier/__init__.py, pero definida aquí
-# para mantener la lógica de creación junta.
+# You could also have a module-level convenience function if preferred,
+# similar to what you have in src/cxd_classifier/__init__.py, but defined here
+# to keep the creation logic together.
 # def create_classifier(...) -> CXDClassifier:
 # return CXDClassifierFactory.create(...)

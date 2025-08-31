@@ -43,13 +43,11 @@ async function runPythonTool(toolName, args = []) {
       return;
     }
     
-    // Use project Python environment
-    const isWindows = process.platform === 'win32';
-    const pythonExecutable = isWindows 
-      ? path.join(MEMMIMIC_DIR, '..', '..', '..', 'venv', 'Scripts', 'python.exe')
-      : path.join(MEMMIMIC_DIR, '..', '..', '..', 'venv', 'bin', 'python');
+    // Use uv to run Python with proper environment
+    const projectRoot = path.join(MEMMIMIC_DIR, '..', '..', '..');
     
-    const pythonProcess = spawn(pythonExecutable, [scriptPath, ...args], {
+    // Use 'uv run python' to ensure correct environment
+    const pythonProcess = spawn('uv', ['run', 'python', scriptPath, ...args], {
       cwd: path.join(MEMMIMIC_DIR, '..', '..', '..'),
       stdio: ['pipe', 'pipe', 'pipe'],
       env: { 

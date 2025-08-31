@@ -38,7 +38,12 @@ class MemMimicAPI:
     
     def recall_cxd(self, query: str, limit: int = 10):
         """Hybrid semantic search."""
-        # For now, use basic search - can be enhanced later
+        # TODO: [CRITICAL] Implement proper CXD-based hybrid search
+        # - Integrate semantic vector search from FAISS
+        # - Add NLTK WordNet lexical expansion
+        # - Implement fusion scoring: max(semantic, lexical) + convergence_bonus
+        # - Use CXD classifier to filter by cognitive function
+        # Current implementation falls back to basic search only
         return self.memory.search(query, limit=limit)
     
     def think_with_memory(self, input_text: str):
@@ -111,7 +116,11 @@ class MemMimicAPI:
     # === MEMORY MANAGEMENT (3 tools) ===
     def update_memory_guided(self, memory_id: int):
         """Socratic memory update."""
-        # Basic implementation - can be enhanced with Socratic questioning
+        # TODO: [HIGH] Complete Socratic-guided memory update implementation
+        # - Integrate SocraticEngine.conduct_dialogue() for questioning
+        # - Apply question templates: assumption_challenge, evidence_inquiry
+        # - Use insights to refine memory content before update
+        # - Store the Socratic dialogue as a separate memory
         all_memories = self.memory.get_all()
         
         # Find memory by ID
@@ -135,6 +144,11 @@ class MemMimicAPI:
         if not confirm:
             return {"error": "Confirmation required for deletion"}
         
+        # TODO: [HIGH] Implement actual memory deletion with Socratic guidance
+        # - Analyze memory relationships before deletion
+        # - Check for dependent memories that would be orphaned
+        # - Use Socratic questioning to confirm deletion rationale
+        # - Implement soft delete with recovery option
         return {"result": f"Memory {memory_id} deletion would be processed here"}
     
     def analyze_memory_patterns(self):

@@ -1,21 +1,25 @@
-# clay/memory.py - Con motor de búsqueda inteligente
+# memory.py - With intelligent search engine
+# TODO: [REFACTOR] Extract semantic expansions to configuration file
 import json
 import sqlite3
 from datetime import datetime
 from typing import List, Optional, Dict
 
 class Memory:
-    """Una unidad de recuerdo"""
-    def __init__(self, content: str, memory_type: str = "interaction", confidence: float = 0.8):
+    """A unit of memory"""
+    # TODO: [ENHANCEMENT] Add embedding cache to Memory object for faster retrieval
+    def __init__(self, content: str, memory_type: str = "interaction", confidence: float = 0.8, id: Optional[int] = None):
+        self.id = id  # Add ID field for database operations
         self.content = content
         self.type = memory_type
-        self.memory_type = memory_type  # Alias para compatibilidad
+        self.memory_type = memory_type  # Alias for compatibility
         self.confidence = confidence
         self.created_at = datetime.now().isoformat()
         self.access_count = 0
         
     def to_dict(self) -> Dict:
         return {
+            "id": self.id,
             "content": self.content,
             "type": self.type,
             "confidence": self.confidence,
