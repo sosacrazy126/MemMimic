@@ -1,7 +1,7 @@
 ---
 created: '2025-07-26T02:57:48.288961'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTEXT
+cxd_confidence: 0.51
 cxd_pattern: X
 id: mem_8
 importance: 0.5
@@ -24,6 +24,16 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-07-26T02:57:48.288963'
+tags:
+- architecture
+- confidence
+- context
+- mcp
+- memory
+- relationship
+- score
+- system
+- test
 ---
 
 # Memory 8

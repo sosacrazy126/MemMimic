@@ -45,9 +45,9 @@ async function runPythonTool(toolName, args = []) {
     
     // Use system Python 3
     const isWindows = process.platform === 'win32';
-    const pythonExecutable = isWindows 
+    const pythonExecutable = isWindows
       ? 'python'
-      : '/home/evilbastardxd/miniconda3/bin/python3';
+      : 'python3';
     
     const pythonProcess = spawn(pythonExecutable, [scriptPath, ...args], {
       cwd: path.join(MEMMIMIC_DIR, '..', '..', '..'),

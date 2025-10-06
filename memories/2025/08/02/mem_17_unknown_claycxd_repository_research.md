@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T06:47:24.323844'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTEXT
+cxd_confidence: 0.45
 cxd_pattern: X
 id: mem_17
 importance: 0.5
@@ -24,6 +24,12 @@ relationships:
   similar_memories: []
 type: technical
 updated: '2025-08-02T06:47:24.323845'
+tags:
+- cxd
+- mcp
+- memory
+- search
+- url
 ---
 
 # Memory 17

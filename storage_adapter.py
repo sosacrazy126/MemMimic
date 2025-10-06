@@ -375,26 +375,70 @@ class MarkdownAdapter(StorageAdapter):
                     return self._markdown_to_memory(content)
         return None
     
-    def search(self, query: str, limit: int = 10) -> List[Memory]:
-        """Search memories in markdown files"""
+    def _calculate_relevance_score(self, query: str, memory: Memory) -> float:
+        """Calculate relevance score for a memory based on query"""
         query_lower = query.lower()
-        results = []
-        
+        content_lower = memory.content.lower()
+
+        score = 0.0
+
+        # 1. Exact phrase match (highest score)
+        if query_lower in content_lower:
+            score += 1.0
+
+        # 2. Token overlap (Jaccard similarity)
+        query_tokens = set(query_lower.split())
+        content_tokens = set(content_lower.split())
+
+        intersection = query_tokens & content_tokens
+        union = query_tokens | content_tokens
+
+        if union:
+            jaccard = len(intersection) / len(union)
+            score += jaccard * 0.8
+
+        # 3. Importance boost
+        score += memory.importance * 0.3
+
+        # 4. Recency boost (last 7 days)
+        days_old = (datetime.now() - memory.created_at).days
+        if days_old < 7:
+            recency_boost = (7 - days_old) / 7 * 0.2
+            score += recency_boost
+
+        # 5. CXD match bonus (if query specifies CXD filter)
+        query_tokens_set = set(query_lower.split())
+        cxd_keywords = {'control', 'context', 'data'}
+        if query_tokens_set & cxd_keywords:
+            memory_cxd = memory.metadata.get('cxd', '').lower()
+            for keyword in cxd_keywords:
+                if keyword in query_tokens_set and keyword in memory_cxd:
+                    score += 0.2
+
+        return score
+
+    def search(self, query: str, limit: int = 10) -> List[Memory]:
+        """Search memories with relevance scoring"""
+        query_lower = query.lower()
+        scored_results = []
+
         for memory_id, info in self.index.items():
-            if len(results) >= limit:
-                break
-            
             file_path = self.memories_dir / info['path']
             if file_path.exists():
                 with open(file_path, 'r', encoding='utf-8') as f:
                     content = f.read()
-                    if query_lower in content.lower():
+                    # Basic filter: must contain at least one query word
+                    query_tokens = query_lower.split()
+                    if any(token in content.lower() for token in query_tokens):
                         memory = self._markdown_to_memory(content)
-                        results.append(memory)
-        
-        # Sort by importance and recency
-        results.sort(key=lambda m: (m.importance, m.created_at), reverse=True)
-        return results[:limit]
+                        relevance = self._calculate_relevance_score(query, memory)
+                        scored_results.append((relevance, memory))
+
+        # Sort by relevance score (descending)
+        scored_results.sort(reverse=True, key=lambda x: x[0])
+
+        # Return top results without scores
+        return [memory for _, memory in scored_results[:limit]]
     
     def update(self, memory_id: str, memory: Memory) -> bool:
         """Update memory in markdown file"""

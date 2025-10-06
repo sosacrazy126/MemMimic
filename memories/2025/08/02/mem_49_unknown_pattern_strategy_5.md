@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T10:24:10.321604'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTROL
+cxd_confidence: 0.66
 cxd_pattern: CX
 id: mem_49
 importance: 0.5
@@ -24,6 +24,10 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T10:24:10.321607'
+tags:
+- auth
+- memory
+- not
 ---
 
 # Memory 49

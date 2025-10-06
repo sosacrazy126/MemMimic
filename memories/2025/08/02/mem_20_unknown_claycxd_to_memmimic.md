@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T06:50:17.400545'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTROL
+cxd_confidence: 0.51
 cxd_pattern: C
 id: mem_20
 importance: 0.5
@@ -24,6 +24,17 @@ relationships:
   similar_memories: []
 type: technical
 updated: '2025-08-02T06:50:17.400547'
+tags:
+- architecture
+- cxd
+- faiss
+- integration
+- manage
+- mcp
+- memmimic
+- memory
+- performance
+- search
 ---
 
 # Memory 20

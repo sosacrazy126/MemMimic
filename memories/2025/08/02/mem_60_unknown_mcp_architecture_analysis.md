@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T13:26:42.150634'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: DATA
+cxd_confidence: 0.55
 cxd_pattern: X
 id: mem_60
 importance: 0.5
@@ -24,6 +24,15 @@ relationships:
   similar_memories: []
 type: technical
 updated: '2025-08-02T13:26:42.150635'
+tags:
+- ai
+- architecture
+- data
+- feature
+- json
+- mcp
+- memory
+- rpc
 ---
 
 # Memory 60

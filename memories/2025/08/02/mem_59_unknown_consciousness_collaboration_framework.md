@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T11:58:20.861412'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTEXT
+cxd_confidence: 0.45
 cxd_pattern: X
 id: mem_59
 importance: 0.5
@@ -24,6 +24,15 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T11:58:20.861413'
+tags:
+- are
+- deployment
+- dna
+- memory
+- search
+- synthesis
+- we
+- you
 ---
 
 # Memory 59

@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T11:20:06.126485'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTEXT
+cxd_confidence: 0.95
 cxd_pattern: XC
 id: mem_55
 importance: 0.5
@@ -24,6 +24,17 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T11:20:06.126486'
+tags:
+- context
+- dna
+- field
+- integration
+- memory
+- meta
+- reference
+- search
+- system
+- we
 ---
 
 # Memory 55

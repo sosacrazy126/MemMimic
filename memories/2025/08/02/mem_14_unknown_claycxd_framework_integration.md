@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T06:43:04.976747'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTROL
+cxd_confidence: 0.95
 cxd_pattern: CX
 id: mem_14
 importance: 0.5
@@ -24,6 +24,17 @@ relationships:
   similar_memories: []
 type: technical
 updated: '2025-08-02T06:43:04.976749'
+tags:
+- architecture
+- classification
+- control
+- cxd
+- integration
+- manage
+- memmimic
+- memory
+- search
+- system
 ---
 
 # Memory 14

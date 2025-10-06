@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T11:11:12.714302'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTEXT
+cxd_confidence: 0.87
 cxd_pattern: X
 id: mem_50
 importance: 0.5
@@ -24,6 +24,11 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T11:11:12.714304'
+tags:
+- context
+- deployment
+- memory
+- system
 ---
 
 # Memory 50

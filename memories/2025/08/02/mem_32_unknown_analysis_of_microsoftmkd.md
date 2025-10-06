@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T09:27:32.647191'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTEXT
+cxd_confidence: 0.45
 cxd_pattern: X
 id: mem_32
 importance: 0.5
@@ -24,6 +24,11 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T09:27:32.647194'
+tags:
+- architecture
+- memory
+- system
+- understand
 ---
 
 # Memory 32

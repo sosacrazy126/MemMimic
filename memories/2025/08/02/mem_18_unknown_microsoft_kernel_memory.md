@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T06:47:49.484170'
 cxd: unknown
-cxd_confidence: 0.5
+cxd_confidence: 0.0
 cxd_pattern: D
 id: mem_18
 importance: 0.5
@@ -24,6 +24,12 @@ relationships:
   similar_memories: []
 type: technical
 updated: '2025-08-02T06:47:49.484172'
+tags:
+- architecture
+- llm
+- memmimic
+- memory
+- system
 ---
 
 # Memory 18

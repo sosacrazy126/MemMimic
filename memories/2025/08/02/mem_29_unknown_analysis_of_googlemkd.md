@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T09:26:47.637874'
 cxd: unknown
-cxd_confidence: 0.5
+cxd_confidence: 0.0
 cxd_pattern: D
 id: mem_29
 importance: 0.5
@@ -24,6 +24,11 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T09:26:47.637876'
+tags:
+- architecture
+- memory
+- model
+- search
 ---
 
 # Memory 29

@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T08:03:56.382748'
 cxd: unknown
-cxd_confidence: 0.5
+cxd_confidence: 0.0
 cxd_pattern: D
 id: mem_22
 importance: 0.5
@@ -24,6 +24,14 @@ relationships:
   similar_memories: []
 type: technical
 updated: '2025-08-02T08:03:56.382750'
+tags:
+- classification
+- cxd
+- integration
+- memory
+- quality
+- system
+- tale
 ---
 
 # Memory 22

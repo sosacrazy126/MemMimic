@@ -1,7 +1,7 @@
 ---
 created: '2025-07-23T17:54:58.262778'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTROL
+cxd_confidence: 0.89
 cxd_pattern: C
 id: mem_2
 importance: 0.5
@@ -24,6 +24,14 @@ relationships:
   similar_memories: []
 type: milestone
 updated: '2025-07-23T17:54:58.262780'
+tags:
+- action
+- ai
+- any
+- control
+- gui
+- manage
+- memory
 ---
 
 # Memory 2

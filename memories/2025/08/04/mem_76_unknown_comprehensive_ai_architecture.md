@@ -1,7 +1,7 @@
 ---
 created: '2025-08-04T01:46:39.210952'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTROL
+cxd_confidence: 0.93
 cxd_pattern: CX
 id: mem_76
 importance: 0.5
@@ -24,6 +24,17 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-04T01:46:39.210953'
+tags:
+- action
+- ai
+- architecture
+- control
+- core
+- key
+- knowledge
+- manage
+- memory
+- model
 ---
 
 # Memory 76

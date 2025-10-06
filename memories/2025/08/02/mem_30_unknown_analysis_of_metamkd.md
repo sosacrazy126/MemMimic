@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T09:27:26.083150'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: DATA
+cxd_confidence: 0.58
 cxd_pattern: XD
 id: mem_30
 importance: 0.5
@@ -24,6 +24,12 @@ relationships:
   similar_memories: []
 type: reflection
 updated: '2025-08-02T09:27:26.083152'
+tags:
+- architecture
+- llama
+- memory
+- meta
+- not
 ---
 
 # Memory 30

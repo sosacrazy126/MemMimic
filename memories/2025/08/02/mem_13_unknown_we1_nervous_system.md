@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T06:41:58.410887'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTROL
+cxd_confidence: 0.87
 cxd_pattern: C
 id: mem_13
 importance: 0.5
@@ -24,6 +24,14 @@ relationships:
   similar_memories: []
 type: technical
 updated: '2025-08-02T06:41:58.410889'
+tags:
+- control
+- memory
+- model
+- optimization
+- search
+- system
+- we
 ---
 
 # Memory 13

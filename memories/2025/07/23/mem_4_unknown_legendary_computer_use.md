@@ -1,7 +1,7 @@
 ---
 created: '2025-07-23T18:10:10.485007'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTROL
+cxd_confidence: 0.89
 cxd_pattern: C
 id: mem_4
 importance: 0.5
@@ -24,6 +24,13 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-07-23T18:10:10.485008'
+tags:
+- ai
+- control
+- gui
+- manage
+- memory
+- use
 ---
 
 # Memory 4

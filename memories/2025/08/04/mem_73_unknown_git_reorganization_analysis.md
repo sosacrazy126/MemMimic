@@ -1,7 +1,7 @@
 ---
 created: '2025-08-04T00:05:29.499498'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: DATA
+cxd_confidence: 0.78
 cxd_pattern: D
 id: mem_73
 importance: 0.5
@@ -24,6 +24,11 @@ relationships:
   similar_memories: []
 type: milestone
 updated: '2025-08-04T00:05:29.499502'
+tags:
+- memory
+- moved
+- search
+- system
 ---
 
 # Memory 73

@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T11:12:59.769053'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTROL
+cxd_confidence: 0.51
 cxd_pattern: C
 id: mem_51
 importance: 0.5
@@ -24,6 +24,12 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T11:12:59.769054'
+tags:
+- auth
+- control
+- integration
+- is
+- memory
 ---
 
 # Memory 51

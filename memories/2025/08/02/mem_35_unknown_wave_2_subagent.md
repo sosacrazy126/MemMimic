@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T09:56:37.036335'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTROL
+cxd_confidence: 0.93
 cxd_pattern: CX
 id: mem_35
 importance: 0.5
@@ -24,6 +24,17 @@ relationships:
   similar_memories: []
 type: milestone
 updated: '2025-08-02T09:56:37.036337'
+tags:
+- action
+- agent
+- ai
+- filter
+- integration
+- memory
+- model
+- search
+- sub
+- system
 ---
 
 # Memory 35

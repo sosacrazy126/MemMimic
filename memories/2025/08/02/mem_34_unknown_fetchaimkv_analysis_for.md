@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T09:55:21.978727'
 cxd: unknown
-cxd_confidence: 0.5
+cxd_confidence: 0.0
 cxd_pattern: D
 id: mem_34
 importance: 0.5
@@ -24,6 +24,12 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T09:55:21.978729'
+tags:
+- ai
+- memory
+- mini
+- nsfw
+- search
 ---
 
 # Memory 34

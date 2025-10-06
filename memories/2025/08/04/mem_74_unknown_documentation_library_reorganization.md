@@ -1,7 +1,7 @@
 ---
 created: '2025-08-04T00:06:39.216638'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: DATA
+cxd_confidence: 0.78
 cxd_pattern: D
 id: mem_74
 importance: 0.5
@@ -24,6 +24,11 @@ relationships:
   similar_memories: []
 type: milestone
 updated: '2025-08-04T00:06:39.216640'
+tags:
+- memory
+- moved
+- system
+- transform
 ---
 
 # Memory 74

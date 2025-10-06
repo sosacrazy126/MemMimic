@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T10:07:38.210286'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTEXT
+cxd_confidence: 0.63
 cxd_pattern: X
 id: mem_37
 importance: 0.5
@@ -24,6 +24,14 @@ relationships:
   similar_memories: []
 type: reflection
 updated: '2025-08-02T10:07:38.210288'
+tags:
+- ai
+- explain
+- memory
+- relationship
+- sigil
+- system
+- why
 ---
 
 # Memory 37

@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T10:14:51.877856'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: DATA
+cxd_confidence: 0.78
 cxd_pattern: DX
 id: mem_41
 importance: 0.5
@@ -24,6 +24,16 @@ relationships:
   similar_memories: []
 type: milestone
 updated: '2025-08-02T10:14:51.877857'
+tags:
+- aaa
+- architecture
+- embedding
+- in
+- knowledge
+- memory
+- system
+- text
+- vector
 ---
 
 # Memory 41

@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T06:43:39.585083'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: DATA
+cxd_confidence: 0.41
 cxd_pattern: D
 id: mem_15
 importance: 0.5
@@ -24,6 +24,17 @@ relationships:
   similar_memories: []
 type: technical
 updated: '2025-08-02T06:43:39.585084'
+tags:
+- ai
+- architecture
+- data
+- km
+- memmimic
+- memory
+- net
+- process
+- rag
+- system
 ---
 
 # Memory 15

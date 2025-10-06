@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T09:27:31.853390'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTEXT
+cxd_confidence: 0.66
 cxd_pattern: X
 id: mem_31
 importance: 0.5
@@ -24,6 +24,14 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T09:27:31.853391'
+tags:
+- ai
+- auth
+- memory
+- not
+- reference
+- system
+- xai
 ---
 
 # Memory 31

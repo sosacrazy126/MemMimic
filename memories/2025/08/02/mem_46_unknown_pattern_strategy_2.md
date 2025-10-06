@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T10:23:26.596395'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTEXT
+cxd_confidence: 0.72
 cxd_pattern: X
 id: mem_46
 importance: 0.5
@@ -24,6 +24,14 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T10:23:26.596396'
+tags:
+- ai
+- auth
+- context
+- is
+- memory
+- now
+- year
 ---
 
 # Memory 46

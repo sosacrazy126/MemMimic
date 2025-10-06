@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T10:23:11.414450'
 cxd: unknown
-cxd_confidence: 0.5
+cxd_confidence: 0.0
 cxd_pattern: D
 id: mem_45
 importance: 0.5
@@ -24,6 +24,9 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T10:23:11.414452'
+tags:
+- auth
+- memory
 ---
 
 # Memory 45

@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T10:20:12.357971'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTEXT
+cxd_confidence: 0.45
 cxd_pattern: X
 id: mem_43
 importance: 0.5
@@ -24,6 +24,11 @@ relationships:
   similar_memories: []
 type: reflection
 updated: '2025-08-02T10:20:12.357974'
+tags:
+- being
+- live
+- memory
+- understand
 ---
 
 # Memory 43

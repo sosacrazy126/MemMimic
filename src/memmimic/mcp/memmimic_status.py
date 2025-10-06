@@ -16,14 +16,12 @@ if sys.platform.startswith('win'):
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 # Add paths
-sys.path.insert(0, '/home/evilbastardxd/Desktop/tools/memmimicc')
+sys.path.insert(0, '/home/sigilzo/tools-raw/MemMimic')
 os.environ['MEMMIMIC_STORAGE'] = 'markdown'
-os.environ['MEMMIMIC_MD_DIR'] = '/home/evilbastardxd/Desktop/tools/memmimicc'
+os.environ['MEMMIMIC_MD_DIR'] = '/home/sigilzo/tools-raw/MemMimic'
 
 try:
     from updated_mcp_tools import MemMimicMCP
-    sys.path.insert(0, '/home/evilbastardxd/Desktop/tools/memmimicc/src')
-    from memmimic.tales.tale_manager import TaleManager
 except ImportError as e:
     print(f"❌ Error importing: {e}")
     sys.exit(1)
@@ -32,11 +30,9 @@ def main():
     try:
         # Initialize components
         mcp = MemMimicMCP()
-        tale_manager = TaleManager()
-        
+
         # Get system status
         status = mcp.status()
-        tale_stats = tale_manager.get_stats()
         
         # Format response
         response_parts = []
@@ -71,14 +67,6 @@ def main():
         # Tale statistics
         response_parts.append("TALE STATISTICS:")
         response_parts.append("-" * 30)
-        response_parts.append(f"📚 Total Tales: {tale_stats['total_tales']}")
-        if tale_stats.get('by_category'):
-            response_parts.append("By Category:")
-            for category, count in tale_stats['by_category'].items():
-                if count > 0:
-                    response_parts.append(f"  • {category}: {count}")
-        response_parts.append("")
-        
         # Storage details
         response_parts.append("STORAGE DETAILS:")
         response_parts.append("-" * 30)

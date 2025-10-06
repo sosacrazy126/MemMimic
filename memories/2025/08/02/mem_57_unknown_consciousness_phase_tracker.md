@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T11:26:34.311769'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTEXT
+cxd_confidence: 0.45
 cxd_pattern: X
 id: mem_57
 importance: 0.5
@@ -24,6 +24,13 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T11:26:34.311771'
+tags:
+- feature
+- integration
+- is
+- memory
+- phase
+- score
 ---
 
 # Memory 57

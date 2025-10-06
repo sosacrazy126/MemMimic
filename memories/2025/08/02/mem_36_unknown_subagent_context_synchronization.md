@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T10:04:57.868125'
-cxd: unknown
-cxd_confidence: 0.5
+cxd: CONTEXT
+cxd_confidence: 0.87
 cxd_pattern: X
 id: mem_36
 importance: 0.5
@@ -24,6 +24,17 @@ relationships:
   similar_memories: []
 type: milestone
 updated: '2025-08-02T10:04:57.868127'
+tags:
+- agent
+- ai
+- confidence
+- context
+- from
+- key
+- memory
+- search
+- sub
+- sync
 ---
 
 # Memory 36

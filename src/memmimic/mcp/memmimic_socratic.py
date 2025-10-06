@@ -5,9 +5,9 @@ MemMimic Socratic Dialogue Tool - Self-questioning for deeper understanding
 
 import sys
 import os
-sys.path.insert(0, '/home/evilbastardxd/Desktop/tools/memmimicc')
+sys.path.insert(0, '/home/sigilzo/tools-raw/MemMimic')
 os.environ['MEMMIMIC_STORAGE'] = 'markdown'
-os.environ['MEMMIMIC_MD_DIR'] = '/home/evilbastardxd/Desktop/tools/memmimicc'
+os.environ['MEMMIMIC_MD_DIR'] = '/home/sigilzo/tools-raw/MemMimic'
 
 try:
     from updated_mcp_tools import MemMimicMCP

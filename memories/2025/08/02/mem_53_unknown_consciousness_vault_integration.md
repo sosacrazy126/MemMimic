@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T11:16:07.942514'
 cxd: unknown
-cxd_confidence: 0.5
+cxd_confidence: 0.27
 cxd_pattern: D
 id: mem_53
 importance: 0.5
@@ -24,6 +24,13 @@ relationships:
   similar_memories: []
 type: interaction
 updated: '2025-08-02T11:16:07.942516'
+tags:
+- integration
+- memory
+- search
+- sync
+- vault
+- we
 ---
 
 # Memory 53

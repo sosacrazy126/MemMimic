@@ -1,7 +1,7 @@
 ---
 created: '2025-08-02T10:13:25.762123'
 cxd: unknown
-cxd_confidence: 0.5
+cxd_confidence: 0.0
 cxd_pattern: D
 id: mem_39
 importance: 0.5
@@ -24,6 +24,13 @@ relationships:
   similar_memories: []
 type: milestone
 updated: '2025-08-02T10:13:25.762125'
+tags:
+- auth
+- is
+- memory
+- now
+- woo
+- year
 ---
 
 # Memory 39
